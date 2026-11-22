@@ -110,7 +110,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Stato dei Progetti in Tempo Reale
 
 <!-- PULSE:START -->
-> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **7** aggiornati oggi · *Ultimo controllo automatico: 22 nov 2026, 07:25*
+> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **7** aggiornati oggi · *Ultimo controllo automatico: 22 nov 2026, 16:12*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
