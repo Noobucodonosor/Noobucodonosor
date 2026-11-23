@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { FreeTierRouter } from './free-tier-router.mjs';
 import { PublicUrlIngestor, extractFirstUrlFromText } from './url-ingestor.mjs';
 import { SmartphoneApprovalGate } from './approval-gate.mjs';
+import { fetchBasilicoContext, buildBasilicoListFromOffers } from './basilico-client.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -115,6 +116,7 @@ export function createAppServer(options = {}) {
   const router = options.router ?? new FreeTierRouter();
   const urlIngestor = options.urlIngestor ?? new PublicUrlIngestor();
   const approvalGate = options.approvalGate ?? new SmartphoneApprovalGate();
+  const basilicoFetcher = options.basilicoFetcher ?? fetchBasilicoContext;
   const allowedOrigin = options.allowedOrigin ?? process.env.ALLOWED_ORIGIN ?? '*';
   const webDir = options.webDir ?? WEB_DIR;
   const bundlesDir = options.bundlesDir ?? BUNDLES_DIR;
@@ -240,6 +242,14 @@ export function createAppServer(options = {}) {
         let userQuery = body.userQuery ?? body.prompt ?? '';
         let context = body.context ?? '';
         let extractedSource = null;
+        let basilicoLive = null;
+
+        if (body.serviceId === 'basilico' && !context) {
+          basilicoLive = await basilicoFetcher(userQuery);
+          if (basilicoLive?.ok && basilicoLive.contextText) {
+            context = basilicoLive.contextText;
+          }
+        }
 
         if (body.serviceId === 'kn5' && !body.urlAlreadyExtracted) {
           const detectedUrl = body.sourceUrl || extractFirstUrlFromText(userQuery);
@@ -308,13 +318,36 @@ export function createAppServer(options = {}) {
           }
         }
 
-        const result = await router.complete({
+        let result = await router.complete({
           serviceId: body.serviceId,
           presetId,
           userQuery,
           context,
           clientIp,
         });
+
+        // Se l'AI pool è saturo ma Basilico live ha restituito offerte reali, costruisci la lista reale da Basilico
+        if (!result.ok && body.serviceId === 'basilico' && basilicoLive?.ok && basilicoLive.offers.length > 0) {
+          const liveText = buildBasilicoListFromOffers(
+            userQuery,
+            basilicoLive.offers,
+            basilicoLive.budgetEuro,
+            basilicoLive.baseUrl,
+          );
+          if (liveText) {
+            result = {
+              ok: true,
+              status: 200,
+              mode: 'basilico-live',
+              provider: 'basilico',
+              providerLabel: 'Basilico Live (Offerte Rapallo)',
+              model: 'basilico-offers-v1',
+              cached: false,
+              text: liveText,
+            };
+          }
+        }
+
         if (extractedSource && result.ok) {
           result.extractedSource = extractedSource;
         }

@@ -195,7 +195,7 @@ export class FreeTierRouter {
 
     this.providers = options.providers ?? buildProvidersFromEnv(options.env ?? process.env);
     this.fetchImpl = options.fetchImpl ?? globalThis.fetch;
-    this.timeoutMs = options.timeoutMs ?? 15000;
+    this.timeoutMs = options.timeoutMs ?? 7000;
     this.cacheTtlMs = options.cacheTtlMs ?? 6 * 60 * 60 * 1000;
     this.maxCacheEntries = options.maxCacheEntries ?? 200;
     this.maxIpEntries = options.maxIpEntries ?? 5000;
