@@ -114,14 +114,39 @@ export async function ghFetch(endpoint, fetchImpl = fetch) {
   return res.json();
 }
 
-export async function checkPreviewReachable(repo, fetchImpl = fetch) {
-  const rawUrl = `https://raw.githubusercontent.com/${OWNER}/${repo}/main/docs/preview/social-preview.png`;
+export async function checkPreviewReachable(repo, previewPath = 'docs/preview/social-preview.png', fetchImpl = fetch) {
+  const rawUrl = `https://raw.githubusercontent.com/${OWNER}/${repo}/main/${previewPath}`;
   try {
     const res = await fetchImpl(rawUrl, { method: 'HEAD' });
     return res.ok;
   } catch {
     return false;
   }
+}
+
+export async function resolvePreviewImage(repo, previewCommits, fetchImpl = fetch) {
+  const primaryPath = 'docs/preview/social-preview.png';
+  const fallbackPath = 'docs/preview/desktop.png';
+  const hasPrimaryCommit = Array.isArray(previewCommits) && previewCommits.length > 0;
+  if (hasPrimaryCommit || (await checkPreviewReachable(repo, primaryPath, fetchImpl))) {
+    return {
+      hasPreview: true,
+      previewPath: primaryPath,
+      previewSha: hasPrimaryCommit ? previewCommits[0]?.sha?.slice(0, 8) || 'latest' : 'latest',
+    };
+  }
+  if (await checkPreviewReachable(repo, fallbackPath, fetchImpl)) {
+    return {
+      hasPreview: true,
+      previewPath: fallbackPath,
+      previewSha: 'latest',
+    };
+  }
+  return {
+    hasPreview: false,
+    previewPath: primaryPath,
+    previewSha: 'latest',
+  };
 }
 
 export function escapeHtml(str) {
@@ -173,15 +198,12 @@ export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
         latestCommits.find((c) => !/^(chore|fix|ci)\(preview\):/i.test(c?.commit?.message || ''))) ||
       (Array.isArray(latestCommits) ? latestCommits[0] : null);
 
-    const hasPreviewCommit = Array.isArray(previewCommits) && previewCommits.length > 0;
-    const hasPreview = hasPreviewCommit ? true : await checkPreviewReachable(proj.repo, fetchImpl);
-    const previewSha = hasPreviewCommit ? previewCommits[0]?.sha?.slice(0, 8) || 'latest' : 'latest';
+    const previewInfo = await resolvePreviewImage(proj.repo, previewCommits, fetchImpl);
     const lastDate = meaningfulCommit?.commit?.author?.date || repoInfo?.pushed_at || null;
 
     return {
       ...proj,
-      hasPreview,
-      previewSha,
+      ...previewInfo,
       lastDate,
       lastDateIt: formatDateIt(lastDate),
       freshness: freshnessBadge(lastDate),
@@ -190,11 +212,10 @@ export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
     };
   } catch (err) {
     console.warn(`[WARN] API fallback for ${proj.repo}: ${err.message}`);
-    const hasPreview = await checkPreviewReachable(proj.repo, fetchImpl);
+    const previewInfo = await resolvePreviewImage(proj.repo, [], fetchImpl);
     return {
       ...proj,
-      hasPreview,
-      previewSha: 'latest',
+      ...previewInfo,
       lastDate: null,
       lastDateIt: 'N/D',
       freshness: '⚪ Stabile',
@@ -206,7 +227,8 @@ export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
 
 export function renderCard(p) {
   const hasPreview = p.hasPreview !== false;
-  const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/docs/preview/social-preview.png?v=${p.previewSha || 'latest'}`;
+  const previewPath = p.previewPath || 'docs/preview/social-preview.png';
+  const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/${previewPath}?v=${p.previewSha || 'latest'}`;
   const previewBlock = hasPreview
     ? `      <a href="${p.liveUrl}">
         <img src="${imgUrl}" alt="${escapeHtml(p.title)}" />
