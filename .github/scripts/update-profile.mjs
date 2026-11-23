@@ -4,6 +4,27 @@ import path from 'node:path';
 const OWNER = 'Noobucodonosor';
 const TOKEN = process.env.GITHUB_TOKEN || '';
 
+const HUB_CONFIG_PATH = path.resolve(process.cwd(), 'showcase.config.json');
+let HUB_BASE_URL = (process.env.HUB_BASE_URL || '').replace(/\/+$/, '');
+if (!HUB_BASE_URL && fs.existsSync(HUB_CONFIG_PATH)) {
+  try {
+    const cfg = JSON.parse(fs.readFileSync(HUB_CONFIG_PATH, 'utf8'));
+    HUB_BASE_URL = String(cfg.hubBaseUrl || '').replace(/\/+$/, '');
+  } catch {
+    // ignore malformed config
+  }
+}
+
+function getLiveTarget(appId, fallbackUrl, fallbackLabel) {
+  if (HUB_BASE_URL) {
+    return {
+      liveUrl: `${HUB_BASE_URL}/?app=${appId}`,
+      liveLabel: 'Prova Live',
+    };
+  }
+  return { liveUrl: fallbackUrl, liveLabel: fallbackLabel };
+}
+
 const PROJECTS = [
   {
     repo: 'basilico',
@@ -39,8 +60,7 @@ const PROJECTS = [
     repo: 'leslie-agency-os',
     title: 'Leslie — Agency OS',
     category: 'Automazione Commerciale B2B',
-    liveUrl: 'https://noobucodonosor.github.io/leslie-agency-os/',
-    liveLabel: 'Guarda la Demo',
+    ...getLiveTarget('leslie', 'https://noobucodonosor.github.io/leslie-agency-os/', 'Guarda la Demo'),
     infoUrl: 'https://github.com/Noobucodonosor/leslie-agency-os',
     summary:
       'Sistema intelligente per agenzie e team commerciali: ricerca automaticamente nuovi potenziali clienti, li analizza con l’AI e li organizza in un pannello di gestione.',
@@ -49,8 +69,7 @@ const PROJECTS = [
     repo: 'kn5',
     title: 'kn5 — Knowledge Ingestor',
     category: 'AI & Gestione Conoscenza',
-    liveUrl: 'https://noobucodonosor.github.io/kn5/',
-    liveLabel: 'Esplora il Progetto',
+    ...getLiveTarget('kn5', 'https://noobucodonosor.github.io/kn5/', 'Esplora il Progetto'),
     infoUrl: 'https://github.com/Noobucodonosor/kn5',
     summary:
       'Assistente AI che trasforma video e post (YouTube e Instagram) in schede ordinate e riassunti consultabili, con controllo dei costi e invio rapido da Telegram.',
@@ -59,8 +78,7 @@ const PROJECTS = [
     repo: 'resuscipack',
     title: 'resuscipack',
     category: 'Ricerca & Editoria Digitale',
-    liveUrl: 'https://noobucodonosor.github.io/resuscipack/',
-    liveLabel: 'Apri Anteprima',
+    ...getLiveTarget('resuscipack', 'https://noobucodonosor.github.io/resuscipack/', 'Apri Anteprima'),
     infoUrl: 'https://github.com/Noobucodonosor/resuscipack',
     summary:
       'Motore di ricerca e consultazione su oltre 1.400 testi e volumi tecnici, progettato per trovare subito concetti chiave con fonti sempre verificabili.',
@@ -69,8 +87,7 @@ const PROJECTS = [
     repo: 'scooterlab',
     title: 'ScooterLab — IoT & Sensori',
     category: 'Dispositivi Connessi (IoT)',
-    liveUrl: 'https://noobucodonosor.github.io/scooterlab/',
-    liveLabel: 'Vedi Scheda Progetto',
+    ...getLiveTarget('scooterlab', 'https://noobucodonosor.github.io/scooterlab/', 'Vedi Scheda Progetto'),
     infoUrl: 'https://github.com/Noobucodonosor/scooterlab',
     summary:
       'Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.',

@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'showcase.config.json'
       - '.github/scripts/update-profile.mjs'
       - '.github/workflows/update-profile.yml'
   workflow_dispatch:

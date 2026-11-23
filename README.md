@@ -14,7 +14,11 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 | **📱 Prodotti Digitali Su Misura** | Trasformo un'esigenza reale in un'applicazione web pronta all'uso (da computer e smartphone): portali locali, comparatori, strumenti di lavoro interni e servizi online. |
 | **🧭 Consulenza Pratica & Sistemi** | Aiuto aziende e professionisti a scegliere gli strumenti giusti, mettere ordine nei dati e collegare software, infrastruttura IT e dispositivi fisici (sensori, domotica, IoT). |
 
-> Qui sotto trovi alcuni dei prodotti in sviluppo, tutti esplorabili dal vivo.
+> Qui sotto trovi tutti i prodotti in sviluppo, esplorabili dal vivo.
+>
+> **Nuovo — Hub Interattivo Live & Kit Locale (`ADR-0002` / `ADR-0003`):**
+> - **Binario Web Live ([Apri Hub & Assistente AI](https://noobucodonosor-hub-664856461640.us-central1.run.app)):** portale con **Assistente AI** e **4 Playground prescaricati** (*Leslie*, *kn5*, *resuscipack*, *ScooterLab*) collegati a un pool di modelli AI a soglia gratuita con cache e fallback **BYOK** / deterministico.
+> - **Binario Locale Portabile ([Scarica `.html` Offline](https://noobucodonosor-hub-664856461640.us-central1.run.app/bundles/noobucodonosor-portable.html?download=1)):** [`bundles/noobucodonosor-portable.html`](./bundles/noobucodonosor-portable.html) — file singolo auto-contenuto apribile con doppio clic (`file://`) offline o con la propria chiave gratuita BYOK.
 
 ---
 
@@ -25,24 +29,24 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://noobucodonosor.github.io/scooterlab/">
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">
         <img src="https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png?v=latest" alt="ScooterLab — IoT &amp; Sensori" />
       </a>
       <br />
-      <strong><a href="https://noobucodonosor.github.io/scooterlab/">ScooterLab — IoT &amp; Sensori</a></strong><br />
+      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">ScooterLab — IoT &amp; Sensori</a></strong><br />
       <sub>Dispositivi Connessi (IoT) · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.<br /><br />
-      <a href="https://noobucodonosor.github.io/scooterlab/"><strong>🚀 Vedi Scheda Progetto</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
     </td>
     <td width="50%" valign="top">
-      <a href="https://noobucodonosor.github.io/resuscipack/">
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">
         <img src="https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png?v=latest" alt="resuscipack" />
       </a>
       <br />
-      <strong><a href="https://noobucodonosor.github.io/resuscipack/">resuscipack</a></strong><br />
+      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">resuscipack</a></strong><br />
       <sub>Ricerca &amp; Editoria Digitale · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Motore di ricerca e consultazione su oltre 1.400 testi e volumi tecnici, progettato per trovare subito concetti chiave con fonti sempre verificabili.<br /><br />
-      <a href="https://noobucodonosor.github.io/resuscipack/"><strong>🚀 Apri Anteprima</strong></a> · <a href="https://github.com/Noobucodonosor/resuscipack">📄 Dettagli</a>
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/resuscipack">📄 Dettagli</a>
     </td>
   </tr>
   <tr>
@@ -57,26 +61,26 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       <a href="https://mediometeo-664856461640.europe-west1.run.app"><strong>🚀 Prova la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/mediometeo">📄 Dettagli</a>
     </td>
     <td width="50%" valign="top">
-      <a href="https://noobucodonosor.github.io/leslie-agency-os/">
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie">
         <img src="https://raw.githubusercontent.com/Noobucodonosor/leslie-agency-os/main/docs/preview/social-preview.png?v=latest" alt="Leslie — Agency OS" />
       </a>
       <br />
-      <strong><a href="https://noobucodonosor.github.io/leslie-agency-os/">Leslie — Agency OS</a></strong><br />
+      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie">Leslie — Agency OS</a></strong><br />
       <sub>Automazione Commerciale B2B · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Sistema intelligente per agenzie e team commerciali: ricerca automaticamente nuovi potenziali clienti, li analizza con l’AI e li organizza in un pannello di gestione.<br /><br />
-      <a href="https://noobucodonosor.github.io/leslie-agency-os/"><strong>🚀 Guarda la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/leslie-agency-os">📄 Dettagli</a>
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/leslie-agency-os">📄 Dettagli</a>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://noobucodonosor.github.io/kn5/">
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5">
         <img src="https://raw.githubusercontent.com/Noobucodonosor/kn5/main/docs/preview/social-preview.png?v=latest" alt="kn5 — Knowledge Ingestor" />
       </a>
       <br />
-      <strong><a href="https://noobucodonosor.github.io/kn5/">kn5 — Knowledge Ingestor</a></strong><br />
+      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5">kn5 — Knowledge Ingestor</a></strong><br />
       <sub>AI &amp; Gestione Conoscenza · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Assistente AI che trasforma video e post (YouTube e Instagram) in schede ordinate e riassunti consultabili, con controllo dei costi e invio rapido da Telegram.<br /><br />
-      <a href="https://noobucodonosor.github.io/kn5/"><strong>🚀 Esplora il Progetto</strong></a> · <a href="https://github.com/Noobucodonosor/kn5">📄 Dettagli</a>
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/kn5">📄 Dettagli</a>
     </td>
     <td width="50%" valign="top">
       <a href="https://noobucodonosor.github.io/genova-settimana/">
@@ -110,15 +114,15 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Stato dei Progetti in Tempo Reale
 
 <!-- PULSE:START -->
-> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **0** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 13:10*
+> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **0** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 14:06*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
-| [**ScooterLab — IoT & Sensori**](https://noobucodonosor.github.io/scooterlab/) | Dispositivi Connessi (IoT) | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
-| [**resuscipack**](https://noobucodonosor.github.io/resuscipack/) | Ricerca & Editoria Digitale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**ScooterLab — IoT & Sensori**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab) | Dispositivi Connessi (IoT) | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**resuscipack**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack) | Ricerca & Editoria Digitale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Previsioni & Monitoraggio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
-| [**Leslie — Agency OS**](https://noobucodonosor.github.io/leslie-agency-os/) | Automazione Commerciale B2B | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
-| [**kn5 — Knowledge Ingestor**](https://noobucodonosor.github.io/kn5/) | AI & Gestione Conoscenza | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**Leslie — Agency OS**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie) | Automazione Commerciale B2B | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**kn5 — Knowledge Ingestor**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5) | AI & Gestione Conoscenza | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**Basilico — Rapallo**](https://basilico-txfxsxuuma-ew.a.run.app) | App Consumer & Risparmio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 <!-- PULSE:END -->

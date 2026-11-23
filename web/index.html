@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noobucodonosor — Vetrina Progetti &amp; Playground AI Prescaricati</title>
+    <meta
+      name="description"
+      content="Consulenza IT, Sistemi di AI Agentica e Prodotti Digitali. Esplora tutti i 7 progetti e prova subito i playground AI su dati prescaricati con modelli a soglia gratuita."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#top">
+          <span class="brand-mark" aria-hidden="true">NB</span>
+          <span>Noobucodonosor</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Navigazione principale">
+          <a href="#vetrina">Vetrina (7)</a>
+          <a href="#playground">Playground AI (4)</a>
+          <a href="#locale">Usa in Locale</a>
+          <a href="https://github.com/Noobucodonosor" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </nav>
+
+        <div class="engine-controls">
+          <span id="engine-status" class="status-pill" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="engine-status-text">Verifica motore...</span>
+          </span>
+          <button type="button" id="open-byok-btn" class="btn btn-sm">Chiave BYOK</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <div id="focus-banner" class="focus-banner" hidden>
+        <div class="container focus-banner-inner">
+          <span id="focus-banner-label">Modalità Focus</span>
+          <a href="./" id="focus-reset-link" class="btn btn-sm">Esplora tutti i 7 progetti</a>
+        </div>
+      </div>
+
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Consulenza IT · AI Agentica · Prodotti Digitali</p>
+            <h1>Prodotti reali, provabili subito con un clic.</h1>
+            <p class="lead">
+              Ogni progetto in vetrina è già <strong>live online</strong> oppure accessibile qui tramite
+              <strong>servizi prescaricati</strong> collegati a un pool di modelli AI con soglie gratuite
+              (Gemini, Groq, OpenRouter), con paracadute BYOK nel browser e analisi locale deterministica.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#playground">Prova i 4 Playground AI</a>
+              <a class="btn" href="#vetrina">Esplora tutti i 7 Progetti</a>
+              <a class="btn btn-slate" href="#locale">Scarica Kit Locale</a>
+            </div>
+
+            <div class="pillars" aria-label="Aree di consulenza">
+              <div class="pillar">
+                <strong>Automazione &amp; AI</strong>
+                <p>Agenti che leggono documenti, qualificano lead e abbattono il lavoro ripetitivo.</p>
+              </div>
+              <div class="pillar">
+                <strong>Prodotti Su Misura</strong>
+                <p>Web app e PWA offline-first pronte per desktop, smartphone e Cloud Run.</p>
+              </div>
+              <div class="pillar">
+                <strong>Sistemi &amp; IoT</strong>
+                <p>Architetture ADR-Driven, controllo costi API e integrazione sensori sul campo.</p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="assistant-card" aria-labelledby="assistant-title">
+            <div class="assistant-header">
+              <div>
+                <p class="eyebrow" style="margin-bottom: 0.15rem">Guida Interattiva</p>
+                <h2 id="assistant-title" style="font-size: 1.15rem">Assistente Noobucodonosor</h2>
+              </div>
+              <span class="badge badge-playground">Contesto Prescaricato</span>
+            </div>
+
+            <div id="assistant-presets" class="assistant-presets" aria-label="Domande rapide"></div>
+
+            <form id="assistant-form" class="assistant-form">
+              <label for="assistant-input" class="sr-only" style="position: absolute; left: -9999px">
+                Chiedi all'assistente sui progetti e servizi
+              </label>
+              <input
+                id="assistant-input"
+                class="input"
+                type="text"
+                placeholder="Chiedi quale progetto fa per te o come lavoriamo..."
+                autocomplete="off"
+                required
+              />
+              <button type="submit" class="btn btn-primary" id="assistant-submit">Chiedi</button>
+            </form>
+
+            <div id="assistant-output" class="ai-output" aria-live="polite">
+              <p>
+                Chiedimi qualsiasi cosa sui <strong>7 progetti in vetrina</strong>, sullo stack o sul
+                funzionamento dei <strong>servizi prescaricati a costo ~€0</strong>.
+              </p>
+            </div>
+            <div id="assistant-meta" class="ai-meta"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="vetrina">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Binario Web Live · Catalogo Completo</p>
+              <h2>Vetrina Progetti (7)</h2>
+            </div>
+            <div class="filter-bar" role="group" aria-label="Filtra progetti">
+              <button type="button" class="filter-btn" data-filter="all" aria-pressed="true">Tutti (7)</button>
+              <button type="button" class="filter-btn" data-filter="playground" aria-pressed="false">
+                Playground AI (4)
+              </button>
+              <button type="button" class="filter-btn" data-filter="live" aria-pressed="false">
+                App Live (3)
+              </button>
+            </div>
+          </div>
+
+          <div id="projects-grid" class="projects-grid"></div>
+        </div>
+      </section>
+
+      <section id="playground" class="playground-section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Servizi Prescaricati · Pool Free-Tier + BYOK</p>
+              <h2>Playground AI Interattivo</h2>
+              <p class="lead" style="margin-top: 0.4rem">
+                I 4 progetti che su GitHub Pages sono solo anteprime statiche diventano qui interattivi:
+                scegli un dato prescaricato (zero PII, zero copyright) e lancia l'analisi AI.
+              </p>
+            </div>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Seleziona playground progetto">
+            <button type="button" class="tab-btn" role="tab" data-tab="leslie" aria-selected="true">
+              Leslie — Agency OS
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="kn5" aria-selected="false">
+              kn5 — Knowledge Ingestor
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="resuscipack" aria-selected="false">
+              resuscipack
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="scooterlab" aria-selected="false">
+              ScooterLab — IoT
+            </button>
+          </div>
+
+          <div class="playground-grid">
+            <div class="panel" id="playground-left"></div>
+
+            <div class="panel">
+              <div class="assistant-header" style="margin-bottom: 0.6rem">
+                <div>
+                  <p class="eyebrow" style="margin-bottom: 0.1rem">Richiesta AI</p>
+                  <h3 id="pg-active-title" style="font-size: 1.05rem">Leslie — Agency OS</h3>
+                </div>
+                <span id="pg-mode-badge" class="badge badge-live">Pronto</span>
+              </div>
+
+              <div class="field">
+                <label for="pg-prompt">Prompt (puoi usare il preset o personalizzarlo)</label>
+                <textarea id="pg-prompt" class="textarea" rows="3"></textarea>
+              </div>
+
+              <div class="card-actions" style="margin-bottom: 0.85rem">
+                <button type="button" id="pg-run-btn" class="btn btn-primary">Esegui Analisi AI</button>
+                <button type="button" id="pg-reset-btn" class="btn btn-sm">Ripristina Preset</button>
+              </div>
+
+              <div id="pg-output" class="ai-output" aria-live="polite">
+                <p>Seleziona un elemento prescaricato a sinistra e premi <strong>Esegui Analisi AI</strong>.</p>
+              </div>
+              <div id="pg-meta" class="ai-meta"></div>
+              <div id="pg-notice"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="locale">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Binario Separato · Autonomo &amp; Offline-Ready</p>
+              <h2>Usa in Locale — Pacchetti Prescaricati</h2>
+              <p class="lead" style="margin-top: 0.4rem">
+                Preferisci eseguire i playground sul tuo computer senza passare dal portale online?
+                Questo binario è completamente separato dal proxy web e funziona con la tua chiave gratuita o offline.
+              </p>
+            </div>
+          </div>
+
+          <div class="portable-grid">
+            <article class="portable-card">
+              <span class="badge badge-playground" style="align-self: flex-start">Single-File Portabile</span>
+              <h3>noobucodonosor-portable.html</h3>
+              <p style="margin: 0; color: var(--ink-soft); font-size: 0.92rem">
+                Un singolo file HTML auto-contenuto con tutti i dataset prescaricati, i 4 playground AI e il
+                connettore BYOK (Gemini / Groq / OpenRouter free). Aprilo con doppio clic (`file://`), zero installazioni.
+              </p>
+              <div class="card-actions">
+                <a class="btn btn-primary" href="/bundles/noobucodonosor-portable.html?download=1" download="noobucodonosor-portable.html">
+                  Scarica File Portabile (.html)
+                </a>
+                <a class="btn" href="/bundles/noobucodonosor-portable.html" target="_blank" rel="noopener noreferrer">
+                  Apri Anteprima
+                </a>
+              </div>
+            </article>
+
+            <article class="portable-card">
+              <span class="badge badge-live" style="align-self: flex-start">Kit Server Locale / Cloud Run</span>
+              <h3>Avvia il tuo Proxy Free-Tier in 1 comando</h3>
+              <p style="margin: 0; color: var(--ink-soft); font-size: 0.92rem">
+                Zero dipendenze npm (solo Node.js 22). Copia <code>.env.example</code> in <code>.env</code>, inserisci
+                una chiave gratuita (Gemini, Groq o OpenRouter) e avvia l'hub completo in locale o su Cloud Run.
+              </p>
+              <pre><code>git clone https://github.com/Noobucodonosor/Noobucodonosor.git
+cd Noobucodonosor
+cp .env.example .env
+node server/index.mjs</code></pre>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span><strong>Noobucodonosor</strong> · Architettura ADR-Driven (ADR-0001 / ADR-0002)</span>
+        <span>
+          <a href="https://github.com/Noobucodonosor/Noobucodonosor" target="_blank" rel="noopener noreferrer">Repository</a>
+          ·
+          <a href="#top">Torna su</a>
+        </span>
+      </div>
+    </footer>
+
+    <!-- Native Modal Dialog (no redundant role="dialog" or aria-modal) -->
+    <dialog id="byok-dialog" closedby="any" aria-labelledby="byok-title">
+      <div class="dialog-body">
+        <div class="dialog-header">
+          <h2 id="byok-title" style="font-size: 1.2rem">Configura Chiave Gratuita (BYOK)</h2>
+          <form method="dialog">
+            <button type="submit" value="cancel" class="btn btn-sm" aria-label="Chiudi finestra">Chiudi</button>
+          </form>
+        </div>
+
+        <p style="margin: 0 0 1rem; font-size: 0.88rem; color: var(--ink-soft)">
+          La chiave viene salvata <strong>solo nel tuo browser</strong> (<code>sessionStorage</code>) e chiama
+          direttamente il provider scelto. Non passa mai dal server Noobucodonosor.
+        </p>
+
+        <form id="byok-form">
+          <div class="field">
+            <label for="byok-provider">Provider con soglia gratuita</label>
+            <select id="byok-provider" class="select" autofocus>
+              <option value="gemini">Google AI Studio — Gemini 3.5 Flash-Lite (Free Tier)</option>
+              <option value="groq">Groq — GPT-OSS 20B (Free Tier)</option>
+              <option value="openrouter">OpenRouter — Modelli :free</option>
+            </select>
+            <small>
+              Ottieni una chiave gratuita in 20 secondi:
+              <a id="byok-provider-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">
+                Apri console provider
+              </a>
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="byok-model">Modello</label>
+            <input id="byok-model" class="input" type="text" value="gemini-3.5-flash-lite" />
+          </div>
+
+          <div class="field">
+            <label for="byok-key">API Key</label>
+            <input id="byok-key" class="input" type="password" placeholder="AIza..." autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <label style="display: flex; align-items: center; gap: 0.45rem; font-weight: 500; cursor: pointer">
+              <input id="byok-ram-only" type="checkbox" />
+              <span>Solo in RAM (non salvare in <code>sessionStorage</code>)</span>
+            </label>
+          </div>
+
+          <div class="dialog-actions">
+            <button type="button" id="byok-clear-btn" class="btn btn-sm">Rimuovi Chiave</button>
+            <button type="submit" class="btn btn-primary">Salva in Sessione</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

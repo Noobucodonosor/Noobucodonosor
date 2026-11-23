@@ -1,7 +1,7 @@
 # AGENTS.md — Contesto & Linee Guida per Agenti AI e Sviluppatori
 
 > **REGOLA AUREA (MANDATORY):**
-> Prima di modificare l'architettura, toccare il modello dati, aggiungere endpoint o sviluppare nuove feature, **DEVI leggere [`docs/adr/README.md`](./docs/adr/README.md)** e gli ADR specifici nella cartella [`docs/adr/`](./docs/adr/).
+> Prima di modificare l'architettura, toccare il modello dati, aggiungere endpoint o sviluppare nuove feature, **DEVI leggere [`VISION.md`](./VISION.md)**, **[`docs/adr/README.md`](./docs/adr/README.md)** e gli ADR specifici nella cartella [`docs/adr/`](./docs/adr/).
 
 ---
 
@@ -22,9 +22,14 @@
 
 | File / Cartella | Ruolo |
 | :--- | :--- |
+| [`VISION.md`](./VISION.md) | **Visione del progetto** (vetrina ~€0, servizi prescaricati, pool API free-tier, binari separati). |
 | [`docs/adr/README.md`](./docs/adr/README.md) | **Indice degli ADR**, diagramma architetturale Mermaid e **Master Task Backlog**. |
 | [`docs/adr/NNNN-*.md`](./docs/adr/) | Singoli Architecture Decision Records con contesto, decisioni e task collegati. |
 | [`README.md`](./README.md) | Pagina vetrina pubblica del profilo GitHub, aggiornata automaticamente tra i marker HTML. |
+| [`web/`](./web/) | **Binario A — Portale Web Vetrina**, Assistente AI e 4 Playground prescaricati (`index.html`, `styles.css`, `ai-client.js`, `app.js`, `data/preloaded-services.json`). |
+| [`server/`](./server/) | **Proxy Free-Tier Node.js 22** (`free-tier-router.mjs`, `index.mjs`) con failover Gemini/Groq/OpenRouter `:free`, cache LRU e rate-limit per IP/giorno. |
+| [`scripts/build-bundles.mjs`](./scripts/build-bundles.mjs) | Generatore del **Binario B separato** (`bundles/noobucodonosor-portable.html`, single-file HTML offline/BYOK). |
+| [`tests/`](./tests/) | Suite di test automatici (`node --test tests/*.test.mjs`) per router free-tier, server HTTP e bundle portabile. |
 | [`.github/scripts/update-profile.mjs`](./.github/scripts/update-profile.mjs) | Script Node.js che interroga le API GitHub per i progetti in vetrina e aggiorna `README.md`. |
 | [`.github/workflows/update-profile.yml`](./.github/workflows/update-profile.yml) | Workflow GitHub Actions (cron orario + push su `main`) che esegue lo script e committa `README.md`. |
 | `.github/ISSUE_TEMPLATE/` | Template standard per l'apertura di GitHub Issues (`adr_task.yml`, `bug_report.yml`). |
@@ -65,6 +70,15 @@
 ## 5. Comandi Rapidi di Sviluppo e Test
 
 ```bash
+# Avvio locale Portale Vetrina + Proxy Free-Tier (http://localhost:8080)
+node server/index.mjs
+
+# Generazione bundle portabile single-file (Binario B separato)
+node scripts/build-bundles.mjs
+
+# Suite di test automatici (router free-tier, server HTTP, bundle portabile)
+node --test tests/*.test.mjs
+
 # Esecuzione locale dello script di aggiornamento vetrina (richiede Node 22+ e GITHUB_TOKEN opzionale)
 node .github/scripts/update-profile.mjs
 
