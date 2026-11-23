@@ -29,6 +29,16 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 <table>
   <tr>
     <td width="50%" valign="top">
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png?v=cfffc598" alt="resuscipack" />
+      </a>
+      <br />
+      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">resuscipack</a></strong><br />
+      <sub>Ricerca &amp; Editoria Digitale · 🟢 Aggiornato oggi (23 nov 2026)</sub><br /><br />
+      Due volumi continui in 20 capitoli e motore di ricerca su oltre 1.400 testi tecnici, progettato per studiare con formule KaTeX, diagrammi SVG e fonti sempre verificabili.<br /><br />
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack"><strong>🚀 Prova Live</strong></a> · <a href="https://noobucodonosor.github.io/resuscipack/"><strong>📖 Vista Libro</strong></a> · <a href="https://github.com/Noobucodonosor/resuscipack">📄 Dettagli</a>
+    </td>
+    <td width="50%" valign="top">
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">
         <img src="https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png?v=latest" alt="ScooterLab — IoT &amp; Sensori" />
       </a>
@@ -37,16 +47,6 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       <sub>Dispositivi Connessi (IoT) · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.<br /><br />
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
-    </td>
-    <td width="50%" valign="top">
-      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png?v=latest" alt="resuscipack" />
-      </a>
-      <br />
-      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">resuscipack</a></strong><br />
-      <sub>Ricerca &amp; Editoria Digitale · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
-      Motore di ricerca e consultazione su oltre 1.400 testi e volumi tecnici, progettato per trovare subito concetti chiave con fonti sempre verificabili.<br /><br />
-      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/resuscipack">📄 Dettagli</a>
     </td>
   </tr>
   <tr>
@@ -95,14 +95,14 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://basilico-txfxsxuuma-ew.a.run.app">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png?v=latest" alt="Basilico — Rapallo" />
+      <a href="https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi">
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png?v=d4c3c2b9" alt="Basilico — Rapallo" />
       </a>
       <br />
-      <strong><a href="https://basilico-txfxsxuuma-ew.a.run.app">Basilico — Rapallo</a></strong><br />
+      <strong><a href="https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi">Basilico — Rapallo</a></strong><br />
       <sub>App Consumer &amp; Risparmio · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       App per confrontare in tempo reale offerte e volantini dei supermercati locali, organizzare la dispensa e pianificare la spesa settimanale anche senza connessione.<br /><br />
-      <a href="https://basilico-txfxsxuuma-ew.a.run.app"><strong>🚀 Prova la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/basilico">📄 Dettagli</a>
+      <a href="https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi"><strong>🚀 Apri Vista Offerte</strong></a> · <a href="https://github.com/Noobucodonosor/basilico">📄 Dettagli</a>
     </td>
     <td width="50%" valign="top"></td>
   </tr>
@@ -114,17 +114,17 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Stato dei Progetti in Tempo Reale
 
 <!-- PULSE:START -->
-> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **0** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 14:07*
+> **7** progetti attivi in vetrina · **10** miglioramenti negli ultimi 7 giorni · **1** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 14:28*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
+| [**resuscipack**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack) | Ricerca & Editoria Digitale | 🟢 Aggiornato oggi | 23 nov 2026 | 3 aggiornamenti |
 | [**ScooterLab — IoT & Sensori**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab) | Dispositivi Connessi (IoT) | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
-| [**resuscipack**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack) | Ricerca & Editoria Digitale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Previsioni & Monitoraggio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**Leslie — Agency OS**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie) | Automazione Commerciale B2B | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**kn5 — Knowledge Ingestor**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5) | AI & Gestione Conoscenza | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 | [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
-| [**Basilico — Rapallo**](https://basilico-txfxsxuuma-ew.a.run.app) | App Consumer & Risparmio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**Basilico — Rapallo**](https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi) | App Consumer & Risparmio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 2 aggiornamenti |
 <!-- PULSE:END -->
 
 ---

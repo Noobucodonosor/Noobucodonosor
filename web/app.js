@@ -615,6 +615,22 @@ function renderPlaygroundLeft() {
     field.append(label, ta);
     left.appendChild(field);
   } else if (state.activeTab === 'resuscipack') {
+    if (pg.bookViewUrl) {
+      const bookBanner = document.createElement('div');
+      bookBanner.className = 'notice-bar';
+      bookBanner.style.marginBottom = '0.75rem';
+      const bookText = document.createElement('span');
+      bookText.textContent = 'Prodotto visualizzabile: Vista Libro continua (2 volumi, 20 capitoli, KaTeX e SVG).';
+      const bookLink = document.createElement('a');
+      bookLink.className = 'btn btn-primary btn-sm';
+      bookLink.href = pg.bookViewUrl;
+      bookLink.target = '_blank';
+      bookLink.rel = 'noopener noreferrer';
+      bookLink.textContent = '📖 Apri Vista Libro';
+      bookBanner.append(bookText, bookLink);
+      left.appendChild(bookBanner);
+    }
+
     const field = document.createElement('div');
     field.className = 'field';
     const label = document.createElement('label');

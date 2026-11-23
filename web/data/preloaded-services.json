@@ -31,8 +31,8 @@
       "title": "Basilico — Rapallo",
       "category": "App Consumer & Risparmio",
       "accessType": "live",
-      "badge": "Live su Cloud Run",
-      "liveUrl": "https://basilico-txfxsxuuma-ew.a.run.app",
+      "badge": "Vista Offerte · Cloud Run",
+      "liveUrl": "https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi",
       "repoUrl": "https://github.com/Noobucodonosor/basilico",
       "previewUrl": "https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png",
       "summary": "Confronta in tempo reale offerte e volantini dei 14 supermercati reali di Rapallo, organizza la dispensa e pianifica la spesa settimanale anche offline (PWA).",
@@ -213,7 +213,8 @@
     },
     "resuscipack": {
       "label": "resuscipack",
-      "subtitle": "Ricerca Full-Text & Ponti Epistemici su fonti Open-Access verificate (zero copyright)",
+      "subtitle": "Vista Libro (20 capitoli) & Ponti Epistemici su fonti Open-Access verificate (zero copyright)",
+      "bookViewUrl": "https://noobucodonosor.github.io/resuscipack/",
       "defaultAction": "Sintetizza i concetti collegati alla query citando esclusivamente gli ID [OA-..] presenti nelle fonti selezionate e proponi un ponte trasversale ('Libro Sbagliato').",
       "items": [
         {

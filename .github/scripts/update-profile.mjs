@@ -30,8 +30,8 @@ const PROJECTS = [
     repo: 'basilico',
     title: 'Basilico — Rapallo',
     category: 'App Consumer & Risparmio',
-    liveUrl: 'https://basilico-txfxsxuuma-ew.a.run.app',
-    liveLabel: 'Prova la Demo',
+    liveUrl: 'https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi',
+    liveLabel: 'Apri Vista Offerte',
     infoUrl: 'https://github.com/Noobucodonosor/basilico',
     summary:
       'App per confrontare in tempo reale offerte e volantini dei supermercati locali, organizzare la dispensa e pianificare la spesa settimanale anche senza connessione.',
@@ -78,10 +78,12 @@ const PROJECTS = [
     repo: 'resuscipack',
     title: 'resuscipack',
     category: 'Ricerca & Editoria Digitale',
-    ...getLiveTarget('resuscipack', 'https://noobucodonosor.github.io/resuscipack/', 'Apri Anteprima'),
+    ...getLiveTarget('resuscipack', 'https://noobucodonosor.github.io/resuscipack/', 'Apri Vista Libro'),
+    secondaryUrl: 'https://noobucodonosor.github.io/resuscipack/',
+    secondaryLabel: '📖 Vista Libro',
     infoUrl: 'https://github.com/Noobucodonosor/resuscipack',
     summary:
-      'Motore di ricerca e consultazione su oltre 1.400 testi e volumi tecnici, progettato per trovare subito concetti chiave con fonti sempre verificabili.',
+      'Due volumi continui in 20 capitoli e motore di ricerca su oltre 1.400 testi tecnici, progettato per studiare con formule KaTeX, diagrammi SVG e fonti sempre verificabili.',
   },
   {
     repo: 'scooterlab',
@@ -165,6 +167,9 @@ async function fetchProjectState(proj) {
 
 function renderCard(p) {
   const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/docs/preview/social-preview.png?v=${p.previewSha}`;
+  const secondaryLink = p.secondaryUrl
+    ? ` · <a href="${p.secondaryUrl}"><strong>${escapeHtml(p.secondaryLabel || 'Anteprima')}</strong></a>`
+    : '';
   return `    <td width="50%" valign="top">
       <a href="${p.liveUrl}">
         <img src="${imgUrl}" alt="${escapeHtml(p.title)}" />
@@ -173,7 +178,7 @@ function renderCard(p) {
       <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></strong><br />
       <sub>${escapeHtml(p.category)} · ${p.freshness} (${p.lastDateIt})</sub><br /><br />
       ${escapeHtml(p.summary)}<br /><br />
-      <a href="${p.liveUrl}"><strong>🚀 ${escapeHtml(p.liveLabel)}</strong></a> · <a href="${p.infoUrl}">📄 Dettagli</a>
+      <a href="${p.liveUrl}"><strong>🚀 ${escapeHtml(p.liveLabel)}</strong></a>${secondaryLink} · <a href="${p.infoUrl}">📄 Dettagli</a>
     </td>`;
 }
 
