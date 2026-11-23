@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   fetchProjectState,
   renderCard,
+  renderShowcase,
   parseProfileArgs,
   replaceBlock,
 } from '../.github/scripts/update-profile.mjs';
@@ -47,4 +48,39 @@ test('replaceBlock replaces content between HTML markers', () => {
   const src = 'before\n<!-- SHOWCASE:START -->\nold\n<!-- SHOWCASE:END -->\nafter';
   const out = replaceBlock(src, 'SHOWCASE', 'new-content');
   assert.ok(out.includes('<!-- SHOWCASE:START -->\nnew-content\n<!-- SHOWCASE:END -->'));
+});
+
+test('renderShowcase renders full-width single-column rows', () => {
+  const html = renderShowcase([
+    {
+      repo: 'r1',
+      title: 'Project 1',
+      category: 'Cat 1',
+      liveUrl: 'https://example.com/1',
+      liveLabel: 'Prova',
+      infoUrl: 'https://github.com/Noobucodonosor/r1',
+      summary: 'Summary 1',
+      hasPreview: true,
+      previewSha: 'abc123',
+      freshness: '🟢 Aggiornato oggi',
+      lastDateIt: '23 nov 2026',
+    },
+    {
+      repo: 'r2',
+      title: 'Project 2',
+      category: 'Cat 2',
+      liveUrl: 'https://example.com/2',
+      liveLabel: 'Prova',
+      infoUrl: 'https://github.com/Noobucodonosor/r2',
+      summary: 'Summary 2',
+      hasPreview: false,
+      freshness: '⚪ Stabile',
+      lastDateIt: 'N/D',
+    },
+  ]);
+
+  assert.equal((html.match(/<tr>/g) || []).length, 2);
+  assert.ok(html.includes('<td width="100%" valign="top">'));
+  assert.ok(html.includes('width="100%" />'));
+  assert.ok(!html.includes('width="50%"'));
 });

@@ -231,7 +231,7 @@ export function renderCard(p) {
   const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/${previewPath}?v=${p.previewSha || 'latest'}`;
   const previewBlock = hasPreview
     ? `      <a href="${p.liveUrl}">
-        <img src="${imgUrl}" alt="${escapeHtml(p.title)}" />
+        <img src="${imgUrl}" alt="${escapeHtml(p.title)}" width="100%" />
       </a>
       <br />\n`
     : '';
@@ -239,7 +239,7 @@ export function renderCard(p) {
     ? ` · <a href="${p.secondaryUrl}"><strong>${escapeHtml(p.secondaryLabel || 'Anteprima')}</strong></a>`
     : '';
   const dateSuffix = p.lastDateIt && p.lastDateIt !== 'N/D' ? ` (${p.lastDateIt})` : '';
-  return `    <td width="50%" valign="top">
+  return `    <td width="100%" valign="top">
 ${previewBlock}      <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></strong><br />
       <sub>${escapeHtml(p.category)} · ${p.freshness}${dateSuffix}</sub><br /><br />
       ${escapeHtml(p.summary)}<br /><br />
@@ -248,12 +248,7 @@ ${previewBlock}      <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></
 }
 
 export function renderShowcase(states) {
-  const rows = [];
-  for (let i = 0; i < states.length; i += 2) {
-    const left = renderCard(states[i]);
-    const right = states[i + 1] ? renderCard(states[i + 1]) : '    <td width="50%" valign="top"></td>';
-    rows.push(`  <tr>\n${left}\n${right}\n  </tr>`);
-  }
+  const rows = states.map((state) => `  <tr>\n${renderCard(state)}\n  </tr>`);
   return `<table>\n${rows.join('\n')}\n</table>`;
 }
 

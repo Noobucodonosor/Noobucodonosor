@@ -37,9 +37,9 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 <!-- SHOWCASE:START -->
 <table>
   <tr>
-    <td width="50%" valign="top">
+    <td width="100%" valign="top">
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png?v=86a20dc4" alt="ScooterLab — IoT &amp; Sensori" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png?v=86a20dc4" alt="ScooterLab — IoT &amp; Sensori" width="100%" />
       </a>
       <br />
       <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">ScooterLab — IoT &amp; Sensori</a></strong><br />
@@ -47,9 +47,11 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.<br /><br />
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
     </td>
-    <td width="50%" valign="top">
+  </tr>
+  <tr>
+    <td width="100%" valign="top">
       <a href="https://noobucodonosor.github.io/genova-settimana/">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/genova-settimana/main/docs/preview/social-preview.png?v=fc48f839" alt="Genova Civica &amp; Cultura" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/genova-settimana/main/docs/preview/social-preview.png?v=fc48f839" alt="Genova Civica &amp; Cultura" width="100%" />
       </a>
       <br />
       <strong><a href="https://noobucodonosor.github.io/genova-settimana/">Genova Civica &amp; Cultura</a></strong><br />
@@ -59,9 +61,9 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
     </td>
   </tr>
   <tr>
-    <td width="50%" valign="top">
+    <td width="100%" valign="top">
       <a href="https://mediometeo-664856461640.europe-west1.run.app">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/mediometeo/main/docs/preview/social-preview.png?v=8b3ec840" alt="MedioMeteo Genova" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/mediometeo/main/docs/preview/social-preview.png?v=8b3ec840" alt="MedioMeteo Genova" width="100%" />
       </a>
       <br />
       <strong><a href="https://mediometeo-664856461640.europe-west1.run.app">MedioMeteo Genova</a></strong><br />
@@ -69,9 +71,11 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       Piattaforma meteo per terra e mare su 67 comuni della provincia di Genova, basata su 199 sensori reali sul territorio con mappe interattive e bollettini chiari.<br /><br />
       <a href="https://mediometeo-664856461640.europe-west1.run.app"><strong>🚀 Prova la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/mediometeo">📄 Dettagli</a>
     </td>
-    <td width="50%" valign="top">
+  </tr>
+  <tr>
+    <td width="100%" valign="top">
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png?v=cfffc598" alt="resuscipack" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png?v=cfffc598" alt="resuscipack" width="100%" />
       </a>
       <br />
       <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack">resuscipack</a></strong><br />
@@ -81,9 +85,9 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
     </td>
   </tr>
   <tr>
-    <td width="50%" valign="top">
+    <td width="100%" valign="top">
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/leslie-agency-os/main/docs/preview/social-preview.png?v=65f45f95" alt="Leslie — Agency OS" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/leslie-agency-os/main/docs/preview/social-preview.png?v=65f45f95" alt="Leslie — Agency OS" width="100%" />
       </a>
       <br />
       <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie">Leslie — Agency OS</a></strong><br />
@@ -91,9 +95,11 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       Sistema intelligente per agenzie e team commerciali: ricerca automaticamente nuovi potenziali clienti, li analizza con l’AI e li organizza in un pannello di gestione.<br /><br />
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/leslie-agency-os">📄 Dettagli</a>
     </td>
-    <td width="50%" valign="top">
+  </tr>
+  <tr>
+    <td width="100%" valign="top">
       <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/kn5/main/docs/preview/social-preview.png?v=bb721526" alt="kn5 — Knowledge Ingestor" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/kn5/main/docs/preview/social-preview.png?v=bb721526" alt="kn5 — Knowledge Ingestor" width="100%" />
       </a>
       <br />
       <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=kn5">kn5 — Knowledge Ingestor</a></strong><br />
@@ -103,9 +109,9 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
     </td>
   </tr>
   <tr>
-    <td width="50%" valign="top">
+    <td width="100%" valign="top">
       <a href="https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png?v=d4c3c2b9" alt="Basilico — Rapallo" />
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png?v=d4c3c2b9" alt="Basilico — Rapallo" width="100%" />
       </a>
       <br />
       <strong><a href="https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi">Basilico — Rapallo</a></strong><br />
@@ -113,7 +119,6 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       App per confrontare in tempo reale offerte e volantini dei supermercati locali, organizzare la dispensa e pianificare la spesa settimanale anche senza connessione.<br /><br />
       <a href="https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi"><strong>🚀 Apri Vista Offerte</strong></a> · <a href="https://github.com/Noobucodonosor/basilico">📄 Dettagli</a>
     </td>
-    <td width="50%" valign="top"></td>
   </tr>
 </table>
 <!-- SHOWCASE:END -->
