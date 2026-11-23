@@ -52,7 +52,7 @@ Scelta l'architettura **Ibrida 1→2 Hardened** con le quattro decisioni bloccat
 ### Difesa a Tre Livelli sul Gateway AI (`packages/ai-gateway/`)
 
 1. **Livello 1 — Hard Spend Cap (GCP):** Budget Spend Cap mensile via Cloud Billing Budget API su Cloud Run (`EXCLUDE_ALL_CREDITS`, soglia all'80–90% del tetto desiderato, es. $1–$5/mese) + alert Pub/Sub sul network egress.
-2. **Livello 2 — Quote, Concurrency & Rate Limit:** Cloud Run Node.js 22 con `0.5 vCPU`, `256 MiB`, `--min-instances=0`, `--max-instances=2`, `--concurrency=40`, `--cpu-boost`, `NODE_COMPILE_CACHE` pre-riscaldata nel Dockerfile e rate limiter per IP/sessione + daily global cap.
+2. **Livello 2 — Quote, Concurrency & Rate Limit:** Cloud Run Node.js 22 con `1 vCPU` (minimo richiesto da Cloud Run per `concurrency > 1`), `256 MiB`, `--min-instances=0`, `--max-instances=2`, `--concurrency=40`, `--cpu-boost`, `NODE_COMPILE_CACHE` pre-riscaldata nel Dockerfile e rate limiter per IP/sessione + daily global cap.
 3. **Livello 3 — Anti-Bot & CORS Hardening:**
    - Middleware CORS con **allowlist esatta** (`ALLOWED_ORIGINS`, mai `*` o `null` in produzione), `Vary: Origin` e `Access-Control-Max-Age: 7200` su `OPTIONS`.
    - Verifica Proof-of-Work **ALTCHA self-hosted** (SHA-256 HMAC zero-dependency in `packages/ai-gateway/src/altcha.mjs`, `GET /api/altcha/challenge`, header `X-Altcha-Payload` opzionale/attivabile via `ALTCHA_ENABLED=1`) per neutralizzare `curl`/bot senza cookie né terze parti USA.
