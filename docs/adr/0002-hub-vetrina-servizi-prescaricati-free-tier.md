@@ -3,7 +3,7 @@
 - **Stato:** Accettato
 - **Priorità:** P1 — Alta
 - **Data:** 2026-11-22
-- **Autori:** Dany (`Noobucodonosor`)
+- **Autori:** `Noobucodonosor`
 - **Fonti:** `README.md`, `AGENTS.md`, `docs/adr/0001-profilo-vetrina-github.md`, repository fratelli (`basilico`, `mediometeo`, `genova-settimana`, `leslie-agency-os`, `kn5`, `resuscipack`, `scooterlab`)
 
 ---

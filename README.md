@@ -1,20 +1,21 @@
 # Noobucodonosor — Officina Digitale, AI Agentica & Sistemi IoT
 
 Progetto e sviluppo **prodotti web reali**, **flussi di AI agentica a costo controllato** e **sistemi IoT** (Genova & Rapallo).
-Tutti i 7 prodotti qui sotto sono esplorabili subito online; i 4 playground AI girano sulla [plancia interattiva statica](https://noobucodonosor.github.io/Noobucodonosor/) con gateway Node.js 22 on-demand.
+Tutti gli 8 prodotti qui sotto sono esplorabili subito online; i 4 playground AI girano sulla [plancia interattiva statica](https://noobucodonosor.github.io/Noobucodonosor/) con gateway Node.js 22 on-demand.
 
-## 7 Prodotti Reali
+## 8 Prodotti Reali
 
 <!-- SHOWCASE:START -->
 | Progetto | Problema risolto | Stack | Live / Playground |
 | :--- | :--- | :--- | :--- |
 | [**Cosa faccio questa settimana a Genova**](https://github.com/Noobucodonosor/genova-settimana) | Cinema, mostre, musica, biblioteche, ~5.000 attività locali e storia delle vie su 67 comuni. | `Static Web · ETL · GitHub Pages` | [**Apri Live**](https://noobucodonosor.github.io/genova-settimana/) |
-| [**resuscipack**](https://github.com/Noobucodonosor/resuscipack) | Due volumi in 20 capitoli e ricerca verificabile su 1.400+ testi tecnici con formule KaTeX. | `FTS5 · KaTeX · Playground AI` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=resuscipack) · [Vista Libro](https://noobucodonosor.github.io/resuscipack/) |
 | [**MedioMeteo Genova**](https://github.com/Noobucodonosor/mediometeo) | Meteo terra e mare su 67 comuni della provincia di Genova basato su 199 sensori reali sul territorio. | `Python · Cloud Run · 199 sensori OMIRL` | [**Apri Live**](https://mediometeo-664856461640.europe-west1.run.app) |
-| [**ScooterLab — Telemetria IoT (ESP32-S3)**](https://github.com/Noobucodonosor/scooterlab) | Kit hardware/software personale (non affiliato a UTSA ScooterLab) con ESP32-S3, IMU e GNSS per analisi di guida su scooter. | `ESP32-S3 · IMU/GNSS · File .slab` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=scooterlab) |
-| [**kn5 — Knowledge Ingestor**](https://github.com/Noobucodonosor/kn5) | Trasforma video YouTube e articoli in schede Markdown Obsidian con controllo budget API. | `Python · Obsidian MD · Telegram` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=kn5) |
-| [**Leslie — Agency OS**](https://github.com/Noobucodonosor/leslie-agency-os) | Scouting e qualificazione B2B con score 0–10 e bozze outreach per agenzie e team commerciali. | `AI Agentica · Scoring · Playground AI` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=leslie) |
-| [**Basilico — Rapallo**](https://github.com/Noobucodonosor/basilico) | Confronto in tempo reale di offerte e volantini di 14 supermercati locali con pianificazione spesa offline. | `PWA Offline-First · Cloud Run` | [**Apri Offerte**](https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi) |
+| [**Basilico (C.I.B.O.) — Rapallo**](https://github.com/Noobucodonosor/basilico) | Food intelligence offline-first: offerte reali di 14 supermercati di Rapallo, nutrizione CREA (832 alimenti), dispensa e spesa zero-sprechi. | `React 19 · PWA · CREA · Cloud Run` | [**Apri Offerte**](https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi) |
+| [**v.i.n.o. — Annate Smartphone NOS**](https://github.com/Noobucodonosor/v.i.n.o.) | Comparatore e market tracker Git-backed per valutare le migliori annate di smartphone New Old Stock con scoring deterministico. | `Astro · TypeScript · Zod · GitHub Pages` | [**Apri Live**](https://noobucodonosor.github.io/v.i.n.o./) |
+| [**resuscipack**](https://github.com/Noobucodonosor/resuscipack) | Decompressione pedagogica, due volumi in 20 capitoli e ricerca verificabile su 1.370+ volumi tecnici con formule KaTeX. | `FTS5 · KaTeX · Playground AI` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=resuscipack) · [Vista Libro](https://noobucodonosor.github.io/resuscipack/) |
+| [**ScooterLab — Telemetria IoT (ESP32-S3)**](https://github.com/Noobucodonosor/scooterlab) | Kit hardware/software personale (non affiliato a UTSA ScooterLab) con ESP32-S3, Smart IMU, GNSS `.slab` e Smart Garage Web App Officina. | `ESP32-S3 · IMU/GNSS · .slab · 8 ADR` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=scooterlab) · [Scheda Live](https://noobucodonosor.github.io/scooterlab/) |
+| [**kn5 — Knowledge Ingestor**](https://github.com/Noobucodonosor/kn5) | Trasforma video YouTube e articoli in schede Markdown Obsidian con controllo budget API. | `Python · Obsidian MD · Telegram` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=kn5) · [Scheda Live](https://noobucodonosor.github.io/kn5/) |
+| [**Leslie — Agency OS**](https://github.com/Noobucodonosor/leslie-agency-os) | Scouting e qualificazione B2B con score 0–10 e bozze outreach per agenzie e team commerciali. | `Flask · AI Scoring · Playground AI` | [**Prova Live**](https://noobucodonosor.github.io/Noobucodonosor/?app=leslie) · [Scheda Live](https://noobucodonosor.github.io/leslie-agency-os/) |
 <!-- SHOWCASE:END -->
 
 ## Plancia Interattiva, Motore AI & Consulenza

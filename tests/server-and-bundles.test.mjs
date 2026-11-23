@@ -37,7 +37,7 @@ test('HTTP server serves portal, dataset, health without secret leaks, AI proxy 
   const dataRes = await fetch(`${base}/data/preloaded-services.json`);
   assert.equal(dataRes.status, 200);
   const dataset = await dataRes.json();
-  assert.equal(dataset.projects.length, 7);
+  assert.equal(dataset.projects.length, 8);
   assert.ok(dataset.playgrounds.leslie.items.length >= 3);
   assert.ok(dataset.playgrounds.kn5.items.length >= 3);
   assert.ok(dataset.playgrounds.resuscipack.items.length >= 4);

@@ -3,7 +3,7 @@
 - **Stato:** Accettato & Implementato
 - **Priorità:** P0 / P1 — Critica & Alta
 - **Data:** 2026-11-22
-- **Autori:** Dany (`Noobucodonosor`)
+- **Autori:** `Noobucodonosor`
 - **Estende:** [ADR-0002](./0002-hub-vetrina-servizi-prescaricati-free-tier.md), [VISION.md](../../VISION.md)
 
 ---

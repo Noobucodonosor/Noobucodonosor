@@ -71,6 +71,8 @@ export const PROJECTS = [
     title: 'Leslie — Agency OS',
     category: 'Automazione Commerciale B2B',
     ...getLiveTarget('leslie', 'https://noobucodonosor.github.io/leslie-agency-os/', 'Guarda la Demo'),
+    secondaryUrl: 'https://noobucodonosor.github.io/leslie-agency-os/',
+    secondaryLabel: 'Scheda Live',
     infoUrl: 'https://github.com/Noobucodonosor/leslie-agency-os',
     summary:
       'Sistema intelligente per agenzie e team commerciali: ricerca automaticamente nuovi potenziali clienti, li analizza con l’AI e li organizza in un pannello di gestione.',
@@ -80,6 +82,8 @@ export const PROJECTS = [
     title: 'kn5 — Knowledge Ingestor',
     category: 'AI & Gestione Conoscenza',
     ...getLiveTarget('kn5', 'https://noobucodonosor.github.io/kn5/', 'Esplora il Progetto'),
+    secondaryUrl: 'https://noobucodonosor.github.io/kn5/',
+    secondaryLabel: 'Scheda Live',
     infoUrl: 'https://github.com/Noobucodonosor/kn5',
     summary:
       'Assistente AI che trasforma video e post (YouTube e Instagram) in schede ordinate e riassunti consultabili, con controllo dei costi e invio rapido da Telegram.',
@@ -93,16 +97,28 @@ export const PROJECTS = [
     secondaryLabel: '📖 Vista Libro',
     infoUrl: 'https://github.com/Noobucodonosor/resuscipack',
     summary:
-      'Due volumi continui in 20 capitoli e motore di ricerca su oltre 1.400 testi tecnici, progettato per studiare con formule KaTeX, diagrammi SVG e fonti sempre verificabili.',
+      'Due volumi continui in 20 capitoli e motore di ricerca su oltre 1.370 volumi tecnici, progettato per studiare con formule KaTeX, diagrammi SVG e fonti sempre verificabili.',
   },
   {
     repo: 'scooterlab',
-    title: 'ScooterLab — IoT & Sensori',
+    title: 'ScooterLab — Telemetria IoT (ESP32-S3)',
     category: 'Dispositivi Connessi (IoT)',
     ...getLiveTarget('scooterlab', 'https://noobucodonosor.github.io/scooterlab/', 'Vedi Scheda Progetto'),
+    secondaryUrl: 'https://noobucodonosor.github.io/scooterlab/',
+    secondaryLabel: 'Scheda Live',
     infoUrl: 'https://github.com/Noobucodonosor/scooterlab',
     summary:
-      'Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.',
+      'Kit hardware/software personale (non affiliato a UTSA ScooterLab) con ESP32-S3, Smart IMU, GNSS .slab e Smart Garage Web App Officina.',
+  },
+  {
+    repo: 'v.i.n.o.',
+    title: 'v.i.n.o. — Annate Smartphone NOS',
+    category: 'Market Tracker & Dati',
+    liveUrl: 'https://noobucodonosor.github.io/v.i.n.o./',
+    liveLabel: 'Apri Live',
+    infoUrl: 'https://github.com/Noobucodonosor/v.i.n.o.',
+    summary:
+      'Comparatore e market tracker Git-backed in Astro + TypeScript + Zod per valutare le migliori annate di smartphone New Old Stock.',
   },
 ];
 

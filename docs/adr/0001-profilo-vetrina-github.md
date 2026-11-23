@@ -2,7 +2,7 @@
 
 - **Stato:** Accettato (Baseline)
 - **Data:** 2026-11-22
-- **Autori:** Dany (Noobucodonosor)
+- **Autori:** Noobucodonosor (Noobucodonosor)
 - **Fonti:** `README.md`, `.github/scripts/update-profile.mjs`, `.github/workflows/update-profile.yml`
 
 ---

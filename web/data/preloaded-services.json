@@ -113,8 +113,21 @@
       "liveUrl": "https://noobucodonosor.github.io/scooterlab/",
       "repoUrl": "https://github.com/Noobucodonosor/scooterlab",
       "previewUrl": "https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png",
-      "summary": "Telemetria veicolare non invasiva (ESP32-S3 + Smart IMU + GNSS u-blox M10) per SYM Symphony ST 200i con formato binario .slab e analisi guida.",
+      "summary": "Telemetria veicolare non invasiva (ESP32-S3 + Smart IMU + GNSS u-blox M10) per SYM Symphony ST 200i con formato binario .slab e Smart Garage Web App.",
       "stack": ["ESP32-S3", "ISM330IS IMU", "GNSS M10", "Python Analytics"]
+    },
+    {
+      "id": "vino",
+      "repo": "v.i.n.o.",
+      "title": "v.i.n.o. — Annate Smartphone NOS",
+      "category": "Market Tracker & Dati",
+      "accessType": "live",
+      "badge": "Live su GitHub Pages",
+      "liveUrl": "https://noobucodonosor.github.io/v.i.n.o./",
+      "repoUrl": "https://github.com/Noobucodonosor/v.i.n.o.",
+      "previewUrl": "",
+      "summary": "Comparatore e market tracker Git-backed in Astro + TypeScript + Zod per individuare le migliori annate di smartphone New Old Stock.",
+      "stack": ["Astro 7", "TypeScript", "Zod", "GitHub Pages"]
     }
   ],
   "assistantPresets": [

@@ -2,7 +2,7 @@
 
 - **Stato:** Accettato
 - **Data:** 2026-11-23
-- **Decisori:** Dany (`Noobucodonosor`)
+- **Decisori:** `Noobucodonosor`
 - **Formato:** MADR 4.0.0
 - **ADR correlati:** [ADR-0001](./0001-profilo-vetrina-github.md), [ADR-0002](./0002-hub-vetrina-servizi-prescaricati-free-tier.md), [ADR-0003](./0003-hardening-sicurezza-cost-control.md)
 
