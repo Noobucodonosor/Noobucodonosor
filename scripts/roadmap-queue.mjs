@@ -1,4 +1,6 @@
 import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const DEFAULT_OWNER = 'Noobucodonosor';
@@ -280,10 +282,89 @@ function scheduleIssue({ owner, projNum, repo, issueNum, wave, start, target, st
   return { itemId, url: issue.url, title: issue.title };
 }
 
+export const AUDIT_SCANNERS = [
+  {
+    id: 'L1-adr-structure',
+    level: 1,
+    check(repoDir) {
+      const missing = [];
+      if (!fs.existsSync(path.join(repoDir, 'AGENTS.md'))) missing.push('AGENTS.md');
+      if (!fs.existsSync(path.join(repoDir, 'docs', 'adr', 'README.md'))) missing.push('docs/adr/README.md');
+      return missing.length
+        ? { ok: false, taskCode: 'TASK-ADR-01', priority: 'P1-high', detail: `Missing: ${missing.join(', ')}` }
+        : { ok: true };
+    }
+  },
+  {
+    id: 'L1-ci-pipeline',
+    level: 1,
+    check(repoDir) {
+      const wfDir = path.join(repoDir, '.github', 'workflows');
+      if (!fs.existsSync(wfDir)) {
+        return { ok: false, taskCode: 'TASK-CI-01', priority: 'P1-high', detail: 'No .github/workflows directory' };
+      }
+      const files = fs.readdirSync(wfDir).filter((f) => f.endsWith('.yml') || f.endsWith('.yaml'));
+      const hasGate = files.some((f) => /ci|test|adr-pre-release|update-profile/i.test(f));
+      return hasGate
+        ? { ok: true, workflows: files }
+        : { ok: false, taskCode: 'TASK-CI-01', priority: 'P1-high', detail: 'Missing CI/ADR gate workflow' };
+    }
+  },
+  {
+    id: 'L2-preview-assets',
+    level: 2,
+    check(repoDir, repoName) {
+      if (repoName === 'Noobucodonosor') return { ok: true };
+      const social = path.join(repoDir, 'docs', 'preview', 'social-preview.png');
+      const desktop = path.join(repoDir, 'docs', 'preview', 'desktop.png');
+      if (fs.existsSync(social) || fs.existsSync(desktop)) {
+        return { ok: true, asset: fs.existsSync(social) ? 'social-preview.png' : 'desktop.png' };
+      }
+      return {
+        ok: false,
+        taskCode: 'TASK-PREVIEW-01',
+        priority: 'P2-medium',
+        detail: 'Missing docs/preview/social-preview.png and desktop.png'
+      };
+    }
+  }
+];
+
+export function auditRepositoryDir(repoDir, repoName = path.basename(repoDir), scanners = AUDIT_SCANNERS) {
+  if (!fs.existsSync(repoDir)) {
+    return { repo: repoName, present: false, findings: [] };
+  }
+  const findings = [];
+  for (const scanner of scanners) {
+    const res = scanner.check(repoDir, repoName);
+    if (!res.ok) {
+      findings.push({
+        scannerId: scanner.id,
+        level: scanner.level,
+        taskCode: res.taskCode,
+        priority: res.priority,
+        detail: res.detail
+      });
+    }
+  }
+  return { repo: repoName, present: true, healthy: findings.length === 0, findings };
+}
+
+export function auditLocalWorkspace(workspaceRoot = path.resolve(process.cwd(), '..'), repos = ECOSYSTEM_REPOS) {
+  return repos.map((repo) => auditRepositoryDir(path.join(workspaceRoot, repo), repo));
+}
+
 function main() {
   const { command, flags } = parseCliArgs(process.argv.slice(2));
   const owner = flags.owner || DEFAULT_OWNER;
   const projNum = Number(flags.project || DEFAULT_PROJECT_NUMBER);
+
+  if (command === 'audit') {
+    const root = flags.workspace ? path.resolve(flags.workspace) : path.resolve(process.cwd(), '..');
+    const results = auditLocalWorkspace(root);
+    console.log(JSON.stringify(results, null, 2));
+    return;
+  }
 
   if (command === 'sync-open') {
     const result = syncOpenIssues({ owner, projNum });
