@@ -4,9 +4,15 @@ import {
   fetchProjectState,
   renderCard,
   renderShowcase,
+  renderBentoShowcase,
   parseProfileArgs,
   replaceBlock,
 } from '../.github/scripts/update-profile.mjs';
+import {
+  renderHeroSvg,
+  renderProjectCardSvg,
+  renderSmilCounter,
+} from '../scripts/build-profile-hud.mjs';
 
 test('parseProfileArgs detects --dry-run flag', () => {
   assert.equal(parseProfileArgs([]).dryRun, false);
@@ -110,4 +116,89 @@ test('renderCard renders clean desktop screenshot and quickLinks for genova-sett
   assert.ok(html.includes('📅 Apri Questa settimana'));
   assert.ok(html.includes('🧭 Tempo libero'));
   assert.ok(html.includes('🏪 Esercenti'));
+});
+
+test('SVG HUD generator produces pure native SVG without foreignObject and respects STATIC=1', () => {
+  const animatedHero = renderHeroSvg({
+    theme: 'dark',
+    identity: { handle: 'noobucodonosor', tagline: 'Test tagline', location: 'Genova' },
+    states: [{ repo: 'mediometeo', slug: 'mediometeo', weekUpdatesCount: 3, freshness: '🟢 Aggiornato oggi' }],
+    hubProbe: { ok: true, status: 200, latencyMs: 120 },
+    updatedAtIt: '23 nov 2026, 21:00',
+    isStatic: false,
+  });
+
+  assert.ok(!animatedHero.includes('<foreignObject'), 'Must not use foreignObject for WebKit safety');
+  assert.ok(animatedHero.includes('prefers-reduced-motion: reduce'));
+  assert.ok(animatedHero.includes('gradientTransform'));
+
+  const staticHero = renderHeroSvg({
+    theme: 'light',
+    identity: { handle: 'noobucodonosor', tagline: 'Test tagline', location: 'Genova' },
+    states: [{ repo: 'mediometeo', slug: 'mediometeo', weekUpdatesCount: 3, freshness: '🟢 Aggiornato oggi' }],
+    hubProbe: { ok: false, status: 0, latencyMs: 4000 },
+    updatedAtIt: '23 nov 2026, 21:00',
+    isStatic: true,
+  });
+
+  assert.ok(!staticHero.includes('<animateTransform'), 'STATIC=1 omits SMIL animateTransform');
+  assert.ok(staticHero.includes('HUB STANDBY'));
+
+  const smilCounter = renderSmilCounter({
+    x: 10,
+    y: 20,
+    targetValue: 199,
+    suffix: ' sensori',
+    fill: '#fff',
+    isStatic: false,
+  });
+  assert.equal((smilCounter.match(/<set /g) || []).length, 18, 'Uses 18 SMIL <set> frames');
+
+  const bentoHtml = renderBentoShowcase([
+    {
+      repo: 'genova-settimana',
+      slug: 'genova-settimana',
+      title: 'Cosa faccio questa settimana a Genova',
+      category: 'Agenda & Territorio',
+      liveUrl: 'https://noobucodonosor.github.io/genova-settimana/',
+      infoUrl: 'https://github.com/Noobucodonosor/genova-settimana',
+      summary: 'Summary',
+      hasPreview: true,
+      previewPath: 'docs/preview/desktop.png',
+      previewSha: 'fc48f839',
+    },
+    {
+      repo: 'mediometeo',
+      slug: 'mediometeo',
+      title: 'MedioMeteo Genova',
+      category: 'Meteo & Sensori',
+      liveUrl: 'https://mediometeo-664856461640.europe-west1.run.app',
+      infoUrl: 'https://github.com/Noobucodonosor/mediometeo',
+      summary: 'Summary 2',
+    },
+  ]);
+
+  assert.ok(bentoHtml.includes('#gh-light-mode-only'));
+  assert.ok(bentoHtml.includes('#gh-dark-mode-only'));
+  assert.ok(bentoHtml.includes('width="49%"'));
+  assert.ok(bentoHtml.includes('<details>'));
+
+  const cardSvg = renderProjectCardSvg({
+    theme: 'dark',
+    project: {
+      repo: 'mediometeo',
+      slug: 'mediometeo',
+      title: 'MedioMeteo Genova',
+      category: 'Meteo & Sensori',
+      metricValue: 199,
+      metricSuffix: ' sensori',
+      metricSub: 'OMIRL · 67 comuni',
+      freshness: '🟢 Aggiornato oggi',
+      lastDateIt: '23 nov 2026',
+      weekUpdatesCount: 3,
+    },
+    probe: { ok: true, status: 200, latencyMs: 95 },
+    isStatic: true,
+  });
+  assert.ok(cardSvg.includes('ONLINE 95ms'));
 });

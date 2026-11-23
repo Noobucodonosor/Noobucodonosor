@@ -1,20 +1,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { buildAllHudSvgs, probeEndpoint } from '../../scripts/build-profile-hud.mjs';
 
 const OWNER = 'Noobucodonosor';
 const TOKEN = process.env.GITHUB_TOKEN || '';
 
 const HUB_CONFIG_PATH = path.resolve(process.cwd(), 'showcase.config.json');
-let HUB_BASE_URL = (process.env.HUB_BASE_URL || '').replace(/\/+$/, '');
-if (!HUB_BASE_URL && fs.existsSync(HUB_CONFIG_PATH)) {
+let SHOWCASE_CONFIG = {};
+if (fs.existsSync(HUB_CONFIG_PATH)) {
   try {
-    const cfg = JSON.parse(fs.readFileSync(HUB_CONFIG_PATH, 'utf8'));
-    HUB_BASE_URL = String(cfg.hubBaseUrl || '').replace(/\/+$/, '');
+    SHOWCASE_CONFIG = JSON.parse(fs.readFileSync(HUB_CONFIG_PATH, 'utf8'));
   } catch {
-    // ignore malformed config
+    SHOWCASE_CONFIG = {};
   }
 }
+let HUB_BASE_URL = (process.env.HUB_BASE_URL || String(SHOWCASE_CONFIG.hubBaseUrl || '')).replace(/\/+$/, '');
 
 export function getLiveTarget(appId, fallbackUrl, fallbackLabel) {
   if (HUB_BASE_URL) {
@@ -269,6 +270,115 @@ ${previewBlock}      <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></
     </td>`;
 }
 
+export function dualThemeImg({ basePath, alt, width, align }) {
+  const alignAttr = align ? ` align="${align}"` : '';
+  const widthAttr = width ? ` width="${width}"` : '';
+  return `<img src="${basePath}-light.svg#gh-light-mode-only" alt="${escapeHtml(alt)}"${widthAttr}${alignAttr} /><img src="${basePath}-dark.svg#gh-dark-mode-only" alt="${escapeHtml(alt)}"${widthAttr}${alignAttr} />`;
+}
+
+export function renderHudHero(hubUrl) {
+  const target = hubUrl || 'https://github.com/Noobucodonosor';
+  return `<a href="${target}">${dualThemeImg({
+    basePath: './assets/cards/hero',
+    alt: 'Noobucodonosor — Terminal HUD',
+    width: '100%',
+  })}</a>`;
+}
+
+export function renderHudTasks(config = SHOWCASE_CONFIG) {
+  const tasks = config?.profileHud?.quickTasks || [];
+  const base = HUB_BASE_URL || 'https://noobucodonosor-hub-664856461640.us-central1.run.app';
+  return tasks
+    .map(
+      (t) =>
+        `<a href="${base}/?task=${encodeURIComponent(t.task)}">${dualThemeImg({
+          basePath: `./assets/cards/task-${t.slug}`,
+          alt: `${t.title} — ${t.project}`,
+          width: '19%',
+        })}</a>`,
+    )
+    .join(' ');
+}
+
+export function renderHudBinaries(config = SHOWCASE_CONFIG) {
+  const base = HUB_BASE_URL || 'https://noobucodonosor-hub-664856461640.us-central1.run.app';
+  const portablePath = config?.profileHud?.portableBundlePath || 'bundles/noobucodonosor-portable.html';
+  return [
+    `<a href="${base}">${dualThemeImg({
+      basePath: './assets/cards/binary-web',
+      alt: 'Binario Web Live — Hub & Assistente AI',
+      width: '32.5%',
+    })}</a>`,
+    `<a href="${base}/${portablePath}?download=1">${dualThemeImg({
+      basePath: './assets/cards/binary-portable',
+      alt: 'Binario Locale Portabile (.html offline)',
+      width: '32.5%',
+    })}</a>`,
+    `<a href="#stato-dei-progetti-in-tempo-reale">${dualThemeImg({
+      basePath: './assets/cards/binary-telemetry',
+      alt: 'Telemetria 7 giorni',
+      width: '32.5%',
+    })}</a>`,
+  ].join(' ');
+}
+
+export function renderBentoShowcase(states) {
+  const featured = states.find((s) => s.repo === 'genova-settimana');
+  const rest = states.filter((s) => s.repo !== 'genova-settimana');
+
+  const blocks = [];
+  if (featured) {
+    const slug = featured.slug || featured.repo;
+    blocks.push(
+      `<a href="${featured.liveUrl}">${dualThemeImg({
+        basePath: `./assets/cards/project-${slug}`,
+        alt: featured.title,
+        width: '100%',
+      })}</a>`,
+    );
+    if (featured.hasPreview !== false) {
+      const previewPath = featured.previewPath || 'docs/preview/desktop.png';
+      const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${featured.repo}/main/${previewPath}?v=${featured.previewSha || 'latest'}`;
+      blocks.push(
+        `\n<a href="${featured.liveUrl}"><img src="${imgUrl}" alt="${escapeHtml(featured.title)}" width="100%" /></a>`,
+      );
+    }
+    blocks.push(
+      `\n<p><a href="${featured.liveUrl}"><strong>📅 Apri Questa settimana</strong></a> · <a href="https://noobucodonosor.github.io/genova-settimana/bussola.html">🧭 Tempo libero</a> · <a href="https://noobucodonosor.github.io/genova-settimana/esercenti.html">🏪 Esercenti</a> · <a href="https://noobucodonosor.github.io/genova-settimana/storie.html">🗺️ Storie &amp; Vie</a> · <a href="https://noobucodonosor.github.io/genova-settimana/dashboard.html">📊 67 Comuni</a> · <a href="${featured.infoUrl}">📄 Dettagli</a></p>`,
+    );
+  }
+
+  for (let i = 0; i < rest.length; i += 2) {
+    const pair = rest.slice(i, i + 2).map((s) => {
+      const slug = s.slug || s.repo;
+      return `<a href="${s.liveUrl}">${dualThemeImg({
+        basePath: `./assets/cards/project-${slug}`,
+        alt: s.title,
+        width: '49%',
+      })}</a>`;
+    });
+    blocks.push(`\n${pair.join(' ')}`);
+  }
+
+  const fallbackRows = states
+    .map(
+      (s) =>
+        `| [**${s.title}**](${s.liveUrl}) | ${s.category} | ${s.summary} | [Repo](${s.infoUrl}) |`,
+    )
+    .join('\n');
+
+  blocks.push(`\n<details>
+<summary><strong>📋 Elenco testuale accessibile (Mobile / Screen Reader)</strong></summary>
+
+| Progetto | Ambito | Descrizione | Sorgente |
+| :--- | :--- | :--- | :---: |
+${fallbackRows}
+
+</details>`);
+
+  return blocks.join('\n');
+}
+
 export function renderShowcase(states) {
   const rows = states.map((state) => `  <tr>\n${renderCard(state)}\n  </tr>`);
   return `<table>\n${rows.join('\n')}\n</table>`;
@@ -323,18 +433,81 @@ export function parseProfileArgs(argv = process.argv.slice(2)) {
   };
 }
 
-export async function runProfileUpdate({ dryRun = false, readmePath = path.resolve('README.md'), fetchImpl = fetch } = {}) {
+export async function runProfileUpdate({
+  dryRun = false,
+  readmePath = path.resolve('README.md'),
+  cardsDir = path.resolve('assets/cards'),
+  fetchImpl = fetch,
+} = {}) {
   const originalReadme = fs.readFileSync(readmePath, 'utf8');
   let nextReadme = originalReadme;
 
-  const states = await Promise.all(PROJECTS.map((p) => fetchProjectState(p, { fetchImpl })));
+  const hudProjects = Array.isArray(SHOWCASE_CONFIG?.profileHud?.projects) && SHOWCASE_CONFIG.profileHud.projects.length
+    ? SHOWCASE_CONFIG.profileHud.projects.map((hp) => {
+        const base = PROJECTS.find((p) => p.repo === hp.repo) || {};
+        const target = hp.appId ? getLiveTarget(hp.appId, hp.probeUrl, hp.liveLabel || 'Prova Live') : {};
+        return {
+          ...base,
+          ...hp,
+          ...target,
+          previewPath: base.previewPath || hp.previewPath,
+        };
+      })
+    : PROJECTS;
+
+  const [states, hubProbe, ...projectProbes] = await Promise.all([
+    Promise.all(hudProjects.map((p) => fetchProjectState(p, { fetchImpl }))),
+    probeEndpoint(HUB_BASE_URL, { fetchImpl }),
+    ...hudProjects.map((p) => probeEndpoint(p.probeUrl || p.liveUrl, { fetchImpl })),
+  ]);
+
+  const probeMap = {};
+  hudProjects.forEach((p, idx) => {
+    probeMap[p.slug || p.repo] = projectProbes[idx];
+  });
+
   states.sort((a, b) => {
+    if (a.repo === 'genova-settimana') return -1;
+    if (b.repo === 'genova-settimana') return 1;
     const ta = a.lastDate ? new Date(a.lastDate).getTime() : 0;
     const tb = b.lastDate ? new Date(b.lastDate).getTime() : 0;
     return tb - ta;
   });
 
-  nextReadme = replaceBlock(nextReadme, 'SHOWCASE', renderShowcase(states));
+  const updatedAtIt = new Date().toLocaleString('it-IT', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Europe/Rome',
+  });
+
+  if (!dryRun && SHOWCASE_CONFIG?.profileHud) {
+    buildAllHudSvgs({
+      outDir: cardsDir,
+      config: SHOWCASE_CONFIG,
+      states,
+      probes: probeMap,
+      hubProbe,
+      updatedAtIt,
+    });
+  }
+
+  if (nextReadme.includes('<!-- HUD_HERO:START -->')) {
+    nextReadme = replaceBlock(nextReadme, 'HUD_HERO', renderHudHero(HUB_BASE_URL));
+  }
+  if (nextReadme.includes('<!-- HUD_TASKS:START -->')) {
+    nextReadme = replaceBlock(nextReadme, 'HUD_TASKS', renderHudTasks(SHOWCASE_CONFIG));
+  }
+  if (nextReadme.includes('<!-- HUD_BINARIES:START -->')) {
+    nextReadme = replaceBlock(nextReadme, 'HUD_BINARIES', renderHudBinaries(SHOWCASE_CONFIG));
+  }
+  nextReadme = replaceBlock(
+    nextReadme,
+    'SHOWCASE',
+    nextReadme.includes('<!-- HUD_HERO:START -->') ? renderBentoShowcase(states) : renderShowcase(states),
+  );
   nextReadme = replaceBlock(nextReadme, 'PULSE', renderPulse(states));
 
   const changed = nextReadme !== originalReadme;

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="286" height="164" viewBox="0 0 286 164" role="img" aria-label="Binario Locale Portabile">
+  <defs><style>
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes barRise {
+      from { transform: scaleY(0.05); }
+      to { transform: scaleY(1); }
+    }
+    @keyframes pulseOpacity {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    @keyframes arrowSlide {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(3px); }
+    }
+    .line-reveal {
+      opacity: 0;
+      animation: fadeSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .bar-grow {
+      transform-box: fill-box;
+      transform-origin: bottom;
+      animation: barRise 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .pulse-dot {
+      animation: pulseOpacity 2.2s ease-in-out infinite;
+    }
+    .arrow-nudge {
+      animation: arrowSlide 2s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .line-reveal, .bar-grow, .pulse-dot, .arrow-nudge {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style></defs>
+  <rect x="0.5" y="0.5" width="285" height="163" rx="10" fill="#f6f8fa" stroke="#d0d7de" />
+  <text x="16" y="28" class="mono" font-size="11" font-weight="700" fill="#1a7f37">BINARIO 02 · OFFLINE HTML</text>
+  <text x="16" y="56" class="sans" font-size="17" font-weight="700" fill="#1f2328">Kit Locale Portabile</text>
+  <text x="16" y="78" class="sans" font-size="12" fill="#59636e">File singolo auto-contenuto (.html)</text>
+  <text x="16" y="96" class="sans" font-size="12" fill="#59636e">Doppio clic file:// · Zero dipendenze</text>
+  <rect x="16" y="114" width="114" height="22" rx="6" fill="#eaeef2" stroke="#d0d7de" />
+  <text x="24" y="129" class="mono" font-size="10" fill="#1f2328">BYOK + Fallback</text>
+  <text x="242" y="130" class="mono arrow-nudge" font-size="13" font-weight="700" fill="#1a7f37">↓</text>
+</svg>

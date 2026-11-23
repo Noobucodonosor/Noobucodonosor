@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="172" height="112" viewBox="0 0 172 112" role="img" aria-label="Lista Spesa — Basilico">
+  <defs>
+    <style>
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes barRise {
+      from { transform: scaleY(0.05); }
+      to { transform: scaleY(1); }
+    }
+    @keyframes pulseOpacity {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    @keyframes arrowSlide {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(3px); }
+    }
+    .line-reveal {
+      opacity: 0;
+      animation: fadeSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .bar-grow {
+      transform-box: fill-box;
+      transform-origin: bottom;
+      animation: barRise 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .pulse-dot {
+      animation: pulseOpacity 2.2s ease-in-out infinite;
+    }
+    .arrow-nudge {
+      animation: arrowSlide 2s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .line-reveal, .bar-grow, .pulse-dot, .arrow-nudge {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+  </defs>
+  <rect x="0.5" y="0.5" width="171" height="111" rx="10" fill="#161b22" stroke="#30363d" />
+  <rect x="0.5" y="0.5" width="171" height="4" rx="2" fill="#10b981" />
+  <g transform="translate(14,16)" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 7h12l-1.2 11H7.2L6 7z" />
+        <path d="M9 7V5a3 3 0 0 1 6 0v2" />
+      </g>
+  <text x="148" y="30" class="mono arrow-nudge" font-size="13" font-weight="700" fill="#10b981">→</text>
+  <text x="14" y="62" class="sans" font-size="14" font-weight="700" fill="#f0f6fc">Lista Spesa</text>
+  <text x="14" y="80" class="mono" font-size="11" font-weight="600" fill="#10b981">Basilico</text>
+  <text x="14" y="97" class="sans" font-size="11" fill="#8b949e">Offerte 14 negozi</text>
+</svg>

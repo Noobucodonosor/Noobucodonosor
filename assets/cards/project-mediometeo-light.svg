@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="156" viewBox="0 0 432 156" role="img" aria-label="MedioMeteo Genova">
+  <defs><style>
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes barRise {
+      from { transform: scaleY(0.05); }
+      to { transform: scaleY(1); }
+    }
+    @keyframes pulseOpacity {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    @keyframes arrowSlide {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(3px); }
+    }
+    .line-reveal {
+      opacity: 0;
+      animation: fadeSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .bar-grow {
+      transform-box: fill-box;
+      transform-origin: bottom;
+      animation: barRise 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .pulse-dot {
+      animation: pulseOpacity 2.2s ease-in-out infinite;
+    }
+    .arrow-nudge {
+      animation: arrowSlide 2s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .line-reveal, .bar-grow, .pulse-dot, .arrow-nudge {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style></defs>
+  <rect x="0.5" y="0.5" width="431" height="155" rx="10" fill="#f6f8fa" stroke="#d0d7de" />
+  <rect x="0.5" y="0.5" width="431" height="4" rx="2" fill="#0ea5e9" />
+  <text x="16" y="28" class="mono" font-size="10" font-weight="700" fill="#0ea5e9">METEO &amp; SENSORI</text>
+  <rect x="298" y="14" width="118" height="20" rx="10" fill="#eaeef2" stroke="#d0d7de" />
+  <circle cx="310" cy="24" r="3.5" fill="#9a6700" />
+  <text x="319" y="28" class="mono" font-size="9.5" font-weight="600" fill="#1f2328">STANDBY</text>
+
+  <text x="16" y="56" class="sans" font-size="17" font-weight="800" fill="#1f2328">MedioMeteo Genova</text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="visible">31 sensori<set attributeName="visibility" to="visible" begin="0s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">59 sensori<set attributeName="visibility" to="visible" begin="0.045s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">84 sensori<set attributeName="visibility" to="visible" begin="0.09s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">105 sensori<set attributeName="visibility" to="visible" begin="0.135s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">124 sensori<set attributeName="visibility" to="visible" begin="0.18s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">140 sensori<set attributeName="visibility" to="visible" begin="0.225s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">154 sensori<set attributeName="visibility" to="visible" begin="0.27s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">165 sensori<set attributeName="visibility" to="visible" begin="0.315s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">174 sensori<set attributeName="visibility" to="visible" begin="0.36s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">182 sensori<set attributeName="visibility" to="visible" begin="0.405s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">187 sensori<set attributeName="visibility" to="visible" begin="0.45s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">192 sensori<set attributeName="visibility" to="visible" begin="0.495s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">195 sensori<set attributeName="visibility" to="visible" begin="0.54s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">197 sensori<set attributeName="visibility" to="visible" begin="0.585s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">198 sensori<set attributeName="visibility" to="visible" begin="0.63s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">199 sensori<set attributeName="visibility" to="visible" begin="0.675s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">199 sensori<set attributeName="visibility" to="visible" begin="0.72s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#0ea5e9" visibility="hidden">199 sensori<set attributeName="visibility" to="visible" begin="0.765s" fill="freeze" /></text>
+  <text x="16" y="106" class="sans" font-size="11.5" fill="#59636e">OMIRL · 67 comuni</text>
+
+  <line x1="16" y1="122" x2="416" y2="122" stroke="#e5e8ec" />
+  <circle cx="21" cy="139" r="4" fill="#1a7f37" class="pulse-dot" />
+  <text x="31" y="143" class="mono" font-size="11" fill="#59636e">23 nov 2026 · 3 agg. (7g)</text>
+  <text x="404" y="143" class="mono arrow-nudge" font-size="13" font-weight="700" fill="#0ea5e9">→</text>
+</svg>
