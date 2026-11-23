@@ -354,15 +354,136 @@ export function auditLocalWorkspace(workspaceRoot = path.resolve(process.cwd(), 
   return repos.map((repo) => auditRepositoryDir(path.join(workspaceRoot, repo), repo));
 }
 
-function main() {
+export const LIVE_ENDPOINTS = [
+  { repo: 'Noobucodonosor', url: 'https://noobucodonosor-hub-664856461640.us-central1.run.app/api/health' },
+  { repo: 'basilico', url: 'https://basilico-txfxsxuuma-ew.a.run.app' },
+  { repo: 'mediometeo', url: 'https://mediometeo-664856461640.europe-west1.run.app' },
+  { repo: 'genova-settimana', url: 'https://noobucodonosor.github.io/genova-settimana/' },
+  { repo: 'resuscipack', url: 'https://noobucodonosor.github.io/resuscipack/' },
+  { repo: 'kn5', url: 'https://noobucodonosor.github.io/kn5/' },
+  { repo: 'leslie-agency-os', url: 'https://noobucodonosor.github.io/leslie-agency-os/' },
+  { repo: 'scooterlab', url: 'https://noobucodonosor.github.io/scooterlab/' }
+];
+
+export async function checkLiveEndpoints(endpoints = LIVE_ENDPOINTS, { fetchImpl = fetch, timeoutMs = 12000 } = {}) {
+  return Promise.all(
+    endpoints.map(async ({ repo, url }) => {
+      const t0 = Date.now();
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        const res = await fetchImpl(url, { method: 'GET', redirect: 'follow', signal: ctrl.signal });
+        const latencyMs = Date.now() - t0;
+        clearTimeout(timer);
+        return {
+          repo,
+          url,
+          ok: res.ok,
+          status: res.status,
+          latencyMs,
+          finding: res.ok
+            ? null
+            : {
+                scannerId: 'L2-live-http',
+                level: 2,
+                taskCode: 'TASK-OPS-01',
+                priority: 'P0-critical',
+                detail: `Live endpoint ${url} returned HTTP ${res.status}`
+              }
+        };
+      } catch (err) {
+        clearTimeout(timer);
+        return {
+          repo,
+          url,
+          ok: false,
+          status: 0,
+          latencyMs: Date.now() - t0,
+          finding: {
+            scannerId: 'L2-live-http',
+            level: 2,
+            taskCode: 'TASK-OPS-01',
+            priority: 'P0-critical',
+            detail: `Live endpoint ${url} unreachable: ${err.message}`
+          }
+        };
+      }
+    })
+  );
+}
+
+export function detectTestCommand(repoDir, repoName) {
+  if (repoName === 'Noobucodonosor') {
+    return { cmd: 'node', args: ['--test', 'tests/free-tier-router.test.mjs', 'tests/roadmap-queue.test.mjs', 'tests/update-profile.test.mjs', 'tests/url-ingestor.test.mjs'], env: { NODE_ENV: 'test' } };
+  }
+  const venvPytest = path.join(repoDir, '.venv', 'bin', 'pytest');
+  if (fs.existsSync(venvPytest) && fs.existsSync(path.join(repoDir, 'tests'))) {
+    return { cmd: venvPytest, args: ['-q'], env: { PYTHONPATH: '.' } };
+  }
+  if (fs.existsSync(path.join(repoDir, 'tests')) && (repoName === 'kn5' || repoName === 'genova-settimana')) {
+    return { cmd: 'python3', args: ['-m', 'unittest', 'discover', '-s', 'tests'], env: {} };
+  }
+  if (fs.existsSync(path.join(repoDir, 'app.py')) || fs.existsSync(path.join(repoDir, 'main.py'))) {
+    return { cmd: 'python3', args: ['-m', 'compileall', '-q', '-x', '\\.venv|venv|node_modules', '.'], env: {} };
+  }
+  return null;
+}
+
+export function runRepoTests(workspaceRoot = path.resolve(process.cwd(), '..'), repos = ECOSYSTEM_REPOS) {
+  const results = [];
+  for (const repo of repos) {
+    const repoDir = path.join(workspaceRoot, repo);
+    if (!fs.existsSync(repoDir)) continue;
+    const spec = detectTestCommand(repoDir, repo);
+    if (!spec) {
+      results.push({ repo, skipped: true, ok: true, detail: 'No local test runner detected' });
+      continue;
+    }
+    const t0 = Date.now();
+    try {
+      execFileSync(spec.cmd, spec.args, {
+        cwd: repoDir,
+        env: { ...process.env, ...spec.env },
+        encoding: 'utf8',
+        timeout: 30000,
+        stdio: 'pipe'
+      });
+      results.push({ repo, ok: true, durationMs: Date.now() - t0, command: `${spec.cmd} ${spec.args.join(' ')}` });
+    } catch (err) {
+      results.push({
+        repo,
+        ok: false,
+        durationMs: Date.now() - t0,
+        command: `${spec.cmd} ${spec.args.join(' ')}`,
+        finding: {
+          scannerId: 'L2-test-suite',
+          level: 2,
+          taskCode: 'TASK-QA-01',
+          priority: 'P1-high',
+          detail: `Test suite failed (${spec.cmd}): ${(err.stderr || err.stdout || err.message).trim().slice(-200)}`
+        }
+      });
+    }
+  }
+  return results;
+}
+
+async function main() {
   const { command, flags } = parseCliArgs(process.argv.slice(2));
   const owner = flags.owner || DEFAULT_OWNER;
   const projNum = Number(flags.project || DEFAULT_PROJECT_NUMBER);
 
   if (command === 'audit') {
     const root = flags.workspace ? path.resolve(flags.workspace) : path.resolve(process.cwd(), '..');
-    const results = auditLocalWorkspace(root);
-    console.log(JSON.stringify(results, null, 2));
+    const local = auditLocalWorkspace(root);
+    const out = { level1_local: local };
+    if (flags.live || flags.full) {
+      out.level2_live_http = await checkLiveEndpoints();
+    }
+    if (flags.tests || flags.full) {
+      out.level2_tests = runRepoTests(root);
+    }
+    console.log(JSON.stringify(out, null, 2));
     return;
   }
 
@@ -403,5 +524,8 @@ function main() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main();
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 }

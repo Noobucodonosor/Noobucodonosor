@@ -9,7 +9,8 @@ import {
   parseCliArgs,
   waveRank,
   priorityRank,
-  auditRepositoryDir
+  auditRepositoryDir,
+  checkLiveEndpoints
 } from '../scripts/roadmap-queue.mjs';
 
 test('waveRank and priorityRank order Wave 1..3 and P0..P2 deterministically', () => {
@@ -124,4 +125,24 @@ test('auditRepositoryDir detects missing ADR structure, CI and preview assets', 
     fs.rmSync(tmp, { recursive: true, force: true });
   }
 });
+
+test('checkLiveEndpoints reports healthy 200 and flags 503 with P0 finding', async () => {
+  const mockFetch = async (url) => {
+    if (url.includes('down.example')) return { ok: false, status: 503 };
+    return { ok: true, status: 200 };
+  };
+  const res = await checkLiveEndpoints(
+    [
+      { repo: 'ok-app', url: 'https://ok.example' },
+      { repo: 'down-app', url: 'https://down.example' }
+    ],
+    { fetchImpl: mockFetch, timeoutMs: 2000 }
+  );
+  assert.equal(res[0].ok, true);
+  assert.equal(res[0].finding, null);
+  assert.equal(res[1].ok, false);
+  assert.equal(res[1].finding.priority, 'P0-critical');
+  assert.equal(res[1].finding.scannerId, 'L2-live-http');
+});
+
 
