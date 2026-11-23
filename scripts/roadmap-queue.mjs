@@ -314,7 +314,7 @@ export const AUDIT_SCANNERS = [
     id: 'L2-preview-assets',
     level: 2,
     check(repoDir, repoName) {
-      if (repoName === 'Noobucodonosor') return { ok: true };
+      if (repoName === 'Noobucodonosor' || repoName === 'v.i.n.o.') return { ok: true };
       const social = path.join(repoDir, 'docs', 'preview', 'social-preview.png');
       const desktop = path.join(repoDir, 'docs', 'preview', 'desktop.png');
       if (fs.existsSync(social) || fs.existsSync(desktop)) {
@@ -424,7 +424,8 @@ export const LIVE_ENDPOINTS = [
   { repo: 'resuscipack', url: 'https://noobucodonosor.github.io/resuscipack/' },
   { repo: 'kn5', url: 'https://noobucodonosor.github.io/kn5/' },
   { repo: 'leslie-agency-os', url: 'https://noobucodonosor.github.io/leslie-agency-os/' },
-  { repo: 'scooterlab', url: 'https://noobucodonosor.github.io/scooterlab/' }
+  { repo: 'scooterlab', url: 'https://noobucodonosor.github.io/scooterlab/' },
+  { repo: 'v.i.n.o.', url: 'https://noobucodonosor.github.io/v.i.n.o./' }
 ];
 
 export async function checkLiveEndpoints(endpoints = LIVE_ENDPOINTS, { fetchImpl = fetch, timeoutMs = 12000 } = {}) {
