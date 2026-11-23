@@ -253,11 +253,11 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Stato dei Progetti in Tempo Reale
 
 <!-- PULSE:START -->
-> **7** progetti attivi in vetrina · **25** miglioramenti negli ultimi 7 giorni · **6** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 20:26*
+> **7** progetti attivi in vetrina · **25** miglioramenti negli ultimi 7 giorni · **6** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 20:32*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
-| [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟢 Aggiornato oggi | 23 nov 2026 | 6 aggiornamenti |
+| [**Cosa faccio questa settimana a Genova**](https://noobucodonosor.github.io/genova-settimana/) | Agenda & Territorio (67 comuni) | 🟢 Aggiornato oggi | 23 nov 2026 | 6 aggiornamenti |
 | [**ScooterLab — IoT & Sensori**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab) | Dispositivi Connessi (IoT) | 🟢 Aggiornato oggi | 23 nov 2026 | 3 aggiornamenti |
 | [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Previsioni & Monitoraggio | 🟢 Aggiornato oggi | 23 nov 2026 | 3 aggiornamenti |
 | [**resuscipack**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack) | Ricerca & Editoria Digitale | 🟢 Aggiornato oggi | 23 nov 2026 | 5 aggiornamenti |
