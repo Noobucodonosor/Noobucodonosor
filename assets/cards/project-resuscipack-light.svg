@@ -46,27 +46,27 @@
   <text x="16" y="28" class="mono" font-size="10" font-weight="700" fill="#6366f1">RICERCA &amp; EDITORIA</text>
   <rect x="298" y="14" width="118" height="20" rx="10" fill="#eaeef2" stroke="#d0d7de" />
   <circle cx="310" cy="24" r="3.5" fill="#1a7f37" />
-  <text x="319" y="28" class="mono" font-size="9.5" font-weight="600" fill="#1f2328">ONLINE 233ms</text>
+  <text x="319" y="28" class="mono" font-size="9.5" font-weight="600" fill="#1f2328">ONLINE 217ms</text>
 
   <text x="16" y="56" class="sans" font-size="17" font-weight="800" fill="#1f2328">resuscipack</text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="visible">221+ testi<set attributeName="visibility" to="visible" begin="0s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">417+ testi<set attributeName="visibility" to="visible" begin="0.045s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">590+ testi<set attributeName="visibility" to="visible" begin="0.09s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">741+ testi<set attributeName="visibility" to="visible" begin="0.135s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">873+ testi<set attributeName="visibility" to="visible" begin="0.18s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">985+ testi<set attributeName="visibility" to="visible" begin="0.225s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1080+ testi<set attributeName="visibility" to="visible" begin="0.27s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1160+ testi<set attributeName="visibility" to="visible" begin="0.315s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1225+ testi<set attributeName="visibility" to="visible" begin="0.36s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1277+ testi<set attributeName="visibility" to="visible" begin="0.405s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1318+ testi<set attributeName="visibility" to="visible" begin="0.45s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1348+ testi<set attributeName="visibility" to="visible" begin="0.495s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1370+ testi<set attributeName="visibility" to="visible" begin="0.54s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1385+ testi<set attributeName="visibility" to="visible" begin="0.585s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1394+ testi<set attributeName="visibility" to="visible" begin="0.63s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1398+ testi<set attributeName="visibility" to="visible" begin="0.675s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1400+ testi<set attributeName="visibility" to="visible" begin="0.72s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1400+ testi<set attributeName="visibility" to="visible" begin="0.765s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="visible">216+ volumi<set attributeName="visibility" to="visible" begin="0s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">408+ volumi<set attributeName="visibility" to="visible" begin="0.045s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">577+ volumi<set attributeName="visibility" to="visible" begin="0.09s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">725+ volumi<set attributeName="visibility" to="visible" begin="0.135s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">854+ volumi<set attributeName="visibility" to="visible" begin="0.18s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">964+ volumi<set attributeName="visibility" to="visible" begin="0.225s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1057+ volumi<set attributeName="visibility" to="visible" begin="0.27s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1135+ volumi<set attributeName="visibility" to="visible" begin="0.315s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1199+ volumi<set attributeName="visibility" to="visible" begin="0.36s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1250+ volumi<set attributeName="visibility" to="visible" begin="0.405s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1289+ volumi<set attributeName="visibility" to="visible" begin="0.45s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1319+ volumi<set attributeName="visibility" to="visible" begin="0.495s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1341+ volumi<set attributeName="visibility" to="visible" begin="0.54s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1355+ volumi<set attributeName="visibility" to="visible" begin="0.585s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1364+ volumi<set attributeName="visibility" to="visible" begin="0.63s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1368+ volumi<set attributeName="visibility" to="visible" begin="0.675s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1370+ volumi<set attributeName="visibility" to="visible" begin="0.72s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#6366f1" visibility="hidden">1370+ volumi<set attributeName="visibility" to="visible" begin="0.765s" fill="freeze" /></text>
   <text x="16" y="106" class="sans" font-size="11.5" fill="#59636e">20 capitoli · KaTeX</text>
 
   <line x1="16" y1="122" x2="416" y2="122" stroke="#e5e8ec" />
