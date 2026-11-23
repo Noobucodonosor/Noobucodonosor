@@ -29,6 +29,7 @@
 | [`web/`](./web/) | **Binario A — Portale Web Vetrina**, Assistente AI e 4 Playground prescaricati (`index.html`, `styles.css`, `ai-client.js`, `app.js`, `data/preloaded-services.json`). |
 | [`server/`](./server/) | **Proxy Free-Tier Node.js 22** (`free-tier-router.mjs`, `index.mjs`) con failover Gemini/Groq/OpenRouter `:free`, cache LRU e rate-limit per IP/giorno. |
 | [`scripts/build-bundles.mjs`](./scripts/build-bundles.mjs) | Generatore del **Binario B separato** (`bundles/noobucodonosor-portable.html`, single-file HTML offline/BYOK). |
+| [`scripts/roadmap-queue.mjs`](./scripts/roadmap-queue.mjs) | Motore coda **"Play" / Roadmap** su GitHub Project `#1` (`next`, `sync-open`, `schedule`). |
 | [`tests/`](./tests/) | Suite di test automatici (`node --test tests/*.test.mjs`) per router free-tier, server HTTP e bundle portabile. |
 | [`.github/scripts/update-profile.mjs`](./.github/scripts/update-profile.mjs) | Script Node.js che interroga le API GitHub per i progetti in vetrina e aggiorna `README.md`. |
 | [`.github/workflows/update-profile.yml`](./.github/workflows/update-profile.yml) | Workflow GitHub Actions (cron orario + push su `main`) che esegue lo script e committa `README.md`. |
@@ -87,4 +88,8 @@ python3 ~/.gemini/config/skills/adr-github-methodology/scripts/pre_release_check
 
 # Lista GitHub Issues attive per priorità
 gh issue list --limit 30
+
+# Coda "Play" dalla Roadmap d'ecosistema (Project #1)
+node scripts/roadmap-queue.mjs next
+node scripts/roadmap-queue.mjs sync-open
 ```
