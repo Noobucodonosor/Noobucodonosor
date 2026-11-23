@@ -51,9 +51,17 @@ export const PROJECTS = [
     repo: 'genova-settimana',
     title: 'Cosa faccio questa settimana a Genova',
     category: 'Agenda & Territorio (67 comuni)',
+    previewPath: 'docs/preview/desktop.png',
     liveUrl: 'https://noobucodonosor.github.io/genova-settimana/',
-    liveLabel: "Apri l'agenda completa",
-    infoUrl: 'https://noobucodonosor.github.io/genova-settimana/esercenti.html',
+    liveLabel: 'Apri Questa settimana',
+    liveIcon: '📅',
+    quickLinks: [
+      { label: '🧭 Tempo libero', url: 'https://noobucodonosor.github.io/genova-settimana/bussola.html' },
+      { label: '🏪 Esercenti', url: 'https://noobucodonosor.github.io/genova-settimana/esercenti.html' },
+      { label: '🗺️ Storie & Vie', url: 'https://noobucodonosor.github.io/genova-settimana/storie.html' },
+      { label: '📊 67 Comuni', url: 'https://noobucodonosor.github.io/genova-settimana/dashboard.html' },
+    ],
+    infoUrl: 'https://github.com/Noobucodonosor/genova-settimana',
     summary:
       'Cinema, mostre, musica, biblioteche, passeggiate, quasi 5.000 attività commerciali locali e storia delle vie su 67 comuni.',
   },
@@ -124,9 +132,15 @@ export async function checkPreviewReachable(repo, previewPath = 'docs/preview/so
   }
 }
 
-export async function resolvePreviewImage(repo, previewCommits, fetchImpl = fetch) {
-  const primaryPath = 'docs/preview/social-preview.png';
-  const fallbackPath = 'docs/preview/desktop.png';
+export async function resolvePreviewImage(
+  repo,
+  previewCommits,
+  fetchImpl = fetch,
+  preferredPath = 'docs/preview/social-preview.png',
+) {
+  const primaryPath = preferredPath || 'docs/preview/social-preview.png';
+  const fallbackPath =
+    primaryPath === 'docs/preview/desktop.png' ? 'docs/preview/social-preview.png' : 'docs/preview/desktop.png';
   const hasPrimaryCommit = Array.isArray(previewCommits) && previewCommits.length > 0;
   if (hasPrimaryCommit || (await checkPreviewReachable(repo, primaryPath, fetchImpl))) {
     return {
@@ -179,169 +193,22 @@ export function freshnessBadge(isoDate) {
   return '⚪ Stabile';
 }
 
-const GENOVA_EVENTS_RAW_URL = `https://raw.githubusercontent.com/${OWNER}/genova-settimana/main/site/data/events.json`;
-const GENOVA_CATEGORY_META = [
-  { key: 'cinema', label: '🎬 Cinema' },
-  { key: 'musica', label: '🎵 Musica & Teatro' },
-  { key: 'mostra', label: '🖼️ Mostre & Musei' },
-  { key: 'biblioteca', label: '📚 Biblioteche & Incontri' },
-  { key: 'passeggiata', label: '🚶 Passeggiate & Gite' },
-  { key: 'laboratorio', label: '🛠️ Laboratori & Botteghe' },
-  { key: 'ritrovo', label: '☕ Ritrovi & Sapori' },
-];
-
-export async function fetchGenovaSettimanaEvents(fetchImpl = fetch) {
-  try {
-    const res = await fetchImpl(GENOVA_EVENTS_RAW_URL);
-    if (res && res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) return data;
-    }
-  } catch {
-    // fallback to local sibling repo if available
-  }
-  const localPath = path.resolve(process.cwd(), '../genova-settimana/site/data/events.json');
-  if (fs.existsSync(localPath)) {
-    try {
-      const data = JSON.parse(fs.readFileSync(localPath, 'utf8'));
-      if (Array.isArray(data) && data.length > 0) return data;
-    } catch {
-      // ignore malformed local cache
-    }
-  }
-  return [];
-}
-
-function truncateText(text, maxLen = 110) {
-  const clean = String(text || '').replace(/\s+/g, ' ').trim();
-  if (clean.length <= maxLen) return clean;
-  return `${clean.slice(0, maxLen - 1).trimEnd()}…`;
-}
-
-function sanitizeEventUrl(url, fallback) {
-  const raw = String(url || '').trim();
-  if (/^https?:\/\//i.test(raw)) return raw;
-  return fallback;
-}
-
-export function renderGenovaSettimanaCard(p) {
-  const events = Array.isArray(p.weeklyEvents) ? p.weeklyEvents : [];
-  const dateSuffix = p.lastDateIt && p.lastDateIt !== 'N/D' ? ` (${p.lastDateIt})` : '';
-  const baseUrl = p.liveUrl.replace(/\/+$/, '');
-
-  // Pick up to 6 distinct highlights with real showtimes, balanced across categories (round-robin)
-  const highlights = [];
-  const seenShowtimeKeys = new Set();
-  const seenVenues = new Set();
-  const preferredOrder = ['cinema', 'musica', 'mostra', 'biblioteca', 'passeggiata', 'altro'];
-  const queues = preferredOrder.map((cat) =>
-    events.filter((e) => e.category === cat && Array.isArray(e.showtimes) && e.showtimes.length > 0),
-  );
-  let progressed = true;
-  while (highlights.length < 6 && progressed) {
-    progressed = false;
-    for (const queue of queues) {
-      while (queue.length > 0) {
-        const ev = queue.shift();
-        const st = ev.showtimes[0];
-        const showKey = `${st?.titolo || ''}|${st?.quando || ''}`.toLowerCase();
-        const venueKey = String(ev.venue || ev.title || '').toLowerCase().slice(0, 24);
-        if (!st?.titolo || seenShowtimeKeys.has(showKey) || seenVenues.has(venueKey)) continue;
-        seenShowtimeKeys.add(showKey);
-        seenVenues.add(venueKey);
-        highlights.push({ ev, st });
-        progressed = true;
-        break;
-      }
-      if (highlights.length >= 6) break;
-    }
-  }
-
-  const highlightRows = highlights
-    .map(({ ev, st }) => {
-      const href = sanitizeEventUrl(ev.url, p.liveUrl);
-      const place = ev.venue || ev.title;
-      const district = ev.district ? ` · ${ev.district}` : '';
-      return `          <tr>
-            <td><a href="${href}"><strong>${escapeHtml(truncateText(st.titolo, 82))}</strong></a></td>
-            <td>${escapeHtml(truncateText(place, 48))}${escapeHtml(district)}</td>
-            <td><sub>${escapeHtml(truncateText(st.quando, 64))}</sub></td>
-          </tr>`;
-    })
-    .join('\n');
-
-  const categoryDetails = GENOVA_CATEGORY_META.map(({ key, label }) => {
-    const dedup = [];
-    const seen = new Set();
-    for (const ev of events.filter((e) => e.category === key)) {
-      const sig = `${ev.showtimes?.[0]?.titolo || ev.title}`.toLowerCase().slice(0, 42);
-      if (seen.has(sig)) continue;
-      seen.add(sig);
-      dedup.push(ev);
-    }
-    if (!dedup.length) return '';
-    // Sort showtime-bearing events first
-    dedup.sort((a, b) => (b.showtimes?.length || 0) - (a.showtimes?.length || 0));
-    const itemsHtml = dedup
-      .slice(0, 8)
-      .map((ev) => {
-        const href = sanitizeEventUrl(ev.url, p.liveUrl);
-        const st = ev.showtimes?.[0];
-        const detail = st
-          ? `${truncateText(st.titolo, 78)} — <em>${escapeHtml(truncateText(st.quando, 64))}</em>`
-          : escapeHtml(truncateText(ev.day_time || ev.summary, 88));
-        const district = ev.district ? ` (${escapeHtml(ev.district)})` : '';
-        return `          <li><a href="${href}"><strong>${escapeHtml(truncateText(ev.title, 62))}</strong></a>${district}: ${st ? escapeHtml(truncateText(st.titolo, 78)) + ` — <em>${escapeHtml(truncateText(st.quando, 64))}</em>` : detail}</li>`;
-      })
-      .join('\n');
-    return `      <details>
-        <summary><strong>${label}</strong> (${dedup.length})</summary>
-        <ul>
-${itemsHtml}
-        </ul>
-      </details>`;
-  })
-    .filter(Boolean)
-    .join('\n');
-
-  return `    <td width="100%" valign="top">
-      <h3><a href="${p.liveUrl}">📅 ${escapeHtml(p.title)}</a></h3>
-      <sub>${escapeHtml(p.category)} · ${events.length} proposte attive · ${p.freshness}${dateSuffix}</sub><br /><br />
-      <strong>In programma questa settimana:</strong>
-      <table>
-        <thead>
-          <tr>
-            <th align="left">Appuntamento</th>
-            <th align="left">Luogo &amp; Zona</th>
-            <th align="left">Quando</th>
-          </tr>
-        </thead>
-        <tbody>
-${highlightRows}
-        </tbody>
-      </table>
-      <strong>Esplora subito per categoria:</strong><br />
-${categoryDetails}
-      <br />
-      <a href="${p.liveUrl}"><strong>📅 Apri l'agenda completa</strong></a> · <a href="${baseUrl}/bussola.html">🧭 Bussola Tempo Libero</a> · <a href="${baseUrl}/esercenti.html">🏪 4.966 Esercenti</a> · <a href="${baseUrl}/storie.html">🗺️ Storie &amp; Vie</a> · <a href="${baseUrl}/dashboard.html">📊 67 Comuni</a>
-    </td>`;
-}
-
 export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
-  const weeklyEventsPromise =
-    proj.repo === 'genova-settimana' ? fetchGenovaSettimanaEvents(fetchImpl) : Promise.resolve([]);
+  const preferredPreviewPath = proj.previewPath || 'docs/preview/social-preview.png';
   try {
-    const [repoInfo, latestCommits, previewCommits, weekCommits, weeklyEvents] = await Promise.all([
+    const [repoInfo, latestCommits, previewCommits, weekCommits] = await Promise.all([
       ghFetch(`/repos/${OWNER}/${proj.repo}`, fetchImpl),
       ghFetch(`/repos/${OWNER}/${proj.repo}/commits?per_page=10`, fetchImpl),
-      ghFetch(`/repos/${OWNER}/${proj.repo}/commits?path=docs/preview/social-preview.png&per_page=1`, fetchImpl),
+      ghFetch(
+        `/repos/${OWNER}/${proj.repo}/commits?path=${encodeURIComponent(preferredPreviewPath)}&per_page=1`,
+        fetchImpl,
+      ),
       ghFetch(
         `/repos/${OWNER}/${proj.repo}/commits?since=${new Date(
           Date.now() - 7 * 86400e3,
         ).toISOString()}&per_page=100`,
         fetchImpl,
       ),
-      weeklyEventsPromise,
     ]);
 
     const meaningfulCommit =
@@ -349,13 +216,12 @@ export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
         latestCommits.find((c) => !/^(chore|fix|ci)\(preview\):/i.test(c?.commit?.message || ''))) ||
       (Array.isArray(latestCommits) ? latestCommits[0] : null);
 
-    const previewInfo = await resolvePreviewImage(proj.repo, previewCommits, fetchImpl);
+    const previewInfo = await resolvePreviewImage(proj.repo, previewCommits, fetchImpl, preferredPreviewPath);
     const lastDate = meaningfulCommit?.commit?.author?.date || repoInfo?.pushed_at || null;
 
     return {
       ...proj,
       ...previewInfo,
-      weeklyEvents,
       lastDate,
       lastDateIt: formatDateIt(lastDate),
       freshness: freshnessBadge(lastDate),
@@ -364,14 +230,10 @@ export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
     };
   } catch (err) {
     console.warn(`[WARN] API fallback for ${proj.repo}: ${err.message}`);
-    const [previewInfo, weeklyEvents] = await Promise.all([
-      resolvePreviewImage(proj.repo, [], fetchImpl),
-      weeklyEventsPromise,
-    ]);
+    const previewInfo = await resolvePreviewImage(proj.repo, [], fetchImpl, preferredPreviewPath);
     return {
       ...proj,
       ...previewInfo,
-      weeklyEvents,
       lastDate: null,
       lastDateIt: 'N/D',
       freshness: '⚪ Stabile',
@@ -382,9 +244,6 @@ export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
 }
 
 export function renderCard(p) {
-  if (p.repo === 'genova-settimana' && Array.isArray(p.weeklyEvents) && p.weeklyEvents.length > 0) {
-    return renderGenovaSettimanaCard(p);
-  }
   const hasPreview = p.hasPreview !== false;
   const previewPath = p.previewPath || 'docs/preview/social-preview.png';
   const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/${previewPath}?v=${p.previewSha || 'latest'}`;
@@ -394,15 +253,19 @@ export function renderCard(p) {
       </a>
       <br />\n`
     : '';
+  const liveIcon = p.liveIcon || '🚀';
   const secondaryLink = p.secondaryUrl
     ? ` · <a href="${p.secondaryUrl}"><strong>${escapeHtml(p.secondaryLabel || 'Anteprima')}</strong></a>`
+    : '';
+  const quickLinksHtml = Array.isArray(p.quickLinks) && p.quickLinks.length
+    ? p.quickLinks.map((ql) => ` · <a href="${ql.url}">${escapeHtml(ql.label)}</a>`).join('')
     : '';
   const dateSuffix = p.lastDateIt && p.lastDateIt !== 'N/D' ? ` (${p.lastDateIt})` : '';
   return `    <td width="100%" valign="top">
 ${previewBlock}      <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></strong><br />
       <sub>${escapeHtml(p.category)} · ${p.freshness}${dateSuffix}</sub><br /><br />
       ${escapeHtml(p.summary)}<br /><br />
-      <a href="${p.liveUrl}"><strong>🚀 ${escapeHtml(p.liveLabel)}</strong></a>${secondaryLink} · <a href="${p.infoUrl}">📄 Dettagli</a>
+      <a href="${p.liveUrl}"><strong>${liveIcon} ${escapeHtml(p.liveLabel)}</strong></a>${secondaryLink}${quickLinksHtml} · <a href="${p.infoUrl}">📄 Dettagli</a>
     </td>`;
 }
 

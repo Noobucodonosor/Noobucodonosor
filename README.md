@@ -38,20 +38,15 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 <table>
   <tr>
     <td width="100%" valign="top">
-      <h3><a href="https://noobucodonosor.github.io/genova-settimana/">📅 Cosa faccio questa settimana a Genova</a></h3>
-      <sub>Agenda &amp; Territorio (67 comuni) · 89 proposte attive · 🟢 Aggiornato oggi (23 nov 2026)</sub><br /><br />
-      <strong>In programma questa settimana:</strong>
-      <table>
-        <thead>
-          <tr>
-            <th align="left">Appuntamento</th>
-            <th align="left">Luogo &amp; Zona</th>
-            <th align="left">Quando</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><a href="https://www.cineclubnickelodeon.it/"><strong>Mama</strong></a></td>
+      <a href="https://noobucodonosor.github.io/genova-settimana/">
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/genova-settimana/main/docs/preview/desktop.png?v=fc48f839" alt="Cosa faccio questa settimana a Genova" width="100%" />
+      </a>
+      <br />
+      <strong><a href="https://noobucodonosor.github.io/genova-settimana/">Cosa faccio questa settimana a Genova</a></strong><br />
+      <sub>Agenda &amp; Territorio (67 comuni) · 🟢 Aggiornato oggi (23 nov 2026)</sub><br /><br />
+      Cinema, mostre, musica, biblioteche, passeggiate, quasi 5.000 attività commerciali locali e storia delle vie su 67 comuni.<br /><br />
+      <a href="https://noobucodonosor.github.io/genova-settimana/"><strong>📅 Apri Questa settimana</strong></a> · <a href="https://noobucodonosor.github.io/genova-settimana/bussola.html">🧭 Tempo libero</a> · <a href="https://noobucodonosor.github.io/genova-settimana/esercenti.html">🏪 Esercenti</a> · <a href="https://noobucodonosor.github.io/genova-settimana/storie.html">🗺️ Storie &amp; Vie</a> · <a href="https://noobucodonosor.github.io/genova-settimana/dashboard.html">📊 67 Comuni</a> · <a href="https://github.com/Noobucodonosor/genova-settimana">📄 Dettagli</a>
+    </td>
             <td>Cineclub Nickelodeon · Centro</td>
             <td><sub>lunedì 23 novembre 20.30 Lingua originale sottotitolato</sub></td>
           </tr>
