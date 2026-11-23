@@ -1,28 +1,42 @@
 const BYOK_STORAGE_PREFIX = 'noobucodonosor:v1:byok:';
 const BYOK_ACTIVE_KEY = `${BYOK_STORAGE_PREFIX}active`;
+const DEFAULT_CLOUD_RUN_GATEWAY = 'https://noobucodonosor-hub-664856461640.us-central1.run.app';
 const ramVault = new Map();
+let lastPrewarmAt = 0;
+let gatewayAltchaEnabled = false;
 
 export const BYOK_PROVIDERS = {
-  gemini: {
-    id: 'gemini',
-    label: 'Google AI Studio (Gemini Free)',
-    defaultModel: 'gemini-3.5-flash-lite',
-    keyUrl: 'https://aistudio.google.com/apikey',
-    placeholder: 'AIza...',
-  },
-  groq: {
-    id: 'groq',
-    label: 'Groq (Free Tier)',
-    defaultModel: 'openai/gpt-oss-20b',
-    keyUrl: 'https://console.groq.com/keys',
-    placeholder: 'gsk_...',
-  },
   openrouter: {
     id: 'openrouter',
-    label: 'OpenRouter (:free)',
+    label: 'OpenRouter (:free · Consigliato CORS)',
     defaultModel: 'meta-llama/llama-3.3-70b-instruct:free',
     keyUrl: 'https://openrouter.ai/keys',
     placeholder: 'sk-or-v1-...',
+    requiresKey: true,
+  },
+  groq: {
+    id: 'groq',
+    label: 'Groq (Free Tier · CORS-open)',
+    defaultModel: 'openai/gpt-oss-20b',
+    keyUrl: 'https://console.groq.com/keys',
+    placeholder: 'gsk_...',
+    requiresKey: true,
+  },
+  anthropic: {
+    id: 'anthropic',
+    label: 'Anthropic Claude (Direct Browser)',
+    defaultModel: 'claude-3-5-haiku-latest',
+    keyUrl: 'https://console.anthropic.com/settings/keys',
+    placeholder: 'sk-ant-...',
+    requiresKey: true,
+  },
+  ollama: {
+    id: 'ollama',
+    label: 'Ollama Locale (http://localhost:11434 · 0 chiavi)',
+    defaultModel: 'llama3.2',
+    keyUrl: 'https://ollama.com/download',
+    placeholder: '(opzionale — nessuna API key richiesta)',
+    requiresKey: false,
   },
 };
 
@@ -51,11 +65,13 @@ export function loadByokConfig() {
     const raw = sessionStorage.getItem(BYOK_ACTIVE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!parsed?.apiKey || !BYOK_PROVIDERS[parsed.provider]) return null;
+    const prov = BYOK_PROVIDERS[parsed?.provider];
+    if (!prov) return null;
+    if (prov.requiresKey && !parsed?.apiKey) return null;
     return {
       provider: parsed.provider,
-      apiKey: String(parsed.apiKey).trim(),
-      model: String(parsed.model || BYOK_PROVIDERS[parsed.provider].defaultModel).trim(),
+      apiKey: String(parsed.apiKey || '').trim(),
+      model: String(parsed.model || prov.defaultModel).trim(),
       ramOnly: Boolean(parsed.ramOnly),
     };
   } catch {
@@ -64,20 +80,21 @@ export function loadByokConfig() {
 }
 
 export function saveByokConfig(config) {
-  if (!config || !config.apiKey?.trim()) {
+  const prov = config ? BYOK_PROVIDERS[config.provider] || BYOK_PROVIDERS.openrouter : null;
+  if (!config || !prov || (prov.requiresKey && !config.apiKey?.trim())) {
     ramVault.delete(BYOK_ACTIVE_KEY);
     try {
       sessionStorage.removeItem(BYOK_ACTIVE_KEY);
     } catch {
-      // sessionStorage non disponibile (es. file:// restrittivo)
+      // sessionStorage non disponibile (es. Safari file:// restrittivo)
     }
     return null;
   }
 
   const clean = {
-    provider: BYOK_PROVIDERS[config.provider] ? config.provider : 'gemini',
-    apiKey: config.apiKey.trim(),
-    model: (config.model || BYOK_PROVIDERS[config.provider]?.defaultModel || '').trim(),
+    provider: prov.id,
+    apiKey: String(config.apiKey || '').trim(),
+    model: (config.model || prov.defaultModel || '').trim(),
     ramOnly: Boolean(config.ramOnly),
   };
 
@@ -95,14 +112,112 @@ export function saveByokConfig(config) {
   try {
     sessionStorage.setItem(BYOK_ACTIVE_KEY, JSON.stringify(clean));
   } catch {
-    // Fallback trasparente su ramVault in memoria volatile
+    // Fallback trasparente su ramVault in memoria volatile (es. Safari file://)
     clean.ramOnly = true;
   }
   return clean;
 }
 
+export function exportPortableStateJson() {
+  const byok = loadByokConfig();
+  return JSON.stringify(
+    {
+      version: 'adr0004-v1',
+      exportedAt: new Date().toISOString(),
+      byok: byok
+        ? {
+            provider: byok.provider,
+            model: byok.model,
+            ramOnly: Boolean(byok.ramOnly),
+          }
+        : null,
+    },
+    null,
+    2,
+  );
+}
+
+export function importPortableStateJson(rawJson) {
+  const parsed = JSON.parse(String(rawJson || '{}'));
+  if (parsed?.byok?.provider && BYOK_PROVIDERS[parsed.byok.provider]) {
+    const existing = loadByokConfig();
+    saveByokConfig({
+      provider: parsed.byok.provider,
+      model: parsed.byok.model || BYOK_PROVIDERS[parsed.byok.provider].defaultModel,
+      apiKey: parsed.byok.apiKey || existing?.apiKey || '',
+      ramOnly: Boolean(parsed.byok.ramOnly),
+    });
+  }
+  return parsed;
+}
+
 export function getProxyBaseUrl() {
-  return (globalThis.NOOB_CONFIG?.proxyBaseUrl || '').replace(/\/+$/, '');
+  const explicit = (globalThis.NOOB_CONFIG?.proxyBaseUrl || globalThis.NOOB_CONFIG?.gatewayBaseUrl || '').replace(/\/+$/, '');
+  if (explicit) return explicit;
+  const host = globalThis.location?.hostname || '';
+  if (host.endsWith('github.io')) {
+    return DEFAULT_CLOUD_RUN_GATEWAY;
+  }
+  return '';
+}
+
+/**
+ * Silent simple-request pre-warming (GET /health with zero custom headers -> no CORS OPTIONS preflight).
+ * Keeps Cloud Run warm for ~15 min while preserving scale-to-zero cost (~€0).
+ */
+export async function prewarmGateway() {
+  if (globalThis.location?.protocol === 'file:') return false;
+  const now = Date.now();
+  if (now - lastPrewarmAt < 10 * 60 * 1000) return true;
+  lastPrewarmAt = now;
+  try {
+    const res = await fetch(`${getProxyBaseUrl()}/health`, { method: 'GET' });
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (typeof data?.altchaEnabled === 'boolean') {
+        gatewayAltchaEnabled = data.altchaEnabled;
+      }
+      return true;
+    }
+  } catch {
+    // Non-blocking best-effort warmup
+  }
+  return false;
+}
+
+async function sha256HexBrowser(input) {
+  if (!globalThis.crypto?.subtle) return null;
+  const bytes = new TextEncoder().encode(input);
+  const hashBuf = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(hashBuf))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function fetchAndSolveAltcha(baseUrl) {
+  if (!globalThis.crypto?.subtle) return null;
+  try {
+    const chRes = await fetch(`${baseUrl}/api/altcha/challenge`, { method: 'GET' });
+    if (!chRes.ok) return null;
+    const ch = await chRes.json();
+    const max = Math.min(Number(ch.maxnumber || 50000), 100000);
+    for (let n = 0; n <= max; n += 1) {
+      const digest = await sha256HexBrowser(`${ch.salt}${n}`);
+      if (digest === ch.challenge) {
+        const payload = {
+          algorithm: ch.algorithm,
+          challenge: ch.challenge,
+          number: n,
+          salt: ch.salt,
+          signature: ch.signature,
+        };
+        return btoa(JSON.stringify(payload));
+      }
+    }
+  } catch {
+    // Fallback gracefully
+  }
+  return null;
 }
 
 export async function extractKn5Url(rawUrl) {
@@ -174,11 +289,12 @@ export async function checkProxyHealth() {
     return { reachable: false, proxyReady: false, providers: [] };
   }
   try {
-    const res = await fetch(`${getProxyBaseUrl()}/api/health`, {
-      headers: { Accept: 'application/json' },
-    });
+    const res = await fetch(`${getProxyBaseUrl()}/api/health`);
     if (!res.ok) return { reachable: false, proxyReady: false, providers: [] };
     const data = await res.json();
+    if (typeof data?.altchaEnabled === 'boolean') {
+      gatewayAltchaEnabled = data.altchaEnabled;
+    }
     return { reachable: true, ...data };
   } catch {
     return { reachable: false, proxyReady: false, providers: [] };
@@ -189,22 +305,48 @@ async function callByokDirect(byok, serviceId, prompt, context) {
   const systemPrompt = SYSTEM_PROMPTS[serviceId] || SYSTEM_PROMPTS.assistant;
   const userText = context ? `CONTESTO PRESCARICATO:\n${context}\n\nRICHIESTA:\n${prompt}` : prompt;
 
-  if (byok.provider === 'gemini') {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(byok.model)}:generateContent?key=${encodeURIComponent(byok.apiKey)}`;
-    const res = await fetch(url, {
+  if (byok.provider === 'anthropic') {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': byok.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: byok.model,
+        max_tokens: 700,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userText }],
+      }),
+    });
+    if (!res.ok) throw new Error(`Anthropic BYOK HTTP ${res.status}`);
+    const data = await res.json();
+    const text = data?.content?.map((c) => c.text || '').join('').trim();
+    if (!text) throw new Error('Risposta Anthropic vuota');
+    return text;
+  }
+
+  if (byok.provider === 'ollama') {
+    const res = await fetch('http://localhost:11434/api/chat', {
       method: 'POST',
       credentials: 'omit',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: 'user', parts: [{ text: userText }] }],
-        generationConfig: { temperature: 0.4, maxOutputTokens: 700 },
+        model: byok.model || 'llama3.2',
+        stream: false,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userText },
+        ],
       }),
     });
-    if (!res.ok) throw new Error(`Gemini BYOK HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`Ollama locale HTTP ${res.status}`);
     const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('').trim();
-    if (!text) throw new Error('Risposta Gemini vuota');
+    const text = data?.message?.content?.trim();
+    if (!text) throw new Error('Risposta Ollama vuota');
     return text;
   }
 
@@ -450,9 +592,16 @@ export async function runServiceAI({ serviceId, prompt, context = '', dataset = 
   // 2) Try Free-Tier Server Proxy (when served over HTTP/HTTPS)
   if (globalThis.location?.protocol !== 'file:') {
     try {
-      const res = await fetch(`${getProxyBaseUrl()}/api/ai/complete`, {
+      const baseUrl = getProxyBaseUrl();
+      const reqHeaders = { 'Content-Type': 'application/json' };
+      if (gatewayAltchaEnabled) {
+        const altchaToken = await fetchAndSolveAltcha(baseUrl);
+        if (altchaToken) reqHeaders['X-Altcha-Payload'] = altchaToken;
+      }
+
+      const res = await fetch(`${baseUrl}/api/ai/complete`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: reqHeaders,
         body: JSON.stringify({
           serviceId,
           presetId: meta?.presetId || meta?.item?.id || null,

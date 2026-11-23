@@ -11,6 +11,7 @@ Questa cartella raccoglie gli **Architecture Decision Records (ADR)** e il **Bac
 | **[ADR-0001](./0001-profilo-vetrina-github.md)** | Architettura Core — Profilo & Vetrina GitHub Automatica | Accettato (Baseline) | Core | Dany |
 | **[ADR-0002](./0002-hub-vetrina-servizi-prescaricati-free-tier.md)** | Hub Vetrina Web, Servizi Prescaricati con Pool API Free-Tier e Pacchetti Locali Separati | Accettato | P1 — Alta | Dany |
 | **[ADR-0003](./0003-hardening-sicurezza-cost-control.md)** | Hardening, Sicurezza, Cost-Control e Limiti di Scalabilità (~€0) | Accettato | P0 / P1 — Critica & Alta | Dany |
+| **[ADR-0004](./0004-split-static-hub-and-ai-gateway.md)** | Split Statico/Dinamico (GitHub Pages + Cloud Run), Isolamento AI Gateway e Posizionamento Profilo | Accettato | P0 / P1 — Critica & Alta | Dany |
 
 ---
 
@@ -72,3 +73,9 @@ flowchart LR
 | **TASK-HARDENING-06** | `#13` | [ADR-0003](./0003-hardening-sicurezza-cost-control.md) | UX zero-click preset, badge 3 livelli & CTA | `web/app.js`, `web/index.html`, `web/styles.css` | **P1 — Alta** | Dany |
 | **TASK-HARDENING-07** | `#14` | [ADR-0003](./0003-hardening-sicurezza-cost-control.md) | Configurazione agnostica (`showcase.config.json`) & deep-link `?app=` | `showcase.config.json`, `server/`, `web/`, `.github/scripts/update-profile.mjs` | **P1 — Alta** | Dany |
 | **TASK-HARDENING-08** | `#15` | [ADR-0003](./0003-hardening-sicurezza-cost-control.md) | Estrattore URL leggero anti-SSRF per `kn5` (`POST /api/kn5/extract`) | `server/url-ingestor.mjs`, `server/index.mjs`, `web/`, `tests/url-ingestor.test.mjs` | **P1 — Alta** | Dany |
+| **TASK-SPLIT-01** | `—` | [ADR-0004](./0004-split-static-hub-and-ai-gateway.md) | Redazione ADR-0004 (MADR 4.0.0) e aggiornamento indice ADR | `docs/adr/0004-split-static-hub-and-ai-gateway.md`, `docs/adr/README.md` | **P0 — Critica** | Dany |
+| **TASK-SPLIT-02** | `—` | [ADR-0004](./0004-split-static-hub-and-ai-gateway.md) | Isolamento zero-brand `packages/ai-gateway/` (router, ALTCHA PoW, CORS allowlist, `/health`) | `packages/ai-gateway/**`, `server/` | **P0 — Critica** | Dany |
+| **TASK-SPLIT-03** | `—` | [ADR-0004](./0004-split-static-hub-and-ai-gateway.md) | Workflow CI/CD disaccoppiati (`deploy-pages.yml`, `deploy-gateway.yml` WIF) & Budget Spend Cap | `.github/workflows/`, `packages/ai-gateway/Dockerfile` | **P0 — Critica** | Dany |
+| **TASK-SPLIT-04** | `—` | [ADR-0004](./0004-split-static-hub-and-ai-gateway.md) | `showcase.config.json` (`embedPolicy`, `gatewayBaseUrl`, `scooterlab`) & `README.md` 1-schermata | `showcase.config.json`, `README.md`, `.github/scripts/update-profile.mjs` | **P1 — Alta** | Dany |
+| **TASK-SPLIT-05** | `—` | [ADR-0004](./0004-split-static-hub-and-ai-gateway.md) | Aggiornamento `web/` (CSP `<meta>`, pre-warm `/health`, ALTCHA client, BYOK CORS-safe) | `web/index.html`, `web/ai-client.js`, `web/app.js` | **P1 — Alta** | Dany |
+| **TASK-SPLIT-06** | `—` | [ADR-0004](./0004-split-static-hub-and-ai-gateway.md) | Offline Kit `bundles/noobucodonosor-portable.html` (IIFE, storage fallback, export/import JSON) | `scripts/build-bundles.mjs`, `bundles/noobucodonosor-portable.html` | **P1 — Alta** | Dany |

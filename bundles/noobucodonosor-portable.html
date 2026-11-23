@@ -2,6 +2,10 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://noobucodonosor-hub-664856461640.us-central1.run.app https://openrouter.ai https://api.groq.com https://api.anthropic.com http://localhost:11434 http://127.0.0.1:11434 https://www.youtube.com; object-src 'none'; base-uri 'self';"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Noobucodonosor — Kit Locale Portabile (Offline + BYOK Free-Tier)</title>
     <meta
@@ -1099,7 +1103,7 @@ body.is-focused-app #locale {
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <span><strong>Noobucodonosor</strong> · Architettura ADR-Driven (ADR-0001 / ADR-0002)</span>
+        <span><strong>Noobucodonosor</strong> · Architettura ADR-Driven (ADR-0001..0004)</span>
         <span>
           <a href="https://github.com/Noobucodonosor/Noobucodonosor" target="_blank" rel="noopener noreferrer">Repository</a>
           ·
@@ -1112,28 +1116,29 @@ body.is-focused-app #locale {
     <dialog id="byok-dialog" closedby="any" aria-labelledby="byok-title">
       <div class="dialog-body">
         <div class="dialog-header">
-          <h2 id="byok-title" style="font-size: 1.2rem">Configura Chiave Gratuita (BYOK)</h2>
+          <h2 id="byok-title" style="font-size: 1.2rem">Configura Chiave BYOK (CORS-Safe)</h2>
           <form method="dialog">
             <button type="submit" value="cancel" class="btn btn-sm" aria-label="Chiudi finestra">Chiudi</button>
           </form>
         </div>
 
         <p style="margin: 0 0 1rem; font-size: 0.88rem; color: var(--ink-soft)">
-          La chiave viene salvata <strong>solo nel tuo browser</strong> (<code>sessionStorage</code>) e chiama
-          direttamente il provider scelto. Non passa mai dal server Noobucodonosor.
+          La chiave resta <strong>solo nel tuo browser</strong> (<code>sessionStorage</code> o RAM volatile su
+          Safari <code>file://</code>) e chiama direttamente provider con supporto CORS verificato.
         </p>
 
         <form id="byok-form">
           <div class="field">
-            <label for="byok-provider">Provider con soglia gratuita</label>
+            <label for="byok-provider">Provider diretto da browser</label>
             <select id="byok-provider" class="select" autofocus>
-              <option value="gemini">Google AI Studio — Gemini 3.5 Flash-Lite (Free Tier)</option>
-              <option value="groq">Groq — GPT-OSS 20B (Free Tier)</option>
-              <option value="openrouter">OpenRouter — Modelli :free</option>
+              <option value="openrouter">OpenRouter — Modelli :free (Default CORS-open)</option>
+              <option value="groq">Groq — Free Tier (CORS-open)</option>
+              <option value="anthropic">Anthropic — Claude Direct Browser</option>
+              <option value="ollama">Ollama Locale — http://localhost:11434 (Offline, 0 chiavi)</option>
             </select>
             <small>
-              Ottieni una chiave gratuita in 20 secondi:
-              <a id="byok-provider-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">
+              Ottieni una chiave gratuita o avvia Ollama:
+              <a id="byok-provider-link" href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">
                 Apri console provider
               </a>
             </small>
@@ -1141,12 +1146,12 @@ body.is-focused-app #locale {
 
           <div class="field">
             <label for="byok-model">Modello</label>
-            <input id="byok-model" class="input" type="text" value="gemini-3.5-flash-lite" />
+            <input id="byok-model" class="input" type="text" value="meta-llama/llama-3.3-70b-instruct:free" />
           </div>
 
           <div class="field">
-            <label for="byok-key">API Key</label>
-            <input id="byok-key" class="input" type="password" placeholder="AIza..." autocomplete="off" />
+            <label for="byok-key">API Key (non richiesta per Ollama)</label>
+            <input id="byok-key" class="input" type="password" placeholder="sk-or-v1-..." autocomplete="off" />
           </div>
 
           <div class="field">
@@ -1156,7 +1161,9 @@ body.is-focused-app #locale {
             </label>
           </div>
 
-          <div class="dialog-actions">
+          <div class="dialog-actions" style="flex-wrap: wrap">
+            <button type="button" id="byok-export-btn" class="btn btn-sm">Esporta JSON</button>
+            <button type="button" id="byok-import-btn" class="btn btn-sm">Importa JSON</button>
             <button type="button" id="byok-clear-btn" class="btn btn-sm">Rimuovi Chiave</button>
             <button type="submit" class="btn btn-primary">Salva in Sessione</button>
           </div>
@@ -1167,33 +1174,47 @@ body.is-focused-app #locale {
     <script>
 (function () {
 
-window.__PRELOADED_DATASET__ = {"schemaVersion":"1.0.0","owner":"Noobucodonosor","profile":{"name":"Noobucodonosor","tagline":"Consulenza IT · Sistemi di AI Agentica · Prodotti Digitali","bio":"Progetto, costruisco e mantengo prodotti digitali completi e sistemi di AI agentica — dall'idea iniziale fino alla messa online — unendo metodo analitico, infrastruttura IT, automazione e dispositivi IoT.","githubUrl":"https://github.com/Noobucodonosor","services":[{"id":"automation","title":"Automazione & Assistenti AI","description":"Flussi con agenti AI che leggono documenti, organizzano informazioni, qualificano contatti commerciali e riducono il lavoro manuale ripetitivo."},{"id":"products","title":"Prodotti Digitali Su Misura","description":"Applicazioni web pronte all'uso per desktop e smartphone: portali locali, comparatori, strumenti interni e servizi online offline-first."},{"id":"consulting","title":"Consulenza Pratica & Sistemi","description":"Scelta pragmatica degli strumenti, ordine nei dati, controllo costi API e integrazione tra software, cloud e dispositivi fisici IoT."}]},"projects":[{"id":"basilico","repo":"basilico","title":"Basilico — Rapallo","category":"App Consumer & Risparmio","accessType":"live","badge":"Vista Offerte · Cloud Run","liveUrl":"https://basilico-txfxsxuuma-ew.a.run.app/?room=room-1-negozi","repoUrl":"https://github.com/Noobucodonosor/basilico","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png","summary":"Confronta in tempo reale offerte e volantini dei 14 supermercati reali di Rapallo, organizza la dispensa e pianifica la spesa settimanale anche offline (PWA).","stack":["React 19","Vite","Express","PWA Offline-First","Cloud Run"]},{"id":"mediometeo","repo":"mediometeo","title":"MedioMeteo Genova","category":"Previsioni & Monitoraggio","accessType":"live","badge":"Live su Cloud Run","liveUrl":"https://mediometeo-664856461640.europe-west1.run.app","repoUrl":"https://github.com/Noobucodonosor/mediometeo","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/mediometeo/main/docs/preview/social-preview.png","summary":"Nowcasting e forecasting terra/mare su 67 comuni della provincia di Genova basati su 199 sensori OMIRL/ARPAL reali, 5 modelli LAM e AI meteo contestuale.","stack":["FastAPI","SQLite","OMIRL/ARPAL","Gemini AI","Cloud Run"]},{"id":"genova-settimana","repo":"genova-settimana","title":"Genova Civica & Cultura","category":"Portale Territoriale","accessType":"live","badge":"Live su GitHub Pages","liveUrl":"https://noobucodonosor.github.io/genova-settimana/","repoUrl":"https://github.com/Noobucodonosor/genova-settimana","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/genova-settimana/main/docs/preview/social-preview.png","summary":"Guida digitale su 67 comuni per scoprire eventi della settimana, quasi 5.000 attività commerciali locali, itinerari e storia delle vie cittadine.","stack":["Python ETL","Static Site","Open Data","GitHub Pages"]},{"id":"leslie","repo":"leslie-agency-os","title":"Leslie — Agency OS","category":"Automazione Commerciale B2B","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/leslie-agency-os/","repoUrl":"https://github.com/Noobucodonosor/leslie-agency-os","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/leslie-agency-os/main/docs/preview/social-preview.png","summary":"Scouting B2B autonomo, qualificazione lead AI con scoring 0–10 e CRM operativo per nautica, ospitalità ed esperienze premium.","stack":["Flask","SQLite WAL","AI Lead Scoring","SSE Streaming"]},{"id":"kn5","repo":"kn5","title":"kn5 — Knowledge Ingestor","category":"AI & Gestione Conoscenza","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/kn5/","repoUrl":"https://github.com/Noobucodonosor/kn5","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/kn5/main/docs/preview/social-preview.png","summary":"Trasforma video YouTube e post Instagram in schede Markdown Obsidian con frontmatter YAML, trascrizione, OCR e sentinella di budget API.","stack":["Python","Gemini / Vertex AI","Obsidian YAML","Telegram Bot"]},{"id":"resuscipack","repo":"resuscipack","title":"resuscipack","category":"Ricerca & Editoria Digitale","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/resuscipack/","repoUrl":"https://github.com/Noobucodonosor/resuscipack","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png","summary":"Motore di ricerca full-text (SQLite FTS5) e atlante disciplinare su oltre 1.370 volumi tecnici con tracciabilità delle fonti e ponti concettuali.","stack":["Python","SQLite FTS5","Epistemic Graph","Zero-Hallucination"]},{"id":"scooterlab","repo":"scooterlab","title":"ScooterLab — IoT & Sensori","category":"Dispositivi Connessi (IoT)","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/scooterlab/","repoUrl":"https://github.com/Noobucodonosor/scooterlab","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png","summary":"Telemetria veicolare non invasiva (ESP32-S3 + Smart IMU + GNSS u-blox M10) per SYM Symphony ST 200i con formato binario .slab e analisi guida.","stack":["ESP32-S3","ISM330IS IMU","GNSS M10","Python Analytics"]}],"assistantPresets":["Quale progetto dimostra meglio come ridurre i costi delle API AI?","Ho un'agenzia B2B: cosa posso provare subito in questa vetrina?","Come funziona il sutterfugio dei servizi prescaricati con modelli gratuiti?","Puoi aiutarmi a trasformare un'idea in una web app offline-first?"],"playgrounds":{"leslie":{"label":"Leslie — Agency OS","subtitle":"Qualificazione Lead B2B & Outreach su dataset dimostrativo (nautica & hospitality)","defaultAction":"Qualifica questo lead (score 0-10), evidenzia 3 segnali di acquisto e scrivi una bozza di primo contatto breve in italiano.","items":[{"id":"lead-velaligure","name":"Cantiere & Charter Golfo del Tigullio (Demo)","sector":"Nautica & Charter","location":"Santa Margherita Ligure (GE)","website":"charter-tigullio.example","signals":["Flotta di 9 imbarcazioni tra 12m e 22m, stagionalità aprile-ottobre","Sito bilingue IT/EN senza booking diretto né CRM per richieste agenzie","Recensioni alte (4.8/5) ma risposte lente sui preventivi personalizzati"],"notes":"Cerca partner per escursioni private clienti hotel 5 stelle e gestione automatica richieste WhatsApp/email."},{"id":"lead-dimora","name":"Dimora Storica Levante Boutique Hotel (Demo)","sector":"Hospitality Premium","location":"Camogli (GE)","website":"dimora-levante.example","signals":["24 suite con concierge dedicato ed esperienze enogastronomiche su misura","Forte clientela internazionale US/CH/DE in alta stagione","Catalogo esperienze ancora gestito via PDF inviati manualmente"],"notes":"Interessata a un portale partner curato per offrire tour in barca e degustazioni con commissione tracciata."},{"id":"lead-cantina","name":"Tenuta Terrazze delle Cinque Terre (Demo)","sector":"Esperienze & Food","location":"Riomaggiore (SP)","website":"tenuta-terrazze.example","signals":["Degustazioni private in vigna con transfer dedicato","Calendario gestito su foglio condiviso, frequenti overbooking estivi","Collabora già con 3 tour operator ma vuole espandersi sul segmento yacht"],"notes":"Budget marketing contenuto, alta propensione a soluzioni snelle pay-per-result."},{"id":"lead-refit","name":"Officina Nautica & Refit Porto Antico (Demo)","sector":"Servizi Nautici B2B","location":"Genova","website":"refit-portoantico.example","signals":["Specializzata in elettronica di bordo e manutenzione stagionale","Nessuna presenza strutturata su LinkedIn, acquisizione solo via passaparola","Picco di richieste tra febbraio e maggio, capacità libera in autunno"],"notes":"Vuole riempire i mesi invernali con contratti di manutenzione programmata per flotte charter."}]},"kn5":{"label":"kn5 — Knowledge Ingestor","subtitle":"Trasforma trascrizioni video/post in schede Obsidian YAML con stima budget","defaultAction":"Estrai una scheda Obsidian completa con frontmatter YAML, sintesi in 4 punti, concetti chiave e 3 azioni pratiche.","items":[{"id":"kn5-free-llm","title":"Come costruire micro-servizi AI a costo quasi zero con pool di modelli free-tier","source":"YouTube Demo · 14:20","author":"Canale Ingegneria Pratica (Demo)","transcript":"Quando pubblichi un portfolio o un MVP AI, il primo ostacolo è il costo delle API se un post diventa virale. Il pattern più efficace ha quattro livelli: primo, dataset prescaricati così l'utente non deve caricare nulla per capire il valore; secondo, cache deterministica sui prompt ricorrenti; terzo, router multi-provider che ruota su soglie gratuite come Gemini Flash, Groq e OpenRouter free quando arriva un HTTP 429; quarto, fallback BYOK direttamente nel browser così chi vuole uso intensivo mette la propria chiave gratuita senza gravare sul tuo server."},{"id":"kn5-adr","title":"Perché gli ADR salvano i progetti sviluppati con agenti AI","source":"Instagram Reel Demo · 01:45","author":"Architettura & AI (Demo)","transcript":"Molti progetti vibe-coded si rompono alla terza iterazione perché l'agente dimentica i vincoli di sicurezza e riscrive il modello dati. Tenere una cartella docs/adr con decisioni numerate, un AGENTS.md con regola aurea di lettura obbligatoria e task atomici collegati a GitHub Issues riduce drasticamente la deriva architetturale e rende ogni PR verificabile."},{"id":"kn5-pwa","title":"PWA Offline-First per app locali: cache atomica e seed integrato","source":"YouTube Demo · 09:10","author":"Web Locale & Dati (Demo)","transcript":"In un'app consumer come un comparatore di offerte dei supermercati, l'utente la apre dentro il punto vendita dove spesso non c'è campo. Servono tre accorgimenti: Service Worker per shell e asset, cache JSON su disco con stale-while-revalidate lato server, e un dataset seed locale per evitare schermate vuote anche quando una fonte esterna cambia formato."}]},"resuscipack":{"label":"resuscipack","subtitle":"Vista Libro (20 capitoli) & Ponti Epistemici su fonti Open-Access verificate (zero copyright)","bookViewUrl":"https://noobucodonosor.github.io/resuscipack/","defaultAction":"Sintetizza i concetti collegati alla query citando esclusivamente gli ID [OA-..] presenti nelle fonti selezionate e proponi un ponte trasversale ('Libro Sbagliato').","items":[{"id":"OA-01-PRO-GIT","title":"Pro Git (2nd Edition)","authors":"Scott Chacon, Ben Straub","discipline":"Ingegneria del Software & Controllo Versione","license":"CC BY-NC-SA 3.0","url":"https://git-scm.com/book/it/v2","excerpt":"Modello a oggetti immutabili di Git (blob, tree, commit), branching leggero, merge a tre vie, tracciabilità della storia e riproducibilità degli esperimenti software."},{"id":"OA-02-BONEH-SHOUP","title":"A Graduate Course in Applied Cryptography (v0.6)","authors":"Dan Boneh, Victor Shoup","discipline":"Crittografia & Sicurezza","license":"Free Academic PDF (Stanford / NYU)","url":"https://toc.cryptobook.us/","excerpt":"Fondamenti formali di cifratura autenticata (AEAD), funzioni hash SHA-256, MAC, scambio chiavi Diffie-Hellman, RSA e garanzie di integrità nei protocolli TLS."},{"id":"OA-03-SWE-OWASP","title":"Software Engineering at Google + OWASP WSTG v4.2","authors":"T. Winters et al. / OWASP Foundation","discipline":"Testing, Qualità & Web Security","license":"CC BY-NC-ND 4.0 / CC BY-SA 4.0","url":"https://owasp.org/www-project-web-security-testing-guide/","excerpt":"Piramide dei test deterministici, code review sostenibili, mitigazione XSS/CSRF/injection, sanitizzazione dell'output HTML e gestione sicura dei segreti in CI/CD."},{"id":"OA-04-SQLITE-FTS5","title":"SQLite FTS5 & Architettura Storage Append-Only","authors":"SQLite Consortium (Public Domain)","discipline":"Basi di Dati & Information Retrieval","license":"Public Domain","url":"https://www.sqlite.org/fts5.html","excerpt":"Indicizzazione full-text con ranking BM25, tokenizer unicode61 senza diacritici, query booleane e di prossimità, persistenza locale a file singolo con modalità WAL."},{"id":"OA-05-BEN-ARI-LOGIC","title":"Logica Matematica Applicata & Stime Fermi","authors":"Scheda Curricolare Open (Unità P0.8)","discipline":"Logica & Metodo Analitico","license":"Open Educational Resource","url":"https://noobucodonosor.github.io/resuscipack/","excerpt":"Formalizzazione di proposizioni, tavole di verità, dimostrazione per assurdo e stime quantitative rapide per verificare ordini di grandezza prima di scrivere codice."}]},"scooterlab":{"label":"ScooterLab — IoT & Sensori","subtitle":"Analisi Telemetria .slab prescaricata (SYM Symphony ST 200i · Tratta costiera ligure)","defaultAction":"Analizza questa sessione telemetrica: evidenzia i 2 punti di guida più critici (frenata o piega), valuta fluidità e consumi stimati, e proponi 3 consigli pratici di sicurezza.","session":{"sessionId":"SLAB-2026-11-18-TIGULLIO","vehicle":"SYM Symphony ST 200i ABS (Livello 0 non invasivo)","hardware":"ESP32-S3 · IMU ISM330IS (SPI) · GNSS u-blox M10 (10 Hz)","route":"Rapallo Lungomare → San Michele di Pagana → Santa Margherita → Paraggi","distanceKm":7.8,"durationMin":16,"avgSpeedKmh":29.3,"maxSpeedKmh":58.4,"maxLeanDeg":27.6,"maxBrakeG":-0.68,"asphaltTempC":17.5,"points":[{"t":"00:00","zone":"Rapallo Lungomare","speedKmh":22,"leanDeg":4,"accelG":0.14,"note":"Partenza fluida"},{"t":"02:30","zone":"Salita San Michele","speedKmh":44,"leanDeg":16,"accelG":0.21,"note":"Curva destra regolare"},{"t":"05:10","zone":"Tornante Pagana","speedKmh":31,"leanDeg":27.6,"accelG":-0.35,"note":"Picco piega su fondo leggermente umido"},{"t":"08:00","zone":"Rettilineo S. Margherita","speedKmh":58.4,"leanDeg":3,"accelG":0.18,"note":"Velocità massima tratta"},{"t":"10:45","zone":"Rotonda Porto S. Margherita","speedKmh":19,"leanDeg":18,"accelG":-0.68,"note":"Frenata decisa per attraversamento pedonale"},{"t":"13:20","zone":"Litoranea Paraggi","speedKmh":38,"leanDeg":22.1,"accelG":0.08,"note":"Sequenza S-curve fluida"},{"t":"16:00","zone":"Arrivo Paraggi","speedKmh":0,"leanDeg":0,"accelG":-0.22,"note":"Arresto e upload Wi-Fi garage"}]}}}};
+window.__PRELOADED_DATASET__ = {"schemaVersion":"1.0.0","owner":"Noobucodonosor","profile":{"name":"Noobucodonosor","tagline":"Consulenza IT · Sistemi di AI Agentica · Prodotti Digitali","bio":"Progetto, costruisco e mantengo prodotti digitali completi e sistemi di AI agentica — dall'idea iniziale fino alla messa online — unendo metodo analitico, infrastruttura IT, automazione e dispositivi IoT.","githubUrl":"https://github.com/Noobucodonosor","services":[{"id":"automation","title":"Automazione & Assistenti AI","description":"Flussi con agenti AI che leggono documenti, organizzano informazioni, qualificano contatti commerciali e riducono il lavoro manuale ripetitivo."},{"id":"products","title":"Prodotti Digitali Su Misura","description":"Applicazioni web pronte all'uso per desktop e smartphone: portali locali, comparatori, strumenti interni e servizi online offline-first."},{"id":"consulting","title":"Consulenza Pratica & Sistemi","description":"Scelta pragmatica degli strumenti, ordine nei dati, controllo costi API e integrazione tra software, cloud e dispositivi fisici IoT."}]},"projects":[{"id":"basilico","repo":"basilico","title":"C.I.B.O. (ex Basilico) — Rapallo","category":"App Consumer & Lista Spesa","accessType":"live","badge":"Lista Spesa · Cloud Run","liveUrl":"https://basilico-txfxsxuuma-ew.a.run.app/?room=room-6-pianificatore","repoUrl":"https://github.com/Noobucodonosor/basilico","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/basilico/main/docs/preview/social-preview.png","summary":"Confronta in tempo reale offerte e volantini dei 14 supermercati reali di Rapallo, organizza la dispensa e pianifica la spesa settimanale anche offline (PWA).","stack":["React 19","Vite","Express","PWA Offline-First","Cloud Run"]},{"id":"mediometeo","repo":"mediometeo","title":"MedioMeteo Genova","category":"Previsioni & Monitoraggio","accessType":"live","badge":"Live su Cloud Run","liveUrl":"https://mediometeo-664856461640.europe-west1.run.app","repoUrl":"https://github.com/Noobucodonosor/mediometeo","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/mediometeo/main/docs/preview/social-preview.png","summary":"Nowcasting e forecasting terra/mare su 67 comuni della provincia di Genova basati su 199 sensori OMIRL/ARPAL reali, 5 modelli LAM e AI meteo contestuale.","stack":["FastAPI","SQLite","OMIRL/ARPAL","Gemini AI","Cloud Run"]},{"id":"genova-settimana","repo":"genova-settimana","title":"Genova Civica & Cultura","category":"Portale Territoriale","accessType":"live","badge":"Live su GitHub Pages","liveUrl":"https://noobucodonosor.github.io/genova-settimana/","repoUrl":"https://github.com/Noobucodonosor/genova-settimana","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/genova-settimana/main/docs/preview/social-preview.png","summary":"Guida digitale su 67 comuni per scoprire eventi della settimana, quasi 5.000 attività commerciali locali, itinerari e storia delle vie cittadine.","stack":["Python ETL","Static Site","Open Data","GitHub Pages"]},{"id":"leslie","repo":"leslie-agency-os","title":"Leslie — Agency OS","category":"Automazione Commerciale B2B","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/leslie-agency-os/","repoUrl":"https://github.com/Noobucodonosor/leslie-agency-os","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/leslie-agency-os/main/docs/preview/social-preview.png","summary":"Scouting B2B autonomo, qualificazione lead AI con scoring 0–10 e CRM operativo per nautica, ospitalità ed esperienze premium.","stack":["Flask","SQLite WAL","AI Lead Scoring","SSE Streaming"]},{"id":"kn5","repo":"kn5","title":"kn5 — Knowledge Ingestor","category":"AI & Gestione Conoscenza","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/kn5/","repoUrl":"https://github.com/Noobucodonosor/kn5","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/kn5/main/docs/preview/social-preview.png","summary":"Trasforma video YouTube e post Instagram in schede Markdown Obsidian con frontmatter YAML, trascrizione, OCR e sentinella di budget API.","stack":["Python","Gemini / Vertex AI","Obsidian YAML","Telegram Bot"]},{"id":"resuscipack","repo":"resuscipack","title":"resuscipack","category":"Ricerca & Editoria Digitale","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/resuscipack/","repoUrl":"https://github.com/Noobucodonosor/resuscipack","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/resuscipack/main/docs/preview/social-preview.png","summary":"Motore di ricerca full-text (SQLite FTS5) e atlante disciplinare su oltre 1.370 volumi tecnici con tracciabilità delle fonti e ponti concettuali.","stack":["Python","SQLite FTS5","Epistemic Graph","Zero-Hallucination"]},{"id":"scooterlab","repo":"scooterlab","title":"ScooterLab — IoT & Sensori","category":"Dispositivi Connessi (IoT)","accessType":"playground","badge":"Playground AI Prescaricato","liveUrl":"https://noobucodonosor.github.io/scooterlab/","repoUrl":"https://github.com/Noobucodonosor/scooterlab","previewUrl":"https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png","summary":"Telemetria veicolare non invasiva (ESP32-S3 + Smart IMU + GNSS u-blox M10) per SYM Symphony ST 200i con formato binario .slab e analisi guida.","stack":["ESP32-S3","ISM330IS IMU","GNSS M10","Python Analytics"]}],"assistantPresets":["Quale progetto dimostra meglio come ridurre i costi delle API AI?","Ho un'agenzia B2B: cosa posso provare subito in questa vetrina?","Come funziona il sutterfugio dei servizi prescaricati con modelli gratuiti?","Puoi aiutarmi a trasformare un'idea in una web app offline-first?"],"playgrounds":{"leslie":{"label":"Leslie — Agency OS","subtitle":"Qualificazione Lead B2B & Outreach su dataset dimostrativo (nautica & hospitality)","defaultAction":"Qualifica questo lead (score 0-10), evidenzia 3 segnali di acquisto e scrivi una bozza di primo contatto breve in italiano.","items":[{"id":"lead-velaligure","name":"Cantiere & Charter Golfo del Tigullio (Demo)","sector":"Nautica & Charter","location":"Santa Margherita Ligure (GE)","website":"charter-tigullio.example","signals":["Flotta di 9 imbarcazioni tra 12m e 22m, stagionalità aprile-ottobre","Sito bilingue IT/EN senza booking diretto né CRM per richieste agenzie","Recensioni alte (4.8/5) ma risposte lente sui preventivi personalizzati"],"notes":"Cerca partner per escursioni private clienti hotel 5 stelle e gestione automatica richieste WhatsApp/email."},{"id":"lead-dimora","name":"Dimora Storica Levante Boutique Hotel (Demo)","sector":"Hospitality Premium","location":"Camogli (GE)","website":"dimora-levante.example","signals":["24 suite con concierge dedicato ed esperienze enogastronomiche su misura","Forte clientela internazionale US/CH/DE in alta stagione","Catalogo esperienze ancora gestito via PDF inviati manualmente"],"notes":"Interessata a un portale partner curato per offrire tour in barca e degustazioni con commissione tracciata."},{"id":"lead-cantina","name":"Tenuta Terrazze delle Cinque Terre (Demo)","sector":"Esperienze & Food","location":"Riomaggiore (SP)","website":"tenuta-terrazze.example","signals":["Degustazioni private in vigna con transfer dedicato","Calendario gestito su foglio condiviso, frequenti overbooking estivi","Collabora già con 3 tour operator ma vuole espandersi sul segmento yacht"],"notes":"Budget marketing contenuto, alta propensione a soluzioni snelle pay-per-result."},{"id":"lead-refit","name":"Officina Nautica & Refit Porto Antico (Demo)","sector":"Servizi Nautici B2B","location":"Genova","website":"refit-portoantico.example","signals":["Specializzata in elettronica di bordo e manutenzione stagionale","Nessuna presenza strutturata su LinkedIn, acquisizione solo via passaparola","Picco di richieste tra febbraio e maggio, capacità libera in autunno"],"notes":"Vuole riempire i mesi invernali con contratti di manutenzione programmata per flotte charter."}]},"kn5":{"label":"kn5 — Knowledge Ingestor","subtitle":"Trasforma trascrizioni video/post in schede Obsidian YAML con stima budget","defaultAction":"Estrai una scheda Obsidian completa con frontmatter YAML, sintesi in 4 punti, concetti chiave e 3 azioni pratiche.","items":[{"id":"kn5-free-llm","title":"Come costruire micro-servizi AI a costo quasi zero con pool di modelli free-tier","source":"YouTube Demo · 14:20","author":"Canale Ingegneria Pratica (Demo)","transcript":"Quando pubblichi un portfolio o un MVP AI, il primo ostacolo è il costo delle API se un post diventa virale. Il pattern più efficace ha quattro livelli: primo, dataset prescaricati così l'utente non deve caricare nulla per capire il valore; secondo, cache deterministica sui prompt ricorrenti; terzo, router multi-provider che ruota su soglie gratuite come Gemini Flash, Groq e OpenRouter free quando arriva un HTTP 429; quarto, fallback BYOK direttamente nel browser così chi vuole uso intensivo mette la propria chiave gratuita senza gravare sul tuo server."},{"id":"kn5-adr","title":"Perché gli ADR salvano i progetti sviluppati con agenti AI","source":"Instagram Reel Demo · 01:45","author":"Architettura & AI (Demo)","transcript":"Molti progetti vibe-coded si rompono alla terza iterazione perché l'agente dimentica i vincoli di sicurezza e riscrive il modello dati. Tenere una cartella docs/adr con decisioni numerate, un AGENTS.md con regola aurea di lettura obbligatoria e task atomici collegati a GitHub Issues riduce drasticamente la deriva architetturale e rende ogni PR verificabile."},{"id":"kn5-pwa","title":"PWA Offline-First per app locali: cache atomica e seed integrato","source":"YouTube Demo · 09:10","author":"Web Locale & Dati (Demo)","transcript":"In un'app consumer come un comparatore di offerte dei supermercati, l'utente la apre dentro il punto vendita dove spesso non c'è campo. Servono tre accorgimenti: Service Worker per shell e asset, cache JSON su disco con stale-while-revalidate lato server, e un dataset seed locale per evitare schermate vuote anche quando una fonte esterna cambia formato."}]},"resuscipack":{"label":"resuscipack","subtitle":"Vista Libro (20 capitoli) & Ponti Epistemici su fonti Open-Access verificate (zero copyright)","bookViewUrl":"https://noobucodonosor.github.io/resuscipack/","defaultAction":"Sintetizza i concetti collegati alla query citando esclusivamente gli ID [OA-..] presenti nelle fonti selezionate e proponi un ponte trasversale ('Libro Sbagliato').","items":[{"id":"OA-01-PRO-GIT","title":"Pro Git (2nd Edition)","authors":"Scott Chacon, Ben Straub","discipline":"Ingegneria del Software & Controllo Versione","license":"CC BY-NC-SA 3.0","url":"https://git-scm.com/book/it/v2","excerpt":"Modello a oggetti immutabili di Git (blob, tree, commit), branching leggero, merge a tre vie, tracciabilità della storia e riproducibilità degli esperimenti software."},{"id":"OA-02-BONEH-SHOUP","title":"A Graduate Course in Applied Cryptography (v0.6)","authors":"Dan Boneh, Victor Shoup","discipline":"Crittografia & Sicurezza","license":"Free Academic PDF (Stanford / NYU)","url":"https://toc.cryptobook.us/","excerpt":"Fondamenti formali di cifratura autenticata (AEAD), funzioni hash SHA-256, MAC, scambio chiavi Diffie-Hellman, RSA e garanzie di integrità nei protocolli TLS."},{"id":"OA-03-SWE-OWASP","title":"Software Engineering at Google + OWASP WSTG v4.2","authors":"T. Winters et al. / OWASP Foundation","discipline":"Testing, Qualità & Web Security","license":"CC BY-NC-ND 4.0 / CC BY-SA 4.0","url":"https://owasp.org/www-project-web-security-testing-guide/","excerpt":"Piramide dei test deterministici, code review sostenibili, mitigazione XSS/CSRF/injection, sanitizzazione dell'output HTML e gestione sicura dei segreti in CI/CD."},{"id":"OA-04-SQLITE-FTS5","title":"SQLite FTS5 & Architettura Storage Append-Only","authors":"SQLite Consortium (Public Domain)","discipline":"Basi di Dati & Information Retrieval","license":"Public Domain","url":"https://www.sqlite.org/fts5.html","excerpt":"Indicizzazione full-text con ranking BM25, tokenizer unicode61 senza diacritici, query booleane e di prossimità, persistenza locale a file singolo con modalità WAL."},{"id":"OA-05-BEN-ARI-LOGIC","title":"Logica Matematica Applicata & Stime Fermi","authors":"Scheda Curricolare Open (Unità P0.8)","discipline":"Logica & Metodo Analitico","license":"Open Educational Resource","url":"https://noobucodonosor.github.io/resuscipack/","excerpt":"Formalizzazione di proposizioni, tavole di verità, dimostrazione per assurdo e stime quantitative rapide per verificare ordini di grandezza prima di scrivere codice."}]},"scooterlab":{"label":"ScooterLab — IoT & Sensori","subtitle":"Analisi Telemetria .slab prescaricata (SYM Symphony ST 200i · Tratta costiera ligure)","defaultAction":"Analizza questa sessione telemetrica: evidenzia i 2 punti di guida più critici (frenata o piega), valuta fluidità e consumi stimati, e proponi 3 consigli pratici di sicurezza.","session":{"sessionId":"SLAB-2026-11-18-TIGULLIO","vehicle":"SYM Symphony ST 200i ABS (Livello 0 non invasivo)","hardware":"ESP32-S3 · IMU ISM330IS (SPI) · GNSS u-blox M10 (10 Hz)","route":"Rapallo Lungomare → San Michele di Pagana → Santa Margherita → Paraggi","distanceKm":7.8,"durationMin":16,"avgSpeedKmh":29.3,"maxSpeedKmh":58.4,"maxLeanDeg":27.6,"maxBrakeG":-0.68,"asphaltTempC":17.5,"points":[{"t":"00:00","zone":"Rapallo Lungomare","speedKmh":22,"leanDeg":4,"accelG":0.14,"note":"Partenza fluida"},{"t":"02:30","zone":"Salita San Michele","speedKmh":44,"leanDeg":16,"accelG":0.21,"note":"Curva destra regolare"},{"t":"05:10","zone":"Tornante Pagana","speedKmh":31,"leanDeg":27.6,"accelG":-0.35,"note":"Picco piega su fondo leggermente umido"},{"t":"08:00","zone":"Rettilineo S. Margherita","speedKmh":58.4,"leanDeg":3,"accelG":0.18,"note":"Velocità massima tratta"},{"t":"10:45","zone":"Rotonda Porto S. Margherita","speedKmh":19,"leanDeg":18,"accelG":-0.68,"note":"Frenata decisa per attraversamento pedonale"},{"t":"13:20","zone":"Litoranea Paraggi","speedKmh":38,"leanDeg":22.1,"accelG":0.08,"note":"Sequenza S-curve fluida"},{"t":"16:00","zone":"Arrivo Paraggi","speedKmh":0,"leanDeg":0,"accelG":-0.22,"note":"Arresto e upload Wi-Fi garage"}]}}}};
 
 const BYOK_STORAGE_PREFIX = 'noobucodonosor:v1:byok:';
 const BYOK_ACTIVE_KEY = `${BYOK_STORAGE_PREFIX}active`;
+const DEFAULT_CLOUD_RUN_GATEWAY = 'https://noobucodonosor-hub-664856461640.us-central1.run.app';
 const ramVault = new Map();
+let lastPrewarmAt = 0;
+let gatewayAltchaEnabled = false;
 
 const BYOK_PROVIDERS = {
-  gemini: {
-    id: 'gemini',
-    label: 'Google AI Studio (Gemini Free)',
-    defaultModel: 'gemini-3.5-flash-lite',
-    keyUrl: 'https://aistudio.google.com/apikey',
-    placeholder: 'AIza...',
-  },
-  groq: {
-    id: 'groq',
-    label: 'Groq (Free Tier)',
-    defaultModel: 'openai/gpt-oss-20b',
-    keyUrl: 'https://console.groq.com/keys',
-    placeholder: 'gsk_...',
-  },
   openrouter: {
     id: 'openrouter',
-    label: 'OpenRouter (:free)',
+    label: 'OpenRouter (:free · Consigliato CORS)',
     defaultModel: 'meta-llama/llama-3.3-70b-instruct:free',
     keyUrl: 'https://openrouter.ai/keys',
     placeholder: 'sk-or-v1-...',
+    requiresKey: true,
+  },
+  groq: {
+    id: 'groq',
+    label: 'Groq (Free Tier · CORS-open)',
+    defaultModel: 'openai/gpt-oss-20b',
+    keyUrl: 'https://console.groq.com/keys',
+    placeholder: 'gsk_...',
+    requiresKey: true,
+  },
+  anthropic: {
+    id: 'anthropic',
+    label: 'Anthropic Claude (Direct Browser)',
+    defaultModel: 'claude-3-5-haiku-latest',
+    keyUrl: 'https://console.anthropic.com/settings/keys',
+    placeholder: 'sk-ant-...',
+    requiresKey: true,
+  },
+  ollama: {
+    id: 'ollama',
+    label: 'Ollama Locale (http://localhost:11434 · 0 chiavi)',
+    defaultModel: 'llama3.2',
+    keyUrl: 'https://ollama.com/download',
+    placeholder: '(opzionale — nessuna API key richiesta)',
+    requiresKey: false,
   },
 };
 
@@ -1222,11 +1243,13 @@ function loadByokConfig() {
     const raw = sessionStorage.getItem(BYOK_ACTIVE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!parsed?.apiKey || !BYOK_PROVIDERS[parsed.provider]) return null;
+    const prov = BYOK_PROVIDERS[parsed?.provider];
+    if (!prov) return null;
+    if (prov.requiresKey && !parsed?.apiKey) return null;
     return {
       provider: parsed.provider,
-      apiKey: String(parsed.apiKey).trim(),
-      model: String(parsed.model || BYOK_PROVIDERS[parsed.provider].defaultModel).trim(),
+      apiKey: String(parsed.apiKey || '').trim(),
+      model: String(parsed.model || prov.defaultModel).trim(),
       ramOnly: Boolean(parsed.ramOnly),
     };
   } catch {
@@ -1235,20 +1258,21 @@ function loadByokConfig() {
 }
 
 function saveByokConfig(config) {
-  if (!config || !config.apiKey?.trim()) {
+  const prov = config ? BYOK_PROVIDERS[config.provider] || BYOK_PROVIDERS.openrouter : null;
+  if (!config || !prov || (prov.requiresKey && !config.apiKey?.trim())) {
     ramVault.delete(BYOK_ACTIVE_KEY);
     try {
       sessionStorage.removeItem(BYOK_ACTIVE_KEY);
     } catch {
-      // sessionStorage non disponibile (es. file:// restrittivo)
+      // sessionStorage non disponibile (es. Safari file:// restrittivo)
     }
     return null;
   }
 
   const clean = {
-    provider: BYOK_PROVIDERS[config.provider] ? config.provider : 'gemini',
-    apiKey: config.apiKey.trim(),
-    model: (config.model || BYOK_PROVIDERS[config.provider]?.defaultModel || '').trim(),
+    provider: prov.id,
+    apiKey: String(config.apiKey || '').trim(),
+    model: (config.model || prov.defaultModel || '').trim(),
     ramOnly: Boolean(config.ramOnly),
   };
 
@@ -1266,14 +1290,112 @@ function saveByokConfig(config) {
   try {
     sessionStorage.setItem(BYOK_ACTIVE_KEY, JSON.stringify(clean));
   } catch {
-    // Fallback trasparente su ramVault in memoria volatile
+    // Fallback trasparente su ramVault in memoria volatile (es. Safari file://)
     clean.ramOnly = true;
   }
   return clean;
 }
 
+function exportPortableStateJson() {
+  const byok = loadByokConfig();
+  return JSON.stringify(
+    {
+      version: 'adr0004-v1',
+      exportedAt: new Date().toISOString(),
+      byok: byok
+        ? {
+            provider: byok.provider,
+            model: byok.model,
+            ramOnly: Boolean(byok.ramOnly),
+          }
+        : null,
+    },
+    null,
+    2,
+  );
+}
+
+function importPortableStateJson(rawJson) {
+  const parsed = JSON.parse(String(rawJson || '{}'));
+  if (parsed?.byok?.provider && BYOK_PROVIDERS[parsed.byok.provider]) {
+    const existing = loadByokConfig();
+    saveByokConfig({
+      provider: parsed.byok.provider,
+      model: parsed.byok.model || BYOK_PROVIDERS[parsed.byok.provider].defaultModel,
+      apiKey: parsed.byok.apiKey || existing?.apiKey || '',
+      ramOnly: Boolean(parsed.byok.ramOnly),
+    });
+  }
+  return parsed;
+}
+
 function getProxyBaseUrl() {
-  return (globalThis.NOOB_CONFIG?.proxyBaseUrl || '').replace(/\/+$/, '');
+  const explicit = (globalThis.NOOB_CONFIG?.proxyBaseUrl || globalThis.NOOB_CONFIG?.gatewayBaseUrl || '').replace(/\/+$/, '');
+  if (explicit) return explicit;
+  const host = globalThis.location?.hostname || '';
+  if (host.endsWith('github.io')) {
+    return DEFAULT_CLOUD_RUN_GATEWAY;
+  }
+  return '';
+}
+
+/**
+ * Silent simple-request pre-warming (GET /health with zero custom headers -> no CORS OPTIONS preflight).
+ * Keeps Cloud Run warm for ~15 min while preserving scale-to-zero cost (~€0).
+ */
+async function prewarmGateway() {
+  if (globalThis.location?.protocol === 'file:') return false;
+  const now = Date.now();
+  if (now - lastPrewarmAt < 10 * 60 * 1000) return true;
+  lastPrewarmAt = now;
+  try {
+    const res = await fetch(`${getProxyBaseUrl()}/health`, { method: 'GET' });
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (typeof data?.altchaEnabled === 'boolean') {
+        gatewayAltchaEnabled = data.altchaEnabled;
+      }
+      return true;
+    }
+  } catch {
+    // Non-blocking best-effort warmup
+  }
+  return false;
+}
+
+async function sha256HexBrowser(input) {
+  if (!globalThis.crypto?.subtle) return null;
+  const bytes = new TextEncoder().encode(input);
+  const hashBuf = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(hashBuf))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function fetchAndSolveAltcha(baseUrl) {
+  if (!globalThis.crypto?.subtle) return null;
+  try {
+    const chRes = await fetch(`${baseUrl}/api/altcha/challenge`, { method: 'GET' });
+    if (!chRes.ok) return null;
+    const ch = await chRes.json();
+    const max = Math.min(Number(ch.maxnumber || 50000), 100000);
+    for (let n = 0; n <= max; n += 1) {
+      const digest = await sha256HexBrowser(`${ch.salt}${n}`);
+      if (digest === ch.challenge) {
+        const payload = {
+          algorithm: ch.algorithm,
+          challenge: ch.challenge,
+          number: n,
+          salt: ch.salt,
+          signature: ch.signature,
+        };
+        return btoa(JSON.stringify(payload));
+      }
+    }
+  } catch {
+    // Fallback gracefully
+  }
+  return null;
 }
 
 async function extractKn5Url(rawUrl) {
@@ -1345,11 +1467,12 @@ async function checkProxyHealth() {
     return { reachable: false, proxyReady: false, providers: [] };
   }
   try {
-    const res = await fetch(`${getProxyBaseUrl()}/api/health`, {
-      headers: { Accept: 'application/json' },
-    });
+    const res = await fetch(`${getProxyBaseUrl()}/api/health`);
     if (!res.ok) return { reachable: false, proxyReady: false, providers: [] };
     const data = await res.json();
+    if (typeof data?.altchaEnabled === 'boolean') {
+      gatewayAltchaEnabled = data.altchaEnabled;
+    }
     return { reachable: true, ...data };
   } catch {
     return { reachable: false, proxyReady: false, providers: [] };
@@ -1360,22 +1483,48 @@ async function callByokDirect(byok, serviceId, prompt, context) {
   const systemPrompt = SYSTEM_PROMPTS[serviceId] || SYSTEM_PROMPTS.assistant;
   const userText = context ? `CONTESTO PRESCARICATO:\n${context}\n\nRICHIESTA:\n${prompt}` : prompt;
 
-  if (byok.provider === 'gemini') {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(byok.model)}:generateContent?key=${encodeURIComponent(byok.apiKey)}`;
-    const res = await fetch(url, {
+  if (byok.provider === 'anthropic') {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': byok.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: byok.model,
+        max_tokens: 700,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userText }],
+      }),
+    });
+    if (!res.ok) throw new Error(`Anthropic BYOK HTTP ${res.status}`);
+    const data = await res.json();
+    const text = data?.content?.map((c) => c.text || '').join('').trim();
+    if (!text) throw new Error('Risposta Anthropic vuota');
+    return text;
+  }
+
+  if (byok.provider === 'ollama') {
+    const res = await fetch('http://localhost:11434/api/chat', {
       method: 'POST',
       credentials: 'omit',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: 'user', parts: [{ text: userText }] }],
-        generationConfig: { temperature: 0.4, maxOutputTokens: 700 },
+        model: byok.model || 'llama3.2',
+        stream: false,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userText },
+        ],
       }),
     });
-    if (!res.ok) throw new Error(`Gemini BYOK HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`Ollama locale HTTP ${res.status}`);
     const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('').trim();
-    if (!text) throw new Error('Risposta Gemini vuota');
+    const text = data?.message?.content?.trim();
+    if (!text) throw new Error('Risposta Ollama vuota');
     return text;
   }
 
@@ -1621,9 +1770,16 @@ async function runServiceAI({ serviceId, prompt, context = '', dataset = null, m
   // 2) Try Free-Tier Server Proxy (when served over HTTP/HTTPS)
   if (globalThis.location?.protocol !== 'file:') {
     try {
-      const res = await fetch(`${getProxyBaseUrl()}/api/ai/complete`, {
+      const baseUrl = getProxyBaseUrl();
+      const reqHeaders = { 'Content-Type': 'application/json' };
+      if (gatewayAltchaEnabled) {
+        const altchaToken = await fetchAndSolveAltcha(baseUrl);
+        if (altchaToken) reqHeaders['X-Altcha-Payload'] = altchaToken;
+      }
+
+      const res = await fetch(`${baseUrl}/api/ai/complete`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: reqHeaders,
         body: JSON.stringify({
           serviceId,
           presetId: meta?.presetId || meta?.item?.id || null,
@@ -2644,6 +2800,31 @@ function setupByokDialog() {
     dialog.close();
   });
 
+  const exportBtn = document.getElementById('byok-export-btn');
+  exportBtn?.addEventListener('click', () => {
+    const json = exportPortableStateJson();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'noobucodonosor-state.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  const importBtn = document.getElementById('byok-import-btn');
+  importBtn?.addEventListener('click', () => {
+    const raw = globalThis.prompt?.('Incolla il JSON esportato da Noobucodonosor:');
+    if (!raw) return;
+    try {
+      importPortableStateJson(raw);
+      updateEngineBadge();
+      openByokDialog();
+    } catch {
+      globalThis.alert?.('JSON non valido.');
+    }
+  });
+
   syncProviderFields();
 }
 
@@ -2846,9 +3027,16 @@ async function init() {
     });
   });
 
+  document.getElementById('assistant-input')?.addEventListener('focus', () => {
+    prewarmGateway();
+  });
+
   // Quick-task text tabs
   document.querySelectorAll('.quick-tab-btn').forEach((btn) => {
-    btn.addEventListener('click', () => selectQuickTask(btn.dataset.task));
+    btn.addEventListener('click', () => {
+      prewarmGateway();
+      selectQuickTask(btn.dataset.task);
+    });
   });
   document.getElementById('qt-form')?.addEventListener('submit', runQuickTask);
   document.getElementById('qt-copy-btn')?.addEventListener('click', async () => {
@@ -2868,7 +3056,10 @@ async function init() {
 
   // Playground tabs & actions
   document.querySelectorAll('.tab-btn:not(.quick-tab-btn)').forEach((btn) => {
-    btn.addEventListener('click', () => selectTab(btn.dataset.tab));
+    btn.addEventListener('click', () => {
+      prewarmGateway();
+      selectTab(btn.dataset.tab);
+    });
   });
   document.getElementById('pg-run-btn').addEventListener('click', runPlayground);
   document.getElementById('pg-reset-btn').addEventListener('click', () => {

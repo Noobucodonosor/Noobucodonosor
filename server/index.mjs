@@ -1,12 +1,12 @@
-import http from 'node:http';
 import fs from 'node:fs';
-import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FreeTierRouter } from './free-tier-router.mjs';
-import { PublicUrlIngestor, extractFirstUrlFromText } from './url-ingestor.mjs';
+import { PublicUrlIngestor } from './url-ingestor.mjs';
 import { SmartphoneApprovalGate } from './approval-gate.mjs';
 import { fetchBasilicoContext, buildBasilicoListFromOffers } from './basilico-client.mjs';
+import { createGatewayServer, extractClientIp } from '../packages/ai-gateway/src/server.mjs';
+import { AltchaGate } from '../packages/ai-gateway/src/altcha.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -25,47 +25,6 @@ const MIME_TYPES = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
-function sendJson(res, status, payload, extraHeaders = {}) {
-  const body = JSON.stringify(payload);
-  res.writeHead(status, {
-    'Content-Type': 'application/json; charset=utf-8',
-    'Cache-Control': 'no-store',
-    ...extraHeaders,
-  });
-  res.end(body);
-}
-
-function readJsonBody(req, maxBytes = 16 * 1024) {
-  return new Promise((resolve, reject) => {
-    let size = 0;
-    let settled = false;
-    const chunks = [];
-    req.on('data', (chunk) => {
-      if (settled) return;
-      size += chunk.length;
-      if (size > maxBytes) {
-        settled = true;
-        reject(Object.assign(new Error('Payload troppo grande (max 16 KB)'), { status: 413 }));
-        req.pause();
-        return;
-      }
-      chunks.push(chunk);
-    });
-    req.on('end', () => {
-      if (settled) return;
-      try {
-        const raw = Buffer.concat(chunks).toString('utf8');
-        resolve(raw ? JSON.parse(raw) : {});
-      } catch {
-        reject(Object.assign(new Error('JSON non valido'), { status: 400 }));
-      }
-    });
-    req.on('error', (err) => {
-      if (!settled) reject(err);
-    });
-  });
-}
-
 function resolveSafePath(baseDir, reqPath) {
   const normalized = path.normalize(reqPath).replace(/^(\.\.[/\\])+/, '');
   const fullPath = path.resolve(baseDir, normalized);
@@ -73,354 +32,103 @@ function resolveSafePath(baseDir, reqPath) {
   return fullPath;
 }
 
-function isInternalOrLoopback(ip) {
-  const lower = String(ip || '').toLowerCase();
-  return (
-    lower === '127.0.0.1' ||
-    lower === '::1' ||
-    lower === '0.0.0.0' ||
-    lower.startsWith('169.254.') ||
-    lower.startsWith('10.') ||
-    lower.startsWith('192.168.') ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(lower) ||
-    lower.startsWith('fe80:') ||
-    lower.startsWith('fc') ||
-    lower.startsWith('fd')
-  );
-}
-
-// Right-to-left parsing of X-Forwarded-For to prevent client IP spoofing on Cloud Run
-export function extractClientIp(req) {
-  const forwarded = req.headers['x-forwarded-for'];
-  if (typeof forwarded === 'string' && forwarded.length > 0) {
-    const parts = forwarded
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-    for (let i = parts.length - 1; i >= 0; i -= 1) {
-      const candidate = parts[i];
-      if (net.isIP(candidate) && !isInternalOrLoopback(candidate)) {
-        return candidate;
-      }
-    }
-  }
-  return req.socket?.remoteAddress || 'local';
-}
-
-function emitTelemetryLog(payload) {
-  if (process.env.NODE_ENV === 'test') return;
-  console.log(JSON.stringify(payload));
-}
+export { extractClientIp };
 
 export function createAppServer(options = {}) {
   const router = options.router ?? new FreeTierRouter();
-  const urlIngestor = options.urlIngestor ?? new PublicUrlIngestor();
+  const urlIngestor = options.urlIngestor ?? new PublicUrlIngestor({ userAgent: 'Mozilla/5.0 (compatible; Noobucodonosor-kn5-Preview/1.0)' });
   const approvalGate = options.approvalGate ?? new SmartphoneApprovalGate();
+  const altchaGate = options.altchaGate ?? new AltchaGate();
   const basilicoFetcher = options.basilicoFetcher ?? fetchBasilicoContext;
-  const allowedOrigin = options.allowedOrigin ?? process.env.ALLOWED_ORIGIN ?? '*';
   const webDir = options.webDir ?? WEB_DIR;
   const bundlesDir = options.bundlesDir ?? BUNDLES_DIR;
-  const logFn = options.logFn ?? emitTelemetryLog;
 
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  };
-
-  return http.createServer(async (req, res) => {
-    const urlObj = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
-    const pathname = decodeURIComponent(urlObj.pathname);
-
-    if (req.method === 'OPTIONS') {
-      res.writeHead(204, corsHeaders);
-      res.end();
-      return;
-    }
-
-    if (pathname === '/api/health' && req.method === 'GET') {
-      sendJson(
-        res,
-        200,
-        {
-          ok: true,
-          service: 'noobucodonosor-hub',
-          approvalMode: approvalGate.isEnabled() ? approvalGate.mode : 'off',
-          ...router.getStatus(),
-        },
-        corsHeaders,
-      );
-      return;
-    }
-
-    if (pathname === '/api/approval/decide' && req.method === 'GET') {
-      const id = urlObj.searchParams.get('id') || '';
-      const decision = urlObj.searchParams.get('decision') || '';
-      const sig = urlObj.searchParams.get('sig') || '';
-      if (!['approve', 'deny'].includes(decision) || !approvalGate.verifySignature(id, decision, sig)) {
-        sendJson(res, 403, { ok: false, error: 'invalid_signature' }, corsHeaders);
-        return;
-      }
-      const approved = decision === 'approve';
-      const matched = approvalGate.decide(id, approved, approved ? 'approved' : 'denied');
-      if (!matched) {
-        sendJson(res, 404, { ok: false, error: 'approval_not_found' }, corsHeaders);
-        return;
-      }
-      sendJson(res, 200, { ok: true, id, decision }, corsHeaders);
-      return;
-    }
-
-    if (pathname === '/api/approval/telegram-webhook' && req.method === 'POST') {
-      if (
-        approvalGate.telegramWebhookSecret &&
-        req.headers['x-telegram-bot-api-secret-token'] !== approvalGate.telegramWebhookSecret
-      ) {
-        sendJson(res, 403, { ok: false, error: 'invalid_webhook_secret' }, corsHeaders);
-        return;
-      }
-      try {
-        const body = await readJsonBody(req, 16 * 1024);
-        const result = await approvalGate.handleTelegramWebhook(body);
-        sendJson(res, 200, result, corsHeaders);
-      } catch (err) {
-        sendJson(res, err.status || 400, { ok: false, error: err.message }, corsHeaders);
-      }
-      return;
-    }
-
-    if (pathname === '/api/kn5/extract' && req.method === 'POST') {
-      const startedAt = Date.now();
-      try {
-        const body = await readJsonBody(req, 4 * 1024);
-        const clientIp = extractClientIp(req);
-        if (!router.consumeIpSlot(clientIp)) {
-          sendJson(
-            res,
-            429,
-            {
-              ok: false,
-              error: 'ip_rate_limited',
-              message: 'Limite orario estrazioni URL raggiunto. Riprova più tardi o incolla il testo manualmente.',
-            },
-            corsHeaders,
-          );
-          return;
+  return createGatewayServer({
+    serviceName: 'noobucodonosor-hub',
+    router,
+    urlIngestor,
+    approvalGate,
+    altchaGate,
+    allowedOrigins:
+      options.allowedOrigins ??
+      options.allowedOrigin ??
+      process.env.ALLOWED_ORIGINS ??
+      process.env.ALLOWED_ORIGIN ??
+      'https://noobucodonosor.github.io',
+    allowLocalhost: options.allowLocalhost,
+    logFn: options.logFn,
+    onBeforeComplete: async ({ body, userQuery, context }) => {
+      if (body.serviceId === 'basilico' && !context) {
+        const basilicoLive = await basilicoFetcher(userQuery);
+        if (basilicoLive?.ok && basilicoLive.contextText) {
+          return { context: basilicoLive.contextText, basilicoLive };
         }
-        const extracted = await urlIngestor.ingest(body.url);
-        logFn({
-          event: 'kn5_extract',
-          status: 200,
-          kind: extracted.kind,
-          cached: Boolean(extracted.cached),
-          latencyMs: Date.now() - startedAt,
-        });
-        sendJson(res, 200, { ok: true, extracted }, corsHeaders);
-      } catch (err) {
-        const status = err.status || 422;
-        logFn({
-          event: 'kn5_extract_error',
-          status,
-          code: err.code || 'extract_failed',
-          latencyMs: Date.now() - startedAt,
-        });
-        sendJson(
-          res,
-          status,
-          { ok: false, error: err.code || 'extract_failed', message: err.message },
-          status === 413 ? { ...corsHeaders, Connection: 'close' } : corsHeaders,
-        );
-        if (status === 413) req.destroy();
+        return { basilicoLive };
       }
-      return;
-    }
-
-    if (pathname === '/api/ai/complete' && req.method === 'POST') {
-      const startedAt = Date.now();
-      try {
-        const body = await readJsonBody(req, 16 * 1024);
-        let userQuery = body.userQuery ?? body.prompt ?? '';
-        let context = body.context ?? '';
-        let extractedSource = null;
-        let basilicoLive = null;
-
-        if (body.serviceId === 'basilico' && !context) {
-          basilicoLive = await basilicoFetcher(userQuery);
-          if (basilicoLive?.ok && basilicoLive.contextText) {
-            context = basilicoLive.contextText;
-          }
-        }
-
-        if (body.serviceId === 'kn5' && !body.urlAlreadyExtracted) {
-          const detectedUrl = body.sourceUrl || extractFirstUrlFromText(userQuery);
-          if (detectedUrl) {
-            try {
-              const ex = await urlIngestor.ingest(detectedUrl);
-              extractedSource = ex;
-              context = `Titolo: ${ex.title}\nFonte: ${ex.source}\nURL: ${ex.url}\n${ex.content}`;
-              const stripped = String(userQuery).replace(detectedUrl, '').trim();
-              userQuery =
-                stripped ||
-                `Genera una scheda Markdown Obsidian completa dal contenuto estratto (${ex.title}).`;
-            } catch (exErr) {
-              sendJson(
-                res,
-                exErr.status || 422,
-                { ok: false, error: exErr.code || 'extract_failed', message: exErr.message },
-                corsHeaders,
-              );
-              return;
-            }
-          }
-        }
-
-        const presetId = extractedSource ? `url:${extractedSource.url}` : (body.presetId ?? null);
-        const clientIp = extractClientIp(req);
-
-        if (
-          approvalGate.isEnabled() &&
-          router.allowedServices.has(body.serviceId) &&
-          !router.hasCached({ serviceId: body.serviceId, presetId, userQuery, context })
-        ) {
-          const statusSnapshot = router.getStatus();
-          const approval = await approvalGate.requestApproval({
-            serviceId: body.serviceId,
-            promptPreview: userQuery,
-            clientIp,
-            dailyRemaining: statusSnapshot.dailyRemaining,
-            dailyCap: statusSnapshot.dailyCap,
-          });
-          if (!approval.approved) {
-            const isTimeout = approval.reason === 'timeout';
-            const denyStatus = isTimeout ? 408 : 403;
-            const errorCode = isTimeout ? 'approval_timeout' : 'approval_denied';
-            logFn({
-              event: 'ai_complete_approval_blocked',
-              serviceId: body.serviceId,
-              status: denyStatus,
-              reason: approval.reason,
-              latencyMs: Date.now() - startedAt,
-            });
-            sendJson(
-              res,
-              denyStatus,
-              {
-                ok: false,
-                error: errorCode,
-                fallbackSuggested: 'byok_or_local',
-                message: isTimeout
-                  ? 'Approvazione su smartphone scaduta. Riprova o usa una tua chiave BYOK gratuita.'
-                  : 'Richiesta negata dallo smartphone del proprietario (API esaurite o limite raggiunto). Usa una tua chiave BYOK gratuita o la modalità locale.',
-              },
-              corsHeaders,
-            );
-            return;
-          }
-        }
-
-        let result = await router.complete({
-          serviceId: body.serviceId,
-          presetId,
+      return null;
+    },
+    onFallbackComplete: async ({ body, userQuery, hookState }) => {
+      const basilicoLive = hookState?.basilicoLive;
+      if (body.serviceId === 'basilico' && basilicoLive?.ok && basilicoLive.offers.length > 0) {
+        const liveText = buildBasilicoListFromOffers(
           userQuery,
-          context,
-          clientIp,
-        });
-
-        // Se l'AI pool è saturo ma Basilico live ha restituito offerte reali, costruisci la lista reale da Basilico
-        if (!result.ok && body.serviceId === 'basilico' && basilicoLive?.ok && basilicoLive.offers.length > 0) {
-          const liveText = buildBasilicoListFromOffers(
-            userQuery,
-            basilicoLive.offers,
-            basilicoLive.budgetEuro,
-            basilicoLive.baseUrl,
-          );
-          if (liveText) {
-            result = {
-              ok: true,
-              status: 200,
-              mode: 'basilico-live',
-              provider: 'basilico',
-              providerLabel: 'Basilico Live (Offerte Rapallo)',
-              model: 'basilico-offers-v1',
-              cached: false,
-              text: liveText,
-            };
-          }
-        }
-
-        if (extractedSource && result.ok) {
-          result.extractedSource = extractedSource;
-        }
-        const status = result.status || (result.ok ? 200 : 500);
-        logFn({
-          event: 'ai_complete',
-          serviceId: body.serviceId || 'unknown',
-          status,
-          mode: result.mode || result.error || 'error',
-          provider: result.provider || null,
-          cached: Boolean(result.cached),
-          latencyMs: Date.now() - startedAt,
-        });
-        sendJson(res, status, result, corsHeaders);
-      } catch (err) {
-        const status = err.status || 400;
-        logFn({
-          event: 'ai_complete_error',
-          status,
-          error: err.message,
-          latencyMs: Date.now() - startedAt,
-        });
-        sendJson(
-          res,
-          status,
-          { ok: false, error: status === 413 ? 'payload_too_large' : 'bad_request', message: err.message },
-          status === 413 ? { ...corsHeaders, Connection: 'close' } : corsHeaders,
+          basilicoLive.offers,
+          basilicoLive.budgetEuro,
+          basilicoLive.baseUrl,
         );
-        if (status === 413) {
-          req.destroy();
+        if (liveText) {
+          return {
+            ok: true,
+            status: 200,
+            mode: 'basilico-live',
+            provider: 'basilico',
+            providerLabel: 'Basilico Live (Offerte Rapallo)',
+            model: 'basilico-offers-v1',
+            cached: false,
+            text: liveText,
+          };
         }
       }
-      return;
-    }
+      return null;
+    },
+    staticHandler: (req, res, urlObj, pathname) => {
+      if (req.method !== 'GET' && req.method !== 'HEAD') return false;
 
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      sendJson(res, 405, { ok: false, error: 'method_not_allowed' }, corsHeaders);
-      return;
-    }
+      let targetFile = null;
+      let isDownload = false;
 
-    let targetFile = null;
-    let isDownload = false;
+      if (pathname.startsWith('/bundles/')) {
+        const rel = pathname.slice('/bundles/'.length);
+        targetFile = resolveSafePath(bundlesDir, rel);
+        isDownload = urlObj.searchParams.get('download') === '1';
+      } else {
+        const rel = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+        targetFile = resolveSafePath(webDir, rel);
+      }
 
-    if (pathname.startsWith('/bundles/')) {
-      const rel = pathname.slice('/bundles/'.length);
-      targetFile = resolveSafePath(bundlesDir, rel);
-      isDownload = urlObj.searchParams.get('download') === '1';
-    } else {
-      const rel = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
-      targetFile = resolveSafePath(webDir, rel);
-    }
+      if (!targetFile || !fs.existsSync(targetFile) || fs.statSync(targetFile).isDirectory()) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('404 Not Found');
+        return true;
+      }
 
-    if (!targetFile || !fs.existsSync(targetFile) || fs.statSync(targetFile).isDirectory()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('404 Not Found');
-      return;
-    }
+      const ext = path.extname(targetFile).toLowerCase();
+      const headers = {
+        'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
+        'X-Content-Type-Options': 'nosniff',
+      };
+      if (isDownload) {
+        headers['Content-Disposition'] = `attachment; filename="${path.basename(targetFile)}"`;
+      }
 
-    const ext = path.extname(targetFile).toLowerCase();
-    const headers = {
-      'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
-      'X-Content-Type-Options': 'nosniff',
-    };
-    if (isDownload) {
-      headers['Content-Disposition'] = `attachment; filename="${path.basename(targetFile)}"`;
-    }
-
-    res.writeHead(200, headers);
-    if (req.method === 'HEAD') {
-      res.end();
-      return;
-    }
-    fs.createReadStream(targetFile).pipe(res);
+      res.writeHead(200, headers);
+      if (req.method === 'HEAD') {
+        res.end();
+        return true;
+      }
+      fs.createReadStream(targetFile).pipe(res);
+      return true;
+    },
   });
 }
 

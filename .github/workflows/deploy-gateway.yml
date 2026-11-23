@@ -1,0 +1,82 @@
+name: Deploy AI Gateway (Cloud Run — Keyless WIF)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/ai-gateway/**'
+      - 'server/**'
+      - 'showcase.config.json'
+      - 'Dockerfile'
+      - '.github/workflows/deploy-gateway.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-gateway
+  cancel-in-progress: false
+
+env:
+  GCP_REGION: us-central1
+  SERVICE_NAME: noobucodonosor-hub
+  AR_REPO: cloud-run-source-deploy
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run AI Gateway & Root tests
+        run: |
+          node --test packages/ai-gateway/tests/*.test.mjs
+          node --test tests/*.test.mjs
+
+      - name: Authenticate to Google Cloud via Workload Identity Federation (Keyless OIDC)
+        if: ${{ vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' }}
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup Cloud SDK
+        if: ${{ vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' }}
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        if: ${{ vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' }}
+        run: gcloud auth configure-docker "${GCP_REGION}-docker.pkg.dev" --quiet
+
+      - name: Build & Push Hardened Node.js 22 Image
+        if: ${{ vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' }}
+        run: |
+          IMAGE="${GCP_REGION}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${AR_REPO}/${SERVICE_NAME}:${{ github.sha }}"
+          docker build -t "${IMAGE}" .
+          docker push "${IMAGE}"
+          echo "IMAGE=${IMAGE}" >> "$GITHUB_ENV"
+
+      - name: Deploy to Cloud Run (ADR-0004 Free-Tier Hardened)
+        if: ${{ vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' }}
+        run: |
+          gcloud run deploy "${SERVICE_NAME}" \
+            --image="${IMAGE}" \
+            --region="${GCP_REGION}" \
+            --platform=managed \
+            --allow-unauthenticated \
+            --cpu=0.5 \
+            --memory=256Mi \
+            --min-instances=0 \
+            --max-instances=2 \
+            --concurrency=40 \
+            --cpu-boost \
+            --timeout=30s \
+            --update-env-vars="NODE_ENV=production,ALLOWED_ORIGINS=https://noobucodonosor.github.io,ALTCHA_ENABLED=1,IP_LIMIT_PER_HOUR=20,DAILY_FREE_CAP=500"

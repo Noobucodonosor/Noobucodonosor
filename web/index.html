@@ -2,6 +2,10 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://noobucodonosor-hub-664856461640.us-central1.run.app https://openrouter.ai https://api.groq.com https://api.anthropic.com http://localhost:11434 http://127.0.0.1:11434 https://www.youtube.com; object-src 'none'; base-uri 'self';"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Noobucodonosor — Vetrina Progetti &amp; Playground AI Prescaricati</title>
     <meta
@@ -268,28 +272,29 @@
 
           <div class="portable-grid">
             <article class="portable-card">
-              <span class="badge badge-playground" style="align-self: flex-start">Single-File Portabile</span>
+              <span class="badge badge-playground" style="align-self: flex-start">Offline / Data-Sovereignty Kit</span>
               <h3>noobucodonosor-portable.html</h3>
               <p style="margin: 0; color: var(--ink-soft); font-size: 0.92rem">
-                Un singolo file HTML auto-contenuto con tutti i dataset prescaricati, i 4 playground AI e il
-                connettore BYOK (Gemini / Groq / OpenRouter free). Aprilo con doppio clic (`file://`), zero installazioni.
+                Deliverable single-file HTML auto-contenuto (script classico IIFE, zero <code>type="module"</code>) con
+                dataset prescaricati, fallback deterministico offline e BYOK diretto su provider CORS-compatibili
+                (OpenRouter, Groq, Anthropic, Ollama locale).
               </p>
               <div class="card-actions">
-                <a class="btn btn-primary" href="/bundles/noobucodonosor-portable.html?download=1" download="noobucodonosor-portable.html">
-                  Scarica File Portabile (.html)
+                <a class="btn btn-primary" href="./bundles/noobucodonosor-portable.html" download="noobucodonosor-portable.html">
+                  Scarica Offline Kit (.html)
                 </a>
-                <a class="btn" href="/bundles/noobucodonosor-portable.html" target="_blank" rel="noopener noreferrer">
-                  Apri Anteprima
+                <a class="btn" href="https://github.com/Noobucodonosor/Noobucodonosor/releases" target="_blank" rel="noopener noreferrer">
+                  GitHub Releases
                 </a>
               </div>
             </article>
 
             <article class="portable-card">
-              <span class="badge badge-live" style="align-self: flex-start">Kit Server Locale / Cloud Run</span>
-              <h3>Avvia il tuo Proxy Free-Tier in 1 comando</h3>
+              <span class="badge badge-live" style="align-self: flex-start">AI Gateway Standalone (packages/ai-gateway)</span>
+              <h3>Avvia il tuo Gateway Free-Tier in 1 comando</h3>
               <p style="margin: 0; color: var(--ink-soft); font-size: 0.92rem">
-                Zero dipendenze npm (solo Node.js 22). Copia <code>.env.example</code> in <code>.env</code>, inserisci
-                una chiave gratuita (Gemini, Groq o OpenRouter) e avvia l'hub completo in locale o su Cloud Run.
+                Modulo zero-brand isolato (Node.js 22, zero dipendenze npm) con CORS allowlist, ALTCHA PoW self-hosted
+                e rate limiting. Pronto per locale o Cloud Run.
               </p>
               <pre><code>git clone https://github.com/Noobucodonosor/Noobucodonosor.git
 cd Noobucodonosor
@@ -303,7 +308,7 @@ node server/index.mjs</code></pre>
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <span><strong>Noobucodonosor</strong> · Architettura ADR-Driven (ADR-0001 / ADR-0002)</span>
+        <span><strong>Noobucodonosor</strong> · Architettura ADR-Driven (ADR-0001..0004)</span>
         <span>
           <a href="https://github.com/Noobucodonosor/Noobucodonosor" target="_blank" rel="noopener noreferrer">Repository</a>
           ·
@@ -316,28 +321,29 @@ node server/index.mjs</code></pre>
     <dialog id="byok-dialog" closedby="any" aria-labelledby="byok-title">
       <div class="dialog-body">
         <div class="dialog-header">
-          <h2 id="byok-title" style="font-size: 1.2rem">Configura Chiave Gratuita (BYOK)</h2>
+          <h2 id="byok-title" style="font-size: 1.2rem">Configura Chiave BYOK (CORS-Safe)</h2>
           <form method="dialog">
             <button type="submit" value="cancel" class="btn btn-sm" aria-label="Chiudi finestra">Chiudi</button>
           </form>
         </div>
 
         <p style="margin: 0 0 1rem; font-size: 0.88rem; color: var(--ink-soft)">
-          La chiave viene salvata <strong>solo nel tuo browser</strong> (<code>sessionStorage</code>) e chiama
-          direttamente il provider scelto. Non passa mai dal server Noobucodonosor.
+          La chiave resta <strong>solo nel tuo browser</strong> (<code>sessionStorage</code> o RAM volatile su
+          Safari <code>file://</code>) e chiama direttamente provider con supporto CORS verificato.
         </p>
 
         <form id="byok-form">
           <div class="field">
-            <label for="byok-provider">Provider con soglia gratuita</label>
+            <label for="byok-provider">Provider diretto da browser</label>
             <select id="byok-provider" class="select" autofocus>
-              <option value="gemini">Google AI Studio — Gemini 3.5 Flash-Lite (Free Tier)</option>
-              <option value="groq">Groq — GPT-OSS 20B (Free Tier)</option>
-              <option value="openrouter">OpenRouter — Modelli :free</option>
+              <option value="openrouter">OpenRouter — Modelli :free (Default CORS-open)</option>
+              <option value="groq">Groq — Free Tier (CORS-open)</option>
+              <option value="anthropic">Anthropic — Claude Direct Browser</option>
+              <option value="ollama">Ollama Locale — http://localhost:11434 (Offline, 0 chiavi)</option>
             </select>
             <small>
-              Ottieni una chiave gratuita in 20 secondi:
-              <a id="byok-provider-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">
+              Ottieni una chiave gratuita o avvia Ollama:
+              <a id="byok-provider-link" href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">
                 Apri console provider
               </a>
             </small>
@@ -345,12 +351,12 @@ node server/index.mjs</code></pre>
 
           <div class="field">
             <label for="byok-model">Modello</label>
-            <input id="byok-model" class="input" type="text" value="gemini-3.5-flash-lite" />
+            <input id="byok-model" class="input" type="text" value="meta-llama/llama-3.3-70b-instruct:free" />
           </div>
 
           <div class="field">
-            <label for="byok-key">API Key</label>
-            <input id="byok-key" class="input" type="password" placeholder="AIza..." autocomplete="off" />
+            <label for="byok-key">API Key (non richiesta per Ollama)</label>
+            <input id="byok-key" class="input" type="password" placeholder="sk-or-v1-..." autocomplete="off" />
           </div>
 
           <div class="field">
@@ -360,7 +366,9 @@ node server/index.mjs</code></pre>
             </label>
           </div>
 
-          <div class="dialog-actions">
+          <div class="dialog-actions" style="flex-wrap: wrap">
+            <button type="button" id="byok-export-btn" class="btn btn-sm">Esporta JSON</button>
+            <button type="button" id="byok-import-btn" class="btn btn-sm">Importa JSON</button>
             <button type="button" id="byok-clear-btn" class="btn btn-sm">Rimuovi Chiave</button>
             <button type="submit" class="btn btn-primary">Salva in Sessione</button>
           </div>

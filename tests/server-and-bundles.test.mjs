@@ -78,6 +78,10 @@ test('HTTP server serves portal, dataset, health without secret leaks, AI proxy 
   assert.match(bundleHtml, /__PRELOADED_DATASET__/);
   assert.match(bundleHtml, /credentials:\s*'omit'/);
   assert.match(bundleHtml, /Document\.parseHTML/);
+  assert.match(bundleHtml, /anthropic-dangerous-direct-browser-access/);
+  assert.match(bundleHtml, /localhost:11434\/api\/chat/);
+  assert.match(bundleHtml, /exportPortableStateJson/);
+  assert.doesNotMatch(bundleHtml, /type="module"/);
   assert.doesNotMatch(bundleHtml, /href="\.\/styles\.css"/);
   assert.doesNotMatch(bundleHtml, /src="\.\/app\.js"/);
 

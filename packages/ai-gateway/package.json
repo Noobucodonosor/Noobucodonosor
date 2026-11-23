@@ -1,0 +1,14 @@
+{
+  "name": "@gateway/ai-gateway",
+  "version": "1.0.0",
+  "description": "Zero-dependency multi-provider free-tier AI gateway with CORS allowlist, rate limiting, SSRF-safe URL ingestion, and self-hosted ALTCHA PoW",
+  "type": "module",
+  "main": "./src/server.mjs",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

@@ -1,8 +1,11 @@
 import {
   BYOK_PROVIDERS,
   checkProxyHealth,
+  exportPortableStateJson,
   extractKn5Url,
+  importPortableStateJson,
   loadByokConfig,
+  prewarmGateway,
   runDeterministicFallback,
   runServiceAI,
   saveByokConfig,
@@ -946,6 +949,31 @@ function setupByokDialog() {
     dialog.close();
   });
 
+  const exportBtn = document.getElementById('byok-export-btn');
+  exportBtn?.addEventListener('click', () => {
+    const json = exportPortableStateJson();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'noobucodonosor-state.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  const importBtn = document.getElementById('byok-import-btn');
+  importBtn?.addEventListener('click', () => {
+    const raw = globalThis.prompt?.('Incolla il JSON esportato da Noobucodonosor:');
+    if (!raw) return;
+    try {
+      importPortableStateJson(raw);
+      updateEngineBadge();
+      openByokDialog();
+    } catch {
+      globalThis.alert?.('JSON non valido.');
+    }
+  });
+
   syncProviderFields();
 }
 
@@ -1149,9 +1177,16 @@ async function init() {
     });
   });
 
+  document.getElementById('assistant-input')?.addEventListener('focus', () => {
+    prewarmGateway();
+  });
+
   // Quick-task text tabs
   document.querySelectorAll('.quick-tab-btn').forEach((btn) => {
-    btn.addEventListener('click', () => selectQuickTask(btn.dataset.task));
+    btn.addEventListener('click', () => {
+      prewarmGateway();
+      selectQuickTask(btn.dataset.task);
+    });
   });
   document.getElementById('qt-form')?.addEventListener('submit', runQuickTask);
   document.getElementById('qt-copy-btn')?.addEventListener('click', async () => {
@@ -1171,7 +1206,10 @@ async function init() {
 
   // Playground tabs & actions
   document.querySelectorAll('.tab-btn:not(.quick-tab-btn)').forEach((btn) => {
-    btn.addEventListener('click', () => selectTab(btn.dataset.tab));
+    btn.addEventListener('click', () => {
+      prewarmGateway();
+      selectTab(btn.dataset.tab);
+    });
   });
   document.getElementById('pg-run-btn').addEventListener('click', runPlayground);
   document.getElementById('pg-reset-btn').addEventListener('click', () => {

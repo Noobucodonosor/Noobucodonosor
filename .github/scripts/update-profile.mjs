@@ -379,6 +379,21 @@ ${fallbackRows}
   return blocks.join('\n');
 }
 
+export function renderCompactProductTable(states) {
+  const rows = states
+    .map((s) => {
+      const stack = s.stack || s.category;
+      const livePart = `[**${s.liveLabel || 'Apri'}**](${s.liveUrl})`;
+      const secondaryPart = s.secondaryUrl ? ` · [${s.secondaryLabel || 'Libro'}](${s.secondaryUrl})` : '';
+      return `| [**${s.title}**](${s.infoUrl}) | ${s.summary} | \`${stack}\` | ${livePart}${secondaryPart} |`;
+    })
+    .join('\n');
+
+  return `| Progetto | Problema risolto | Stack | Live / Playground |
+| :--- | :--- | :--- | :--- |
+${rows}`;
+}
+
 export function renderShowcase(states) {
   const rows = states.map((state) => `  <tr>\n${renderCard(state)}\n  </tr>`);
   return `<table>\n${rows.join('\n')}\n</table>`;
@@ -506,7 +521,9 @@ export async function runProfileUpdate({
   nextReadme = replaceBlock(
     nextReadme,
     'SHOWCASE',
-    nextReadme.includes('<!-- HUD_HERO:START -->') ? renderBentoShowcase(states) : renderShowcase(states),
+    nextReadme.includes('<!-- HUD_HERO:START -->')
+      ? renderBentoShowcase(states)
+      : renderCompactProductTable(states),
   );
   nextReadme = replaceBlock(nextReadme, 'PULSE', renderPulse(states));
 
