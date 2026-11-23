@@ -46,7 +46,7 @@
   <text x="16" y="28" class="mono" font-size="10" font-weight="700" fill="#f59e0b">AI &amp; KNOWLEDGE</text>
   <rect x="298" y="14" width="118" height="20" rx="10" fill="#eaeef2" stroke="#d0d7de" />
   <circle cx="310" cy="24" r="3.5" fill="#1a7f37" />
-  <text x="319" y="28" class="mono" font-size="9.5" font-weight="600" fill="#1f2328">ONLINE 188ms</text>
+  <text x="319" y="28" class="mono" font-size="9.5" font-weight="600" fill="#1f2328">ONLINE 259ms</text>
 
   <text x="16" y="56" class="sans" font-size="17" font-weight="800" fill="#1f2328">kn5 — Knowledge Ingestor</text>
   <text x="16" y="86" class="mono" font-size="19" font-weight="700" fill="#f59e0b" visibility="visible">0 canali<set attributeName="visibility" to="visible" begin="0s" dur="0.045s" fill="freeze" /></text>
@@ -71,6 +71,6 @@
 
   <line x1="16" y1="122" x2="416" y2="122" stroke="#e5e8ec" />
   <circle cx="21" cy="139" r="4" fill="#1a7f37" class="pulse-dot" />
-  <text x="31" y="143" class="mono" font-size="11" fill="#59636e">23 nov 2026 · 3 agg. (7g)</text>
+  <text x="31" y="143" class="mono" font-size="11" fill="#59636e">23 nov 2026 · 4 agg. (7g)</text>
   <text x="404" y="143" class="mono arrow-nudge" font-size="13" font-weight="700" fill="#f59e0b">→</text>
 </svg>

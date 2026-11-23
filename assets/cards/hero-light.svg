@@ -72,10 +72,10 @@
       </g>
   <g class="line-reveal" style="animation-delay: 36ms">
         <text x="28" y="160" class="mono" font-size="13" font-weight="700" fill="#0969da">&gt;</text>
-        <text x="46" y="160" class="mono" font-size="13" fill="#59636e">vetrina: 7 prodotti verticali | 6 aggiornati oggi | 25 commit (7g)</text>
+        <text x="46" y="160" class="mono" font-size="13" fill="#59636e">vetrina: 7 prodotti verticali | 7 aggiornati oggi | 35 commit (7g)</text>
       </g>
   <g class="line-reveal" style="animation-delay: 54ms">
         <text x="28" y="183" class="mono" font-size="13" font-weight="700" fill="#0969da">&gt;</text>
-        <text x="46" y="183" class="mono" font-size="13" fill="#59636e">hub-cloud-run: HTTP 404 | kit-offline: bundles/noobucodonosor-portable.html | sync: 23 nov 2026, 21:42</text>
+        <text x="46" y="183" class="mono" font-size="13" fill="#59636e">hub-cloud-run: HTTP 404 | kit-offline: bundles/noobucodonosor-portable.html | sync: 23 nov 2026, 21:43</text>
       </g>
 </svg>
