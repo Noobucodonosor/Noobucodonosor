@@ -378,6 +378,16 @@ export class FreeTierRouter {
     };
   }
 
+  hasCached({ serviceId, presetId = null, prompt, userQuery, context = '' }) {
+    if (!this.allowedServices.has(serviceId)) return false;
+    const rawPrompt = userQuery ?? prompt ?? '';
+    const cleanPrompt = String(rawPrompt).trim().slice(0, 2000);
+    if (!cleanPrompt) return false;
+    const cleanContext = String(context || '').trim().slice(0, 10000);
+    const cacheKey = this.#cacheKey({ serviceId, presetId, prompt: cleanPrompt, context: cleanContext });
+    return Boolean(this.#getCached(cacheKey));
+  }
+
   async complete({ serviceId, presetId = null, prompt, userQuery, context = '', clientIp = 'local' }) {
     if (!this.allowedServices.has(serviceId)) {
       this.#recordMetric('invalid', 400);

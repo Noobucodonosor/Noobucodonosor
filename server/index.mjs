@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FreeTierRouter } from './free-tier-router.mjs';
 import { PublicUrlIngestor, extractFirstUrlFromText } from './url-ingestor.mjs';
+import { SmartphoneApprovalGate } from './approval-gate.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -113,6 +114,7 @@ function emitTelemetryLog(payload) {
 export function createAppServer(options = {}) {
   const router = options.router ?? new FreeTierRouter();
   const urlIngestor = options.urlIngestor ?? new PublicUrlIngestor();
+  const approvalGate = options.approvalGate ?? new SmartphoneApprovalGate();
   const allowedOrigin = options.allowedOrigin ?? process.env.ALLOWED_ORIGIN ?? '*';
   const webDir = options.webDir ?? WEB_DIR;
   const bundlesDir = options.bundlesDir ?? BUNDLES_DIR;
@@ -141,10 +143,47 @@ export function createAppServer(options = {}) {
         {
           ok: true,
           service: 'noobucodonosor-hub',
+          approvalMode: approvalGate.isEnabled() ? approvalGate.mode : 'off',
           ...router.getStatus(),
         },
         corsHeaders,
       );
+      return;
+    }
+
+    if (pathname === '/api/approval/decide' && req.method === 'GET') {
+      const id = urlObj.searchParams.get('id') || '';
+      const decision = urlObj.searchParams.get('decision') || '';
+      const sig = urlObj.searchParams.get('sig') || '';
+      if (!['approve', 'deny'].includes(decision) || !approvalGate.verifySignature(id, decision, sig)) {
+        sendJson(res, 403, { ok: false, error: 'invalid_signature' }, corsHeaders);
+        return;
+      }
+      const approved = decision === 'approve';
+      const matched = approvalGate.decide(id, approved, approved ? 'approved' : 'denied');
+      if (!matched) {
+        sendJson(res, 404, { ok: false, error: 'approval_not_found' }, corsHeaders);
+        return;
+      }
+      sendJson(res, 200, { ok: true, id, decision }, corsHeaders);
+      return;
+    }
+
+    if (pathname === '/api/approval/telegram-webhook' && req.method === 'POST') {
+      if (
+        approvalGate.telegramWebhookSecret &&
+        req.headers['x-telegram-bot-api-secret-token'] !== approvalGate.telegramWebhookSecret
+      ) {
+        sendJson(res, 403, { ok: false, error: 'invalid_webhook_secret' }, corsHeaders);
+        return;
+      }
+      try {
+        const body = await readJsonBody(req, 16 * 1024);
+        const result = await approvalGate.handleTelegramWebhook(body);
+        sendJson(res, 200, result, corsHeaders);
+      } catch (err) {
+        sendJson(res, err.status || 400, { ok: false, error: err.message }, corsHeaders);
+      }
       return;
     }
 
@@ -225,12 +264,56 @@ export function createAppServer(options = {}) {
           }
         }
 
+        const presetId = extractedSource ? `url:${extractedSource.url}` : (body.presetId ?? null);
+        const clientIp = extractClientIp(req);
+
+        if (
+          approvalGate.isEnabled() &&
+          router.allowedServices.has(body.serviceId) &&
+          !router.hasCached({ serviceId: body.serviceId, presetId, userQuery, context })
+        ) {
+          const statusSnapshot = router.getStatus();
+          const approval = await approvalGate.requestApproval({
+            serviceId: body.serviceId,
+            promptPreview: userQuery,
+            clientIp,
+            dailyRemaining: statusSnapshot.dailyRemaining,
+            dailyCap: statusSnapshot.dailyCap,
+          });
+          if (!approval.approved) {
+            const isTimeout = approval.reason === 'timeout';
+            const denyStatus = isTimeout ? 408 : 403;
+            const errorCode = isTimeout ? 'approval_timeout' : 'approval_denied';
+            logFn({
+              event: 'ai_complete_approval_blocked',
+              serviceId: body.serviceId,
+              status: denyStatus,
+              reason: approval.reason,
+              latencyMs: Date.now() - startedAt,
+            });
+            sendJson(
+              res,
+              denyStatus,
+              {
+                ok: false,
+                error: errorCode,
+                fallbackSuggested: 'byok_or_local',
+                message: isTimeout
+                  ? 'Approvazione su smartphone scaduta. Riprova o usa una tua chiave BYOK gratuita.'
+                  : 'Richiesta negata dallo smartphone del proprietario (API esaurite o limite raggiunto). Usa una tua chiave BYOK gratuita o la modalità locale.',
+              },
+              corsHeaders,
+            );
+            return;
+          }
+        }
+
         const result = await router.complete({
           serviceId: body.serviceId,
-          presetId: extractedSource ? `url:${extractedSource.url}` : (body.presetId ?? null),
+          presetId,
           userQuery,
           context,
-          clientIp: extractClientIp(req),
+          clientIp,
         });
         if (extractedSource && result.ok) {
           result.extractedSource = extractedSource;

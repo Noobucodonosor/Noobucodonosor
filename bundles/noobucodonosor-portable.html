@@ -604,6 +604,29 @@ h2 {
   color: #fff;
 }
 
+.quick-tasks-section {
+  padding-block: 2rem 1rem;
+}
+
+.quick-task-panel {
+  max-width: 920px;
+}
+
+.quick-task-output {
+  margin: 0;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-soft, #f8fafc);
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 5.5rem;
+}
+
 .playground-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -931,6 +954,64 @@ body.is-focused-app #locale {
         </div>
       </section>
 
+      <section id="azioni-rapide" class="quick-tasks-section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Flussi Diretti · Risultato Solo Testo</p>
+              <h2>Azioni Rapide (5 Tab)</h2>
+              <p class="lead" style="margin-top: 0.4rem">
+                Scegli un’attività e ottieni direttamente il testo risultante dal processo del progetto
+                (lista spesa, estratto libro, scheda video/reel, bollettino zona o lead B2B).
+              </p>
+            </div>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Azioni rapide solo testo">
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="spesa" aria-selected="true">
+              🛒 Genera lista della spesa
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="libro" aria-selected="false">
+              📖 Leggi un libro
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="video" aria-selected="false">
+              🎬 Converti un reel o un video
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="meteo" aria-selected="false">
+              🌦️ Previsioni per una zona
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="lead" aria-selected="false">
+              🎯 Trova lead per la mia azienda
+            </button>
+          </div>
+
+          <div class="panel quick-task-panel">
+            <div class="assistant-header" style="margin-bottom: 0.6rem">
+              <div>
+                <p id="qt-project-label" class="eyebrow" style="margin-bottom: 0.1rem">Basilico — Rapallo</p>
+                <h3 id="qt-title" style="font-size: 1.05rem">Genera lista della spesa</h3>
+              </div>
+              <span id="qt-status-badge" class="badge badge-live">Solo Testo</span>
+            </div>
+
+            <form id="qt-form" class="quick-task-form">
+              <div class="field" style="margin-bottom: 0.75rem">
+                <label id="qt-input-label" for="qt-input">Cosa vuoi preparare o comprare?</label>
+                <textarea id="qt-input" class="textarea" rows="2" required></textarea>
+              </div>
+              <div class="card-actions" style="margin-bottom: 0.85rem">
+                <button type="submit" id="qt-run-btn" class="btn btn-primary">Genera Testo</button>
+                <button type="button" id="qt-copy-btn" class="btn btn-sm">Copia Testo</button>
+              </div>
+            </form>
+
+            <pre id="qt-output" class="quick-task-output" aria-live="polite">Inserisci una richiesta e premi Genera Testo.</pre>
+            <div id="qt-meta" class="ai-meta"></div>
+            <div id="qt-notice"></div>
+          </div>
+        </div>
+      </section>
+
       <section id="vetrina">
         <div class="container">
           <div class="section-head">
@@ -1127,6 +1208,10 @@ const SYSTEM_PROMPTS = {
     'Sei resuscipack. Rispondi in italiano usando SOLO le fonti Open-Access nel contesto, citando sempre gli ID [OA-..], e chiudi con un Ponte Trasversale.',
   scooterlab:
     'Sei ScooterLab. Analizza la sessione telemetrica .slab: evidenzia 2 punti critici (piega/frenata), valuta la fluidità e dai 3 consigli pratici di sicurezza.',
+  basilico:
+    'Sei Basilico (Rapallo). Genera in italiano solo testo/Markdown una lista della spesa ordinata per reparto con quantità e 2 consigli di risparmio.',
+  mediometeo:
+    'Sei MedioMeteo Genova. Genera in italiano solo testo/Markdown un bollettino sintetico terra/mare per la zona richiesta.',
 };
 
 function loadByokConfig() {
@@ -1455,6 +1540,43 @@ function runDeterministicFallback(serviceId, prompt, dataset, meta = {}) {
       '1. Sui tornanti costieri in ombra (asfalto ~17°C), anticipa l’impostazione di traiettoria per ridurre la piega di 3–4°.',
       '2. In ingresso rotonda/attraversamenti urbani, modula la decelerazione progressiva per evitare picchi oltre -0.60 g.',
       '3. Sincronizza il file `.slab` su Wi-Fi garage per confrontare il trend frenate settimana su settimana.',
+    ].join('\n');
+  }
+
+  if (serviceId === 'basilico') {
+    const req = String(prompt || 'Spesa settimanale per 2 persone').trim();
+    return [
+      `# Lista della Spesa — Basilico`,
+      `Richiesta: ${req}`,
+      '',
+      '## Ortofrutta',
+      '- [ ] Verdure di stagione (1 kg)',
+      '- [ ] Frutta fresca di stagione (1 kg)',
+      '- [ ] Aromi freschi (basilico / prezzemolo)',
+      '',
+      '## Dispensa',
+      '- [ ] Pasta di semola (2 pacchi)',
+      '- [ ] Olio extravergine d’oliva (1 bottiglia, controlla offerte volantino)',
+      '- [ ] Legumi o passata di pomodoro (3 confezioni)',
+      '',
+      '## Freschi & Proteine',
+      '- [ ] Latticini / formaggio fresco',
+      '- [ ] Uova (6 pz) o alternativa proteica',
+      '',
+      'Consiglio risparmio: confronta i volantini locali su Basilico Live prima di uscire.',
+    ].join('\n');
+  }
+
+  if (serviceId === 'mediometeo') {
+    const zone = String(prompt || 'Genova Centro / Tigullio').trim();
+    return [
+      `# Bollettino Sintetico — MedioMeteo Genova`,
+      `Zona richiesta: ${zone}`,
+      '',
+      '- Modalità: stima locale offline (per i dati in tempo reale dai 199 sensori apri MedioMeteo Live).',
+      '- Cielo e precipitazioni: variabilità locale con possibili addensamenti sui rilievi.',
+      '- Vento e mare: brezza tesa lungo la costa, moto ondoso da valutare sotto costa.',
+      '- Consiglio pratico: verifica la stazione più vicina alla tua zona su MedioMeteo Genova.',
     ].join('\n');
   }
 
@@ -2538,6 +2660,120 @@ function openByokDialog() {
   dialog.showModal();
 }
 
+const QUICK_TASKS = {
+  spesa: {
+    serviceId: 'basilico',
+    projectLabel: 'Basilico — Rapallo',
+    title: 'Genera lista della spesa',
+    inputLabel: 'Pasti, numero di persone o budget settimanale',
+    defaultPrompt: 'Spesa settimanale per 2 persone con cena di pesto, verdure di stagione e colazioni.',
+  },
+  libro: {
+    serviceId: 'resuscipack',
+    projectLabel: 'resuscipack — Editoria & Ricerca',
+    title: 'Leggi un libro / Chiedi al corpus',
+    inputLabel: 'Argomento o domanda dai 2 volumi Open-Access',
+    defaultPrompt: 'Spiegami il concetto chiave di immutabilità verificabile e collegalo a un altro tema del corpus.',
+  },
+  video: {
+    serviceId: 'kn5',
+    projectLabel: 'kn5 — Knowledge Ingestor',
+    title: 'Converti un reel o un video in testo',
+    inputLabel: 'Incolla URL YouTube / Instagram Reel oppure testo da sintetizzare',
+    defaultPrompt: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ Riassumi i concetti chiave in punti.',
+  },
+  meteo: {
+    serviceId: 'mediometeo',
+    projectLabel: 'MedioMeteo Genova — 67 Comuni',
+    title: 'Previsioni per una zona',
+    inputLabel: 'Comune o zona (es. Rapallo, Genova Ponente, Val Trebbia)',
+    defaultPrompt: 'Rapallo e Golfo del Tigullio — previsione sintetica terra e mare per oggi.',
+  },
+  lead: {
+    serviceId: 'leslie',
+    projectLabel: 'Leslie — Agency OS',
+    title: 'Trova lead per la mia azienda',
+    inputLabel: 'Settore target, zona o descrizione azienda cliente ideale',
+    defaultPrompt: 'Agenzie immobiliari o studi tecnici in Liguria interessati ad automazione AI e portali web.',
+  },
+};
+
+function selectQuickTask(taskId) {
+  const cfg = QUICK_TASKS[taskId];
+  if (!cfg) return;
+  state.activeQuickTask = taskId;
+  document.querySelectorAll('.quick-tab-btn').forEach((btn) => {
+    btn.setAttribute('aria-selected', String(btn.dataset.task === taskId));
+  });
+  document.getElementById('qt-project-label').textContent = cfg.projectLabel;
+  document.getElementById('qt-title').textContent = cfg.title;
+  document.getElementById('qt-input-label').textContent = cfg.inputLabel;
+  document.getElementById('qt-input').value = cfg.defaultPrompt;
+  document.getElementById('qt-output').textContent = 'Premi "Genera Testo" per avviare il flusso.';
+  document.getElementById('qt-meta').textContent = '';
+  document.getElementById('qt-notice').innerHTML = '';
+}
+
+async function runQuickTask(e) {
+  if (e) e.preventDefault();
+  const cfg = QUICK_TASKS[state.activeQuickTask || 'spesa'];
+  const inputEl = document.getElementById('qt-input');
+  const runBtn = document.getElementById('qt-run-btn');
+  const outputEl = document.getElementById('qt-output');
+  const metaEl = document.getElementById('qt-meta');
+  const noticeEl = document.getElementById('qt-notice');
+  const badgeEl = document.getElementById('qt-status-badge');
+
+  const prompt = inputEl.value.trim();
+  if (!prompt) return;
+
+  runBtn.disabled = true;
+  runBtn.textContent = 'Attesa / Elaborazione...';
+  badgeEl.textContent = 'In corso';
+  outputEl.textContent = 'Elaborazione in corso (se attiva l’approvazione su smartphone, conferma dal telefono)...';
+  noticeEl.innerHTML = '';
+
+  let context = '';
+  let urlAlreadyExtracted = false;
+  let finalPrompt = prompt;
+
+  if (cfg.serviceId === 'kn5') {
+    const urlMatch = prompt.match(/https?:\/\/[^\s<>"')]+/i);
+    if (urlMatch) {
+      const exRes = await extractKn5Url(urlMatch[0]);
+      if (exRes.ok && exRes.extracted) {
+        const ex = exRes.extracted;
+        context = `Titolo: ${ex.title}\nFonte: ${ex.source}\nURL: ${ex.url}\n${ex.content}`;
+        urlAlreadyExtracted = true;
+        finalPrompt = prompt.replace(urlMatch[0], '').trim() || 'Genera una scheda testuale sintetica.';
+      }
+    }
+  } else if (cfg.serviceId === 'resuscipack') {
+    const items = state.dataset?.playgrounds?.resuscipack?.items || [];
+    context = items.slice(0, 3).map((i) => `[${i.id}] ${i.title}: ${i.excerpt}`).join('\n');
+  } else if (cfg.serviceId === 'leslie') {
+    const items = state.dataset?.playgrounds?.leslie?.items || [];
+    context = items.slice(0, 2).map((i) => `${i.company} (${i.sector}, ${i.city}): ${i.notes}`).join('\n');
+  }
+
+  const result = await runServiceAI({
+    serviceId: cfg.serviceId,
+    prompt: finalPrompt,
+    context,
+    dataset: state.dataset,
+    meta: { urlAlreadyExtracted },
+  });
+
+  outputEl.textContent = result.text || '';
+  const cacheLabel = result.cached ? ' · Cache €0' : '';
+  metaEl.textContent = `Motore: ${result.providerLabel || result.provider} (${result.model || 'locale'})${cacheLabel}`;
+  badgeEl.textContent = result.mode === 'local-fallback' ? 'Locale (€0)' : result.cached ? 'Cache (€0)' : 'Solo Testo';
+  renderNotice(noticeEl, result);
+
+  runBtn.disabled = false;
+  runBtn.textContent = 'Genera Testo';
+}
+
 function applyDeepLinkFocus() {
   const params = new URLSearchParams(globalThis.location?.search || '');
   const appParam = (params.get('app') || '').trim().toLowerCase();
@@ -2557,6 +2793,14 @@ function applyDeepLinkFocus() {
       handleKn5UrlExtract(urlParam, true);
     }
     return;
+  }
+
+  const taskParam = (params.get('task') || '').trim().toLowerCase();
+  if (QUICK_TASKS[taskParam]) {
+    selectQuickTask(taskParam);
+    document.getElementById('azioni-rapide')?.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    selectQuickTask('spesa');
   }
 
   document.body.classList.remove('is-focused-app');
@@ -2602,8 +2846,28 @@ async function init() {
     });
   });
 
+  // Quick-task text tabs
+  document.querySelectorAll('.quick-tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => selectQuickTask(btn.dataset.task));
+  });
+  document.getElementById('qt-form')?.addEventListener('submit', runQuickTask);
+  document.getElementById('qt-copy-btn')?.addEventListener('click', async () => {
+    const text = document.getElementById('qt-output')?.textContent || '';
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const copyBtn = document.getElementById('qt-copy-btn');
+      copyBtn.textContent = 'Copiato!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copia Testo';
+      }, 1500);
+    } catch {
+      // Clipboard API non disponibile
+    }
+  });
+
   // Playground tabs & actions
-  document.querySelectorAll('.tab-btn').forEach((btn) => {
+  document.querySelectorAll('.tab-btn:not(.quick-tab-btn)').forEach((btn) => {
     btn.addEventListener('click', () => selectTab(btn.dataset.tab));
   });
   document.getElementById('pg-run-btn').addEventListener('click', runPlayground);

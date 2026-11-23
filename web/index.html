@@ -113,6 +113,64 @@
         </div>
       </section>
 
+      <section id="azioni-rapide" class="quick-tasks-section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Flussi Diretti · Risultato Solo Testo</p>
+              <h2>Azioni Rapide (5 Tab)</h2>
+              <p class="lead" style="margin-top: 0.4rem">
+                Scegli un’attività e ottieni direttamente il testo risultante dal processo del progetto
+                (lista spesa, estratto libro, scheda video/reel, bollettino zona o lead B2B).
+              </p>
+            </div>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Azioni rapide solo testo">
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="spesa" aria-selected="true">
+              🛒 Genera lista della spesa
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="libro" aria-selected="false">
+              📖 Leggi un libro
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="video" aria-selected="false">
+              🎬 Converti un reel o un video
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="meteo" aria-selected="false">
+              🌦️ Previsioni per una zona
+            </button>
+            <button type="button" class="tab-btn quick-tab-btn" role="tab" data-task="lead" aria-selected="false">
+              🎯 Trova lead per la mia azienda
+            </button>
+          </div>
+
+          <div class="panel quick-task-panel">
+            <div class="assistant-header" style="margin-bottom: 0.6rem">
+              <div>
+                <p id="qt-project-label" class="eyebrow" style="margin-bottom: 0.1rem">Basilico — Rapallo</p>
+                <h3 id="qt-title" style="font-size: 1.05rem">Genera lista della spesa</h3>
+              </div>
+              <span id="qt-status-badge" class="badge badge-live">Solo Testo</span>
+            </div>
+
+            <form id="qt-form" class="quick-task-form">
+              <div class="field" style="margin-bottom: 0.75rem">
+                <label id="qt-input-label" for="qt-input">Cosa vuoi preparare o comprare?</label>
+                <textarea id="qt-input" class="textarea" rows="2" required></textarea>
+              </div>
+              <div class="card-actions" style="margin-bottom: 0.85rem">
+                <button type="submit" id="qt-run-btn" class="btn btn-primary">Genera Testo</button>
+                <button type="button" id="qt-copy-btn" class="btn btn-sm">Copia Testo</button>
+              </div>
+            </form>
+
+            <pre id="qt-output" class="quick-task-output" aria-live="polite">Inserisci una richiesta e premi Genera Testo.</pre>
+            <div id="qt-meta" class="ai-meta"></div>
+            <div id="qt-notice"></div>
+          </div>
+        </div>
+      </section>
+
       <section id="vetrina">
         <div class="container">
           <div class="section-head">

@@ -25,6 +25,13 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Vetrina Progetti & Demo Live
 *Ogni progetto ha una demo esplorabile direttamente online. Le anteprime visive e lo stato di attività si aggiornano automaticamente.*
 
+#### ⚡ Azioni Rapide (Solo Testo)
+*Avvia subito uno dei 5 flussi testuali sull'Hub (risultato in testo puro / Markdown, protetto da approvazione su smartphone quando richiesto dalle API).*
+
+| [🛒 Genera lista della spesa](https://noobucodonosor-hub-664856461640.us-central1.run.app/?task=spesa) | [📖 Leggi un libro](https://noobucodonosor-hub-664856461640.us-central1.run.app/?task=libro) | [🎬 Converti un reel o un video](https://noobucodonosor-hub-664856461640.us-central1.run.app/?task=video) | [🌦️ Previsioni per una zona](https://noobucodonosor-hub-664856461640.us-central1.run.app/?task=meteo) | [🎯 Trova lead per la mia azienda](https://noobucodonosor-hub-664856461640.us-central1.run.app/?task=lead) |
+| :---: | :---: | :---: | :---: | :---: |
+| *Basilico* | *resuscipack* | *kn5* | *MedioMeteo* | *Leslie OS* |
+
 <!-- SHOWCASE:START -->
 <table>
   <tr>

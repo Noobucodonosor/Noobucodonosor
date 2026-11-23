@@ -962,6 +962,120 @@ function openByokDialog() {
   dialog.showModal();
 }
 
+const QUICK_TASKS = {
+  spesa: {
+    serviceId: 'basilico',
+    projectLabel: 'Basilico — Rapallo',
+    title: 'Genera lista della spesa',
+    inputLabel: 'Pasti, numero di persone o budget settimanale',
+    defaultPrompt: 'Spesa settimanale per 2 persone con cena di pesto, verdure di stagione e colazioni.',
+  },
+  libro: {
+    serviceId: 'resuscipack',
+    projectLabel: 'resuscipack — Editoria & Ricerca',
+    title: 'Leggi un libro / Chiedi al corpus',
+    inputLabel: 'Argomento o domanda dai 2 volumi Open-Access',
+    defaultPrompt: 'Spiegami il concetto chiave di immutabilità verificabile e collegalo a un altro tema del corpus.',
+  },
+  video: {
+    serviceId: 'kn5',
+    projectLabel: 'kn5 — Knowledge Ingestor',
+    title: 'Converti un reel o un video in testo',
+    inputLabel: 'Incolla URL YouTube / Instagram Reel oppure testo da sintetizzare',
+    defaultPrompt: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ Riassumi i concetti chiave in punti.',
+  },
+  meteo: {
+    serviceId: 'mediometeo',
+    projectLabel: 'MedioMeteo Genova — 67 Comuni',
+    title: 'Previsioni per una zona',
+    inputLabel: 'Comune o zona (es. Rapallo, Genova Ponente, Val Trebbia)',
+    defaultPrompt: 'Rapallo e Golfo del Tigullio — previsione sintetica terra e mare per oggi.',
+  },
+  lead: {
+    serviceId: 'leslie',
+    projectLabel: 'Leslie — Agency OS',
+    title: 'Trova lead per la mia azienda',
+    inputLabel: 'Settore target, zona o descrizione azienda cliente ideale',
+    defaultPrompt: 'Agenzie immobiliari o studi tecnici in Liguria interessati ad automazione AI e portali web.',
+  },
+};
+
+function selectQuickTask(taskId) {
+  const cfg = QUICK_TASKS[taskId];
+  if (!cfg) return;
+  state.activeQuickTask = taskId;
+  document.querySelectorAll('.quick-tab-btn').forEach((btn) => {
+    btn.setAttribute('aria-selected', String(btn.dataset.task === taskId));
+  });
+  document.getElementById('qt-project-label').textContent = cfg.projectLabel;
+  document.getElementById('qt-title').textContent = cfg.title;
+  document.getElementById('qt-input-label').textContent = cfg.inputLabel;
+  document.getElementById('qt-input').value = cfg.defaultPrompt;
+  document.getElementById('qt-output').textContent = 'Premi "Genera Testo" per avviare il flusso.';
+  document.getElementById('qt-meta').textContent = '';
+  document.getElementById('qt-notice').innerHTML = '';
+}
+
+async function runQuickTask(e) {
+  if (e) e.preventDefault();
+  const cfg = QUICK_TASKS[state.activeQuickTask || 'spesa'];
+  const inputEl = document.getElementById('qt-input');
+  const runBtn = document.getElementById('qt-run-btn');
+  const outputEl = document.getElementById('qt-output');
+  const metaEl = document.getElementById('qt-meta');
+  const noticeEl = document.getElementById('qt-notice');
+  const badgeEl = document.getElementById('qt-status-badge');
+
+  const prompt = inputEl.value.trim();
+  if (!prompt) return;
+
+  runBtn.disabled = true;
+  runBtn.textContent = 'Attesa / Elaborazione...';
+  badgeEl.textContent = 'In corso';
+  outputEl.textContent = 'Elaborazione in corso (se attiva l’approvazione su smartphone, conferma dal telefono)...';
+  noticeEl.innerHTML = '';
+
+  let context = '';
+  let urlAlreadyExtracted = false;
+  let finalPrompt = prompt;
+
+  if (cfg.serviceId === 'kn5') {
+    const urlMatch = prompt.match(/https?:\/\/[^\s<>"')]+/i);
+    if (urlMatch) {
+      const exRes = await extractKn5Url(urlMatch[0]);
+      if (exRes.ok && exRes.extracted) {
+        const ex = exRes.extracted;
+        context = `Titolo: ${ex.title}\nFonte: ${ex.source}\nURL: ${ex.url}\n${ex.content}`;
+        urlAlreadyExtracted = true;
+        finalPrompt = prompt.replace(urlMatch[0], '').trim() || 'Genera una scheda testuale sintetica.';
+      }
+    }
+  } else if (cfg.serviceId === 'resuscipack') {
+    const items = state.dataset?.playgrounds?.resuscipack?.items || [];
+    context = items.slice(0, 3).map((i) => `[${i.id}] ${i.title}: ${i.excerpt}`).join('\n');
+  } else if (cfg.serviceId === 'leslie') {
+    const items = state.dataset?.playgrounds?.leslie?.items || [];
+    context = items.slice(0, 2).map((i) => `${i.company} (${i.sector}, ${i.city}): ${i.notes}`).join('\n');
+  }
+
+  const result = await runServiceAI({
+    serviceId: cfg.serviceId,
+    prompt: finalPrompt,
+    context,
+    dataset: state.dataset,
+    meta: { urlAlreadyExtracted },
+  });
+
+  outputEl.textContent = result.text || '';
+  const cacheLabel = result.cached ? ' · Cache €0' : '';
+  metaEl.textContent = `Motore: ${result.providerLabel || result.provider} (${result.model || 'locale'})${cacheLabel}`;
+  badgeEl.textContent = result.mode === 'local-fallback' ? 'Locale (€0)' : result.cached ? 'Cache (€0)' : 'Solo Testo';
+  renderNotice(noticeEl, result);
+
+  runBtn.disabled = false;
+  runBtn.textContent = 'Genera Testo';
+}
+
 function applyDeepLinkFocus() {
   const params = new URLSearchParams(globalThis.location?.search || '');
   const appParam = (params.get('app') || '').trim().toLowerCase();
@@ -981,6 +1095,14 @@ function applyDeepLinkFocus() {
       handleKn5UrlExtract(urlParam, true);
     }
     return;
+  }
+
+  const taskParam = (params.get('task') || '').trim().toLowerCase();
+  if (QUICK_TASKS[taskParam]) {
+    selectQuickTask(taskParam);
+    document.getElementById('azioni-rapide')?.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    selectQuickTask('spesa');
   }
 
   document.body.classList.remove('is-focused-app');
@@ -1027,8 +1149,28 @@ async function init() {
     });
   });
 
+  // Quick-task text tabs
+  document.querySelectorAll('.quick-tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => selectQuickTask(btn.dataset.task));
+  });
+  document.getElementById('qt-form')?.addEventListener('submit', runQuickTask);
+  document.getElementById('qt-copy-btn')?.addEventListener('click', async () => {
+    const text = document.getElementById('qt-output')?.textContent || '';
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const copyBtn = document.getElementById('qt-copy-btn');
+      copyBtn.textContent = 'Copiato!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copia Testo';
+      }, 1500);
+    } catch {
+      // Clipboard API non disponibile
+    }
+  });
+
   // Playground tabs & actions
-  document.querySelectorAll('.tab-btn').forEach((btn) => {
+  document.querySelectorAll('.tab-btn:not(.quick-tab-btn)').forEach((btn) => {
     btn.addEventListener('click', () => selectTab(btn.dataset.tab));
   });
   document.getElementById('pg-run-btn').addEventListener('click', runPlayground);

@@ -37,6 +37,10 @@ const SYSTEM_PROMPTS = {
     'Sei resuscipack. Rispondi in italiano usando SOLO le fonti Open-Access nel contesto, citando sempre gli ID [OA-..], e chiudi con un Ponte Trasversale.',
   scooterlab:
     'Sei ScooterLab. Analizza la sessione telemetrica .slab: evidenzia 2 punti critici (piega/frenata), valuta la fluidità e dai 3 consigli pratici di sicurezza.',
+  basilico:
+    'Sei Basilico (Rapallo). Genera in italiano solo testo/Markdown una lista della spesa ordinata per reparto con quantità e 2 consigli di risparmio.',
+  mediometeo:
+    'Sei MedioMeteo Genova. Genera in italiano solo testo/Markdown un bollettino sintetico terra/mare per la zona richiesta.',
 };
 
 export function loadByokConfig() {
@@ -365,6 +369,43 @@ export function runDeterministicFallback(serviceId, prompt, dataset, meta = {}) 
       '1. Sui tornanti costieri in ombra (asfalto ~17°C), anticipa l’impostazione di traiettoria per ridurre la piega di 3–4°.',
       '2. In ingresso rotonda/attraversamenti urbani, modula la decelerazione progressiva per evitare picchi oltre -0.60 g.',
       '3. Sincronizza il file `.slab` su Wi-Fi garage per confrontare il trend frenate settimana su settimana.',
+    ].join('\n');
+  }
+
+  if (serviceId === 'basilico') {
+    const req = String(prompt || 'Spesa settimanale per 2 persone').trim();
+    return [
+      `# Lista della Spesa — Basilico`,
+      `Richiesta: ${req}`,
+      '',
+      '## Ortofrutta',
+      '- [ ] Verdure di stagione (1 kg)',
+      '- [ ] Frutta fresca di stagione (1 kg)',
+      '- [ ] Aromi freschi (basilico / prezzemolo)',
+      '',
+      '## Dispensa',
+      '- [ ] Pasta di semola (2 pacchi)',
+      '- [ ] Olio extravergine d’oliva (1 bottiglia, controlla offerte volantino)',
+      '- [ ] Legumi o passata di pomodoro (3 confezioni)',
+      '',
+      '## Freschi & Proteine',
+      '- [ ] Latticini / formaggio fresco',
+      '- [ ] Uova (6 pz) o alternativa proteica',
+      '',
+      'Consiglio risparmio: confronta i volantini locali su Basilico Live prima di uscire.',
+    ].join('\n');
+  }
+
+  if (serviceId === 'mediometeo') {
+    const zone = String(prompt || 'Genova Centro / Tigullio').trim();
+    return [
+      `# Bollettino Sintetico — MedioMeteo Genova`,
+      `Zona richiesta: ${zone}`,
+      '',
+      '- Modalità: stima locale offline (per i dati in tempo reale dai 199 sensori apri MedioMeteo Live).',
+      '- Cielo e precipitazioni: variabilità locale con possibili addensamenti sui rilievi.',
+      '- Vento e mare: brezza tesa lungo la costa, moto ondoso da valutare sotto costa.',
+      '- Consiglio pratico: verifica la stazione più vicina alla tua zona su MedioMeteo Genova.',
     ].join('\n');
   }
 
