@@ -334,7 +334,7 @@ export const AUDIT_SCANNERS = [
     id: 'L2-preview-assets',
     level: 2,
     check(repoDir, repoName) {
-      if (repoName === 'Noobucodonosor' || repoName === 'v.i.n.o.') return { ok: true };
+      if (repoName === 'Noobucodonosor' || repoName === 'v.i.n.o.' || PRIVATE_REPOS.includes(repoName)) return { ok: true };
       const social = path.join(repoDir, 'docs', 'preview', 'social-preview.png');
       const desktop = path.join(repoDir, 'docs', 'preview', 'desktop.png');
       if (fs.existsSync(social) || fs.existsSync(desktop)) {
