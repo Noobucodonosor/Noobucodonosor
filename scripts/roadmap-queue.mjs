@@ -17,6 +17,22 @@ export const ECOSYSTEM_REPOS = [
   'v.i.n.o.'
 ];
 
+export const PRIVATE_REPOS = [
+  'entanglement-system',
+  'cibo',
+  'PACK',
+  'a',
+  'meteomare',
+  'kn5-agentic-downloader',
+  'claude-24h-project'
+];
+
+export function resolveReposForScope(scope, projNum) {
+  if (scope === 'private' || Number(projNum) === 2) return PRIVATE_REPOS;
+  if (scope === 'all') return [...ECOSYSTEM_REPOS, ...PRIVATE_REPOS];
+  return ECOSYSTEM_REPOS;
+}
+
 export function waveRank(wave = '') {
   const m = String(wave).match(/wave\s*(\d+)/i);
   return m ? Number(m[1]) : 99;
@@ -140,7 +156,7 @@ function fetchProjectItems(owner, projNum) {
   return raw.items || [];
 }
 
-function syncOpenIssues({ owner, projNum }) {
+function syncOpenIssues({ owner, projNum, repos = ECOSYSTEM_REPOS, includeClosed = false }) {
   const { proj, fields } = getProjectMeta(owner, projNum);
   const existing = fetchProjectItems(owner, projNum);
   const existingByUrl = new Map(existing.map((it) => [it.content?.url, it]));
@@ -153,6 +169,7 @@ function syncOpenIssues({ owner, projNum }) {
 
   const todoOpt = statusField?.options?.find((o) => /todo|backlog|open/i.test(o.name));
   const inProgOpt = statusField?.options?.find((o) => /progress|doing/i.test(o.name));
+  const doneOpt = statusField?.options?.find((o) => /done|closed|complete/i.test(o.name));
   const p0Opt = prioField?.options?.find((o) => o.name.startsWith('P0'));
   const p1Opt = prioField?.options?.find((o) => o.name.startsWith('P1'));
   const p2Opt = prioField?.options?.find((o) => o.name.startsWith('P2'));
@@ -162,7 +179,7 @@ function syncOpenIssues({ owner, projNum }) {
   let added = 0;
   let updated = 0;
 
-  for (const repo of ECOSYSTEM_REPOS) {
+  for (const repo of repos) {
     const openIssues = JSON.parse(
       gh([
         'issue',
@@ -170,11 +187,11 @@ function syncOpenIssues({ owner, projNum }) {
         '-R',
         `${owner}/${repo}`,
         '--state',
-        'open',
+        includeClosed ? 'all' : 'open',
         '--limit',
         '100',
         '--json',
-        'id,number,title,labels,url'
+        'id,number,title,state,labels,url'
       ])
     );
 
@@ -190,12 +207,15 @@ function syncOpenIssues({ owner, projNum }) {
       }
 
       const labelNames = (issue.labels || []).map((l) => l.name);
-      const isInProgress = labelNames.some((n) => /in-progress|taste-check/i.test(n));
+      const isClosed = issue.state === 'CLOSED';
+      const isInProgress = !isClosed && labelNames.some((n) => /in-progress|taste-check/i.test(n));
       const ops = [];
 
-      if (!item?.status && statusField) {
-        const opt = isInProgress ? inProgOpt || todoOpt : todoOpt;
-        if (opt) ops.push({ fieldId: statusField.id, value: { singleSelectOptionId: opt.id } });
+      if ((!item?.status || isClosed) && statusField) {
+        const opt = isClosed ? doneOpt : isInProgress ? inProgOpt || todoOpt : todoOpt;
+        if (opt && item?.status !== opt.name) {
+          ops.push({ fieldId: statusField.id, value: { singleSelectOptionId: opt.id } });
+        }
       }
       if (!item?.['priorità'] && prioField) {
         const opt = labelNames.includes('P0-critical')
@@ -534,31 +554,32 @@ export function runRepoTests(workspaceRoot = path.resolve(process.cwd(), '..'), 
 async function main() {
   const { command, flags } = parseCliArgs(process.argv.slice(2));
   const owner = flags.owner || DEFAULT_OWNER;
-  const projNum = Number(flags.project || DEFAULT_PROJECT_NUMBER);
+  const projNum = Number(flags.project || (flags.scope === 'private' ? 2 : DEFAULT_PROJECT_NUMBER));
+  const repos = resolveReposForScope(flags.scope, projNum);
 
   if (command === 'discover') {
     const root = flags.workspace ? path.resolve(flags.workspace) : path.resolve(process.cwd(), '..');
-    const results = discoverWorkspaceTodos(root);
+    const results = discoverWorkspaceTodos(root, repos);
     console.log(JSON.stringify(results, null, 2));
     return;
   }
 
   if (command === 'audit') {
     const root = flags.workspace ? path.resolve(flags.workspace) : path.resolve(process.cwd(), '..');
-    const local = auditLocalWorkspace(root);
+    const local = auditLocalWorkspace(root, repos);
     const out = { level1_local: local };
     if (flags.live || flags.full) {
       out.level2_live_http = await checkLiveEndpoints();
     }
     if (flags.tests || flags.full) {
-      out.level2_tests = runRepoTests(root);
+      out.level2_tests = runRepoTests(root, repos);
     }
     console.log(JSON.stringify(out, null, 2));
     return;
   }
 
   if (command === 'sync-open') {
-    const result = syncOpenIssues({ owner, projNum });
+    const result = syncOpenIssues({ owner, projNum, repos, includeClosed: Boolean(flags.all) });
     console.log(JSON.stringify(result, null, 2));
     return;
   }
