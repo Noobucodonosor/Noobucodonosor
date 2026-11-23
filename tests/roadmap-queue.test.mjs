@@ -10,7 +10,8 @@ import {
   waveRank,
   priorityRank,
   auditRepositoryDir,
-  checkLiveEndpoints
+  checkLiveEndpoints,
+  discoverRepoTodos
 } from '../scripts/roadmap-queue.mjs';
 
 test('waveRank and priorityRank order Wave 1..3 and P0..P2 deterministically', () => {
@@ -144,5 +145,23 @@ test('checkLiveEndpoints reports healthy 200 and flags 503 with P0 finding', asy
   assert.equal(res[1].finding.priority, 'P0-critical');
   assert.equal(res[1].finding.scannerId, 'L2-live-http');
 });
+
+test('discoverRepoTodos extracts open ADR checkboxes with task codes', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'noob-discover-'));
+  try {
+    fs.mkdirSync(path.join(tmp, 'docs', 'adr'), { recursive: true });
+    fs.writeFileSync(
+      path.join(tmp, 'docs', 'adr', '0001-demo.md'),
+      '- [x] **TASK-DONE-01**: Done\n- [ ] **TASK-OPEN-01**: Still open\n'
+    );
+    const res = discoverRepoTodos(tmp, 'demo-repo');
+    assert.equal(res.adrOpen.length, 1);
+    assert.equal(res.adrOpen[0].taskCode, 'TASK-OPEN-01');
+    assert.equal(res.adrOpen[0].file, 'docs/adr/0001-demo.md');
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
 
 

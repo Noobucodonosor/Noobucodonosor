@@ -354,6 +354,68 @@ export function auditLocalWorkspace(workspaceRoot = path.resolve(process.cwd(), 
   return repos.map((repo) => auditRepositoryDir(path.join(workspaceRoot, repo), repo));
 }
 
+export function discoverRepoTodos(repoDir, repoName = path.basename(repoDir)) {
+  if (!fs.existsSync(repoDir)) {
+    return { repo: repoName, present: false, adrOpen: [], codeTodos: [], gitState: null };
+  }
+
+  const adrOpen = [];
+  const adrDir = path.join(repoDir, 'docs', 'adr');
+  if (fs.existsSync(adrDir)) {
+    for (const file of fs.readdirSync(adrDir).filter((f) => f.endsWith('.md') && f !== '0000-adr-template.md')) {
+      const lines = fs.readFileSync(path.join(adrDir, file), 'utf8').split('\n');
+      lines.forEach((line, idx) => {
+        if (/^\s*-\s*\[\s\]\s+/.test(line)) {
+          const taskMatch = line.match(/\*\*(TASK-[A-Z0-9-]+)\*\*/);
+          adrOpen.push({
+            file: `docs/adr/${file}`,
+            line: idx + 1,
+            taskCode: taskMatch ? taskMatch[1] : null,
+            text: line.replace(/^\s*-\s*\[\s\]\s+/, '').trim()
+          });
+        }
+      });
+    }
+  }
+
+  const codeTodos = [];
+  try {
+    const out = execFileSync(
+      'git',
+      ['-C', repoDir, 'grep', '-n', '-E', '\\b(TODO|FIXME)\\b', '--', ':!docs/adr/0000*', ':!*.json', ':!*.html', ':!*.md'],
+      { encoding: 'utf8', stdio: 'pipe' }
+    ).trim();
+    if (out) {
+      for (const line of out.split('\n').slice(0, 20)) {
+        const [file, lineNum, ...rest] = line.split(':');
+        codeTodos.push({ file, line: Number(lineNum), text: rest.join(':').trim() });
+      }
+    }
+  } catch {
+    // git grep exits 1 when no matches are found
+  }
+
+  let gitState = null;
+  try {
+    const branch = execFileSync('git', ['-C', repoDir, 'rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8', stdio: 'pipe' }).trim();
+    const dirtyCount = execFileSync('git', ['-C', repoDir, 'status', '--porcelain'], { encoding: 'utf8', stdio: 'pipe' })
+      .trim()
+      .split('\n')
+      .filter(Boolean).length;
+    if (branch !== 'main' || dirtyCount > 0) {
+      gitState = { branch, dirtyCount };
+    }
+  } catch {
+    // ignore non-git dirs
+  }
+
+  return { repo: repoName, present: true, adrOpen, codeTodos, gitState };
+}
+
+export function discoverWorkspaceTodos(workspaceRoot = path.resolve(process.cwd(), '..'), repos = ECOSYSTEM_REPOS) {
+  return repos.map((repo) => discoverRepoTodos(path.join(workspaceRoot, repo), repo));
+}
+
 export const LIVE_ENDPOINTS = [
   { repo: 'Noobucodonosor', url: 'https://noobucodonosor-hub-664856461640.us-central1.run.app/api/health' },
   { repo: 'basilico', url: 'https://basilico-txfxsxuuma-ew.a.run.app' },
@@ -472,6 +534,13 @@ async function main() {
   const { command, flags } = parseCliArgs(process.argv.slice(2));
   const owner = flags.owner || DEFAULT_OWNER;
   const projNum = Number(flags.project || DEFAULT_PROJECT_NUMBER);
+
+  if (command === 'discover') {
+    const root = flags.workspace ? path.resolve(flags.workspace) : path.resolve(process.cwd(), '..');
+    const results = discoverWorkspaceTodos(root);
+    console.log(JSON.stringify(results, null, 2));
+    return;
+  }
 
   if (command === 'audit') {
     const root = flags.workspace ? path.resolve(flags.workspace) : path.resolve(process.cwd(), '..');
