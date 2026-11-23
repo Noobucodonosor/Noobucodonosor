@@ -37,5 +37,5 @@ Mantenere manualmente aggiornate le card dei progetti, gli stati di attività ("
 
 ## 4. Task Operativi Collegati
 
-- [ ] **TASK-SHOWCASE-01**: Aggiungere validazione e fallback per `social-preview.png` e stato API nei progetti in `.github/scripts/update-profile.mjs`
-- [ ] **TASK-SHOWCASE-02**: Estendere i test/verifica dry-run locale per `.github/scripts/update-profile.mjs` senza sovrascrivere `README.md`
+- [x] **TASK-SHOWCASE-01**: Aggiungere validazione e fallback per `social-preview.png` e stato API nei progetti in `.github/scripts/update-profile.mjs`
+- [x] **TASK-SHOWCASE-02**: Estendere i test/verifica dry-run locale per `.github/scripts/update-profile.mjs` senza sovrascrivere `README.md`

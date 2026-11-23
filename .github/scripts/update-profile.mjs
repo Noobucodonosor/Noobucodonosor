@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const OWNER = 'Noobucodonosor';
 const TOKEN = process.env.GITHUB_TOKEN || '';
@@ -15,7 +16,7 @@ if (!HUB_BASE_URL && fs.existsSync(HUB_CONFIG_PATH)) {
   }
 }
 
-function getLiveTarget(appId, fallbackUrl, fallbackLabel) {
+export function getLiveTarget(appId, fallbackUrl, fallbackLabel) {
   if (HUB_BASE_URL) {
     return {
       liveUrl: `${HUB_BASE_URL}/?app=${appId}`,
@@ -25,7 +26,7 @@ function getLiveTarget(appId, fallbackUrl, fallbackLabel) {
   return { liveUrl: fallbackUrl, liveLabel: fallbackLabel };
 }
 
-const PROJECTS = [
+export const PROJECTS = [
   {
     repo: 'basilico',
     title: 'Basilico — Rapallo',
@@ -96,7 +97,7 @@ const PROJECTS = [
   },
 ];
 
-async function ghFetch(endpoint) {
+export async function ghFetch(endpoint, fetchImpl = fetch) {
   const headers = {
     Accept: 'application/vnd.github+json',
     'User-Agent': 'Noobucodonosor-profile-updater',
@@ -104,14 +105,26 @@ async function ghFetch(endpoint) {
   if (TOKEN) {
     headers.Authorization = `Bearer ${TOKEN}`;
   }
-  const res = await fetch(`https://api.github.com${endpoint}`, { headers });
+  const res = await fetchImpl(`https://api.github.com${endpoint}`, { headers });
   if (!res.ok) {
-    throw new Error(`GitHub API ${endpoint} failed: ${res.status} ${res.statusText}`);
+    const err = new Error(`GitHub API ${endpoint} failed: ${res.status} ${res.statusText}`);
+    err.status = res.status;
+    throw err;
   }
   return res.json();
 }
 
-function escapeHtml(str) {
+export async function checkPreviewReachable(repo, fetchImpl = fetch) {
+  const rawUrl = `https://raw.githubusercontent.com/${OWNER}/${repo}/main/docs/preview/social-preview.png`;
+  try {
+    const res = await fetchImpl(rawUrl, { method: 'HEAD' });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -119,8 +132,10 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-function formatDateIt(isoDate) {
+export function formatDateIt(isoDate) {
+  if (!isoDate) return 'N/D';
   const d = new Date(isoDate);
+  if (Number.isNaN(d.getTime())) return 'N/D';
   return d.toLocaleDateString('it-IT', {
     day: '2-digit',
     month: 'short',
@@ -129,60 +144,88 @@ function formatDateIt(isoDate) {
   });
 }
 
-function freshnessBadge(isoDate) {
-  const diffHours = (Date.now() - new Date(isoDate).getTime()) / 36e5;
+export function freshnessBadge(isoDate) {
+  if (!isoDate) return '⚪ Stabile';
+  const ts = new Date(isoDate).getTime();
+  if (Number.isNaN(ts)) return '⚪ Stabile';
+  const diffHours = (Date.now() - ts) / 36e5;
   if (diffHours <= 24) return '🟢 Aggiornato oggi';
   if (diffHours <= 24 * 7) return '🟡 Aggiornato questa settimana';
   return '⚪ Stabile';
 }
 
-async function fetchProjectState(proj) {
-  const [repoInfo, latestCommits, previewCommits, weekCommits] = await Promise.all([
-    ghFetch(`/repos/${OWNER}/${proj.repo}`),
-    ghFetch(`/repos/${OWNER}/${proj.repo}/commits?per_page=10`),
-    ghFetch(`/repos/${OWNER}/${proj.repo}/commits?path=docs/preview/social-preview.png&per_page=1`),
-    ghFetch(
-      `/repos/${OWNER}/${proj.repo}/commits?since=${new Date(
-        Date.now() - 7 * 86400e3,
-      ).toISOString()}&per_page=100`,
-    ),
-  ]);
+export async function fetchProjectState(proj, { fetchImpl = fetch } = {}) {
+  try {
+    const [repoInfo, latestCommits, previewCommits, weekCommits] = await Promise.all([
+      ghFetch(`/repos/${OWNER}/${proj.repo}`, fetchImpl),
+      ghFetch(`/repos/${OWNER}/${proj.repo}/commits?per_page=10`, fetchImpl),
+      ghFetch(`/repos/${OWNER}/${proj.repo}/commits?path=docs/preview/social-preview.png&per_page=1`, fetchImpl),
+      ghFetch(
+        `/repos/${OWNER}/${proj.repo}/commits?since=${new Date(
+          Date.now() - 7 * 86400e3,
+        ).toISOString()}&per_page=100`,
+        fetchImpl,
+      ),
+    ]);
 
-  const meaningfulCommit =
-    latestCommits.find((c) => !/^(chore|fix|ci)\(preview\):/i.test(c.commit.message)) ||
-    latestCommits[0];
+    const meaningfulCommit =
+      (Array.isArray(latestCommits) &&
+        latestCommits.find((c) => !/^(chore|fix|ci)\(preview\):/i.test(c?.commit?.message || ''))) ||
+      (Array.isArray(latestCommits) ? latestCommits[0] : null);
 
-  const previewSha = previewCommits[0]?.sha?.slice(0, 8) || 'latest';
-  const lastDate = meaningfulCommit?.commit?.author?.date || repoInfo.pushed_at;
+    const hasPreviewCommit = Array.isArray(previewCommits) && previewCommits.length > 0;
+    const hasPreview = hasPreviewCommit ? true : await checkPreviewReachable(proj.repo, fetchImpl);
+    const previewSha = hasPreviewCommit ? previewCommits[0]?.sha?.slice(0, 8) || 'latest' : 'latest';
+    const lastDate = meaningfulCommit?.commit?.author?.date || repoInfo?.pushed_at || null;
 
-  return {
-    ...proj,
-    previewSha,
-    lastDate,
-    lastDateIt: formatDateIt(lastDate),
-    freshness: freshnessBadge(lastDate),
-    weekUpdatesCount: Array.isArray(weekCommits) ? weekCommits.length : 0,
-  };
+    return {
+      ...proj,
+      hasPreview,
+      previewSha,
+      lastDate,
+      lastDateIt: formatDateIt(lastDate),
+      freshness: freshnessBadge(lastDate),
+      weekUpdatesCount: Array.isArray(weekCommits) ? weekCommits.length : 0,
+      apiFallback: false,
+    };
+  } catch (err) {
+    console.warn(`[WARN] API fallback for ${proj.repo}: ${err.message}`);
+    const hasPreview = await checkPreviewReachable(proj.repo, fetchImpl);
+    return {
+      ...proj,
+      hasPreview,
+      previewSha: 'latest',
+      lastDate: null,
+      lastDateIt: 'N/D',
+      freshness: '⚪ Stabile',
+      weekUpdatesCount: 0,
+      apiFallback: true,
+    };
+  }
 }
 
-function renderCard(p) {
-  const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/docs/preview/social-preview.png?v=${p.previewSha}`;
+export function renderCard(p) {
+  const hasPreview = p.hasPreview !== false;
+  const imgUrl = `https://raw.githubusercontent.com/${OWNER}/${p.repo}/main/docs/preview/social-preview.png?v=${p.previewSha || 'latest'}`;
+  const previewBlock = hasPreview
+    ? `      <a href="${p.liveUrl}">
+        <img src="${imgUrl}" alt="${escapeHtml(p.title)}" />
+      </a>
+      <br />\n`
+    : '';
   const secondaryLink = p.secondaryUrl
     ? ` · <a href="${p.secondaryUrl}"><strong>${escapeHtml(p.secondaryLabel || 'Anteprima')}</strong></a>`
     : '';
+  const dateSuffix = p.lastDateIt && p.lastDateIt !== 'N/D' ? ` (${p.lastDateIt})` : '';
   return `    <td width="50%" valign="top">
-      <a href="${p.liveUrl}">
-        <img src="${imgUrl}" alt="${escapeHtml(p.title)}" />
-      </a>
-      <br />
-      <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></strong><br />
-      <sub>${escapeHtml(p.category)} · ${p.freshness} (${p.lastDateIt})</sub><br /><br />
+${previewBlock}      <strong><a href="${p.liveUrl}">${escapeHtml(p.title)}</a></strong><br />
+      <sub>${escapeHtml(p.category)} · ${p.freshness}${dateSuffix}</sub><br /><br />
       ${escapeHtml(p.summary)}<br /><br />
       <a href="${p.liveUrl}"><strong>🚀 ${escapeHtml(p.liveLabel)}</strong></a>${secondaryLink} · <a href="${p.infoUrl}">📄 Dettagli</a>
     </td>`;
 }
 
-function renderShowcase(states) {
+export function renderShowcase(states) {
   const rows = [];
   for (let i = 0; i < states.length; i += 2) {
     const left = renderCard(states[i]);
@@ -192,7 +235,7 @@ function renderShowcase(states) {
   return `<table>\n${rows.join('\n')}\n</table>`;
 }
 
-function renderPulse(states) {
+export function renderPulse(states) {
   const totalWeekUpdates = states.reduce((acc, s) => acc + s.weekUpdatesCount, 0);
   const activeToday = states.filter((s) => s.freshness.includes('oggi')).length;
   const nowIt = new Date().toLocaleString('it-IT', {
@@ -218,7 +261,7 @@ function renderPulse(states) {
 ${rows}`;
 }
 
-function replaceBlock(content, marker, replacement) {
+export function replaceBlock(content, marker, replacement) {
   const startTag = `<!-- ${marker}:START -->`;
   const endTag = `<!-- ${marker}:END -->`;
   const startIdx = content.indexOf(startTag);
@@ -235,21 +278,47 @@ function replaceBlock(content, marker, replacement) {
   );
 }
 
-async function main() {
-  const readmePath = path.resolve('README.md');
-  let readme = fs.readFileSync(readmePath, 'utf8');
-
-  const states = await Promise.all(PROJECTS.map(fetchProjectState));
-  states.sort((a, b) => new Date(b.lastDate).getTime() - new Date(a.lastDate).getTime());
-
-  readme = replaceBlock(readme, 'SHOWCASE', renderShowcase(states));
-  readme = replaceBlock(readme, 'PULSE', renderPulse(states));
-
-  fs.writeFileSync(readmePath, readme, 'utf8');
-  console.log('README.md updated successfully.');
+export function parseProfileArgs(argv = process.argv.slice(2)) {
+  return {
+    dryRun: argv.includes('--dry-run'),
+  };
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+export async function runProfileUpdate({ dryRun = false, readmePath = path.resolve('README.md'), fetchImpl = fetch } = {}) {
+  const originalReadme = fs.readFileSync(readmePath, 'utf8');
+  let nextReadme = originalReadme;
+
+  const states = await Promise.all(PROJECTS.map((p) => fetchProjectState(p, { fetchImpl })));
+  states.sort((a, b) => {
+    const ta = a.lastDate ? new Date(a.lastDate).getTime() : 0;
+    const tb = b.lastDate ? new Date(b.lastDate).getTime() : 0;
+    return tb - ta;
+  });
+
+  nextReadme = replaceBlock(nextReadme, 'SHOWCASE', renderShowcase(states));
+  nextReadme = replaceBlock(nextReadme, 'PULSE', renderPulse(states));
+
+  const changed = nextReadme !== originalReadme;
+
+  if (dryRun) {
+    console.log(`[DRY-RUN] Verified ${states.length} projects (README.md not written, changed=${changed}).`);
+    for (const s of states) {
+      console.log(
+        ` - ${s.repo}: ${s.freshness} (${s.lastDateIt}) | preview=${s.hasPreview ? s.previewSha : 'MISSING'} | fallback=${s.apiFallback}`
+      );
+    }
+    return { dryRun: true, changed, states };
+  }
+
+  fs.writeFileSync(readmePath, nextReadme, 'utf8');
+  console.log('README.md updated successfully.');
+  return { dryRun: false, changed, states };
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const { dryRun } = parseProfileArgs();
+  runProfileUpdate({ dryRun }).catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
