@@ -38,18 +38,6 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 <table>
   <tr>
     <td width="100%" valign="top">
-      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">
-        <img src="https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png?v=86a20dc4" alt="ScooterLab — IoT &amp; Sensori" width="100%" />
-      </a>
-      <br />
-      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">ScooterLab — IoT &amp; Sensori</a></strong><br />
-      <sub>Dispositivi Connessi (IoT) · 🟢 Aggiornato oggi (23 nov 2026)</sub><br /><br />
-      Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.<br /><br />
-      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
-    </td>
-  </tr>
-  <tr>
-    <td width="100%" valign="top">
       <a href="https://noobucodonosor.github.io/genova-settimana/">
         <img src="https://raw.githubusercontent.com/Noobucodonosor/genova-settimana/main/docs/preview/social-preview.png?v=fc48f839" alt="Genova Civica &amp; Cultura" width="100%" />
       </a>
@@ -58,6 +46,18 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       <sub>Portale Territoriale · 🟢 Aggiornato oggi (23 nov 2026)</sub><br /><br />
       Guida digitale su 67 comuni per scoprire eventi della settimana, quasi 5.000 attività commerciali locali, idee per il tempo libero e storia delle vie cittadine.<br /><br />
       <a href="https://noobucodonosor.github.io/genova-settimana/"><strong>🚀 Prova la Demo</strong></a> · <a href="https://noobucodonosor.github.io/genova-settimana/esercenti.html">📄 Dettagli</a>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top">
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">
+        <img src="https://raw.githubusercontent.com/Noobucodonosor/scooterlab/main/docs/preview/social-preview.png?v=86a20dc4" alt="ScooterLab — IoT &amp; Sensori" width="100%" />
+      </a>
+      <br />
+      <strong><a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab">ScooterLab — IoT &amp; Sensori</a></strong><br />
+      <sub>Dispositivi Connessi (IoT) · 🟢 Aggiornato oggi (23 nov 2026)</sub><br /><br />
+      Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.<br /><br />
+      <a href="https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab"><strong>🚀 Prova Live</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
     </td>
   </tr>
   <tr>
@@ -128,12 +128,12 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Stato dei Progetti in Tempo Reale
 
 <!-- PULSE:START -->
-> **7** progetti attivi in vetrina · **24** miglioramenti negli ultimi 7 giorni · **6** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 17:45*
+> **7** progetti attivi in vetrina · **25** miglioramenti negli ultimi 7 giorni · **6** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 20:26*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
+| [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟢 Aggiornato oggi | 23 nov 2026 | 6 aggiornamenti |
 | [**ScooterLab — IoT & Sensori**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=scooterlab) | Dispositivi Connessi (IoT) | 🟢 Aggiornato oggi | 23 nov 2026 | 3 aggiornamenti |
-| [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟢 Aggiornato oggi | 23 nov 2026 | 5 aggiornamenti |
 | [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Previsioni & Monitoraggio | 🟢 Aggiornato oggi | 23 nov 2026 | 3 aggiornamenti |
 | [**resuscipack**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=resuscipack) | Ricerca & Editoria Digitale | 🟢 Aggiornato oggi | 23 nov 2026 | 5 aggiornamenti |
 | [**Leslie — Agency OS**](https://noobucodonosor-hub-664856461640.us-central1.run.app/?app=leslie) | Automazione Commerciale B2B | 🟢 Aggiornato oggi | 23 nov 2026 | 3 aggiornamenti |
