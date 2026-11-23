@@ -30,7 +30,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://noobucodonosor.github.io/scooterlab/">ScooterLab — IoT &amp; Sensori</a></strong><br />
-      <sub>Dispositivi Connessi (IoT) · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>Dispositivi Connessi (IoT) · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Sistema di monitoraggio con sensori di movimento e GPS per raccogliere dati di guida su due ruote in modo non invasivo, sicuro e resistente alle intemperie.<br /><br />
       <a href="https://noobucodonosor.github.io/scooterlab/"><strong>🚀 Vedi Scheda Progetto</strong></a> · <a href="https://github.com/Noobucodonosor/scooterlab">📄 Dettagli</a>
     </td>
@@ -40,7 +40,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://noobucodonosor.github.io/resuscipack/">resuscipack</a></strong><br />
-      <sub>Ricerca &amp; Editoria Digitale · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>Ricerca &amp; Editoria Digitale · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Motore di ricerca e consultazione su oltre 1.400 testi e volumi tecnici, progettato per trovare subito concetti chiave con fonti sempre verificabili.<br /><br />
       <a href="https://noobucodonosor.github.io/resuscipack/"><strong>🚀 Apri Anteprima</strong></a> · <a href="https://github.com/Noobucodonosor/resuscipack">📄 Dettagli</a>
     </td>
@@ -52,7 +52,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://mediometeo-664856461640.europe-west1.run.app">MedioMeteo Genova</a></strong><br />
-      <sub>Previsioni &amp; Monitoraggio · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>Previsioni &amp; Monitoraggio · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Piattaforma meteo per terra e mare su 67 comuni della provincia di Genova, basata su 199 sensori reali sul territorio con mappe interattive e bollettini chiari.<br /><br />
       <a href="https://mediometeo-664856461640.europe-west1.run.app"><strong>🚀 Prova la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/mediometeo">📄 Dettagli</a>
     </td>
@@ -62,7 +62,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://noobucodonosor.github.io/leslie-agency-os/">Leslie — Agency OS</a></strong><br />
-      <sub>Automazione Commerciale B2B · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>Automazione Commerciale B2B · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Sistema intelligente per agenzie e team commerciali: ricerca automaticamente nuovi potenziali clienti, li analizza con l’AI e li organizza in un pannello di gestione.<br /><br />
       <a href="https://noobucodonosor.github.io/leslie-agency-os/"><strong>🚀 Guarda la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/leslie-agency-os">📄 Dettagli</a>
     </td>
@@ -74,7 +74,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://noobucodonosor.github.io/kn5/">kn5 — Knowledge Ingestor</a></strong><br />
-      <sub>AI &amp; Gestione Conoscenza · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>AI &amp; Gestione Conoscenza · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Assistente AI che trasforma video e post (YouTube e Instagram) in schede ordinate e riassunti consultabili, con controllo dei costi e invio rapido da Telegram.<br /><br />
       <a href="https://noobucodonosor.github.io/kn5/"><strong>🚀 Esplora il Progetto</strong></a> · <a href="https://github.com/Noobucodonosor/kn5">📄 Dettagli</a>
     </td>
@@ -84,7 +84,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://noobucodonosor.github.io/genova-settimana/">Genova Civica &amp; Cultura</a></strong><br />
-      <sub>Portale Territoriale · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>Portale Territoriale · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       Guida digitale su 67 comuni per scoprire eventi della settimana, quasi 5.000 attività commerciali locali, idee per il tempo libero e storia delle vie cittadine.<br /><br />
       <a href="https://noobucodonosor.github.io/genova-settimana/"><strong>🚀 Prova la Demo</strong></a> · <a href="https://noobucodonosor.github.io/genova-settimana/esercenti.html">📄 Dettagli</a>
     </td>
@@ -96,7 +96,7 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
       </a>
       <br />
       <strong><a href="https://basilico-txfxsxuuma-ew.a.run.app">Basilico — Rapallo</a></strong><br />
-      <sub>App Consumer &amp; Risparmio · 🟢 Aggiornato oggi (21 nov 2026)</sub><br /><br />
+      <sub>App Consumer &amp; Risparmio · 🟡 Aggiornato questa settimana (21 nov 2026)</sub><br /><br />
       App per confrontare in tempo reale offerte e volantini dei supermercati locali, organizzare la dispensa e pianificare la spesa settimanale anche senza connessione.<br /><br />
       <a href="https://basilico-txfxsxuuma-ew.a.run.app"><strong>🚀 Prova la Demo</strong></a> · <a href="https://github.com/Noobucodonosor/basilico">📄 Dettagli</a>
     </td>
@@ -110,17 +110,17 @@ Progetto, costruisco e mantengo **prodotti digitali completi** e **sistemi di AI
 ### Stato dei Progetti in Tempo Reale
 
 <!-- PULSE:START -->
-> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **7** aggiornati oggi · *Ultimo controllo automatico: 22 nov 2026, 22:40*
+> **7** progetti attivi in vetrina · **7** miglioramenti negli ultimi 7 giorni · **0** aggiornati oggi · *Ultimo controllo automatico: 23 nov 2026, 03:28*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
-| [**ScooterLab — IoT & Sensori**](https://noobucodonosor.github.io/scooterlab/) | Dispositivi Connessi (IoT) | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
-| [**resuscipack**](https://noobucodonosor.github.io/resuscipack/) | Ricerca & Editoria Digitale | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
-| [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Previsioni & Monitoraggio | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
-| [**Leslie — Agency OS**](https://noobucodonosor.github.io/leslie-agency-os/) | Automazione Commerciale B2B | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
-| [**kn5 — Knowledge Ingestor**](https://noobucodonosor.github.io/kn5/) | AI & Gestione Conoscenza | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
-| [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
-| [**Basilico — Rapallo**](https://basilico-txfxsxuuma-ew.a.run.app) | App Consumer & Risparmio | 🟢 Aggiornato oggi | 21 nov 2026 | 1 aggiornamenti |
+| [**ScooterLab — IoT & Sensori**](https://noobucodonosor.github.io/scooterlab/) | Dispositivi Connessi (IoT) | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**resuscipack**](https://noobucodonosor.github.io/resuscipack/) | Ricerca & Editoria Digitale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Previsioni & Monitoraggio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**Leslie — Agency OS**](https://noobucodonosor.github.io/leslie-agency-os/) | Automazione Commerciale B2B | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**kn5 — Knowledge Ingestor**](https://noobucodonosor.github.io/kn5/) | AI & Gestione Conoscenza | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**Genova Civica & Cultura**](https://noobucodonosor.github.io/genova-settimana/) | Portale Territoriale | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
+| [**Basilico — Rapallo**](https://basilico-txfxsxuuma-ew.a.run.app) | App Consumer & Risparmio | 🟡 Aggiornato questa settimana | 21 nov 2026 | 1 aggiornamenti |
 <!-- PULSE:END -->
 
 ---
