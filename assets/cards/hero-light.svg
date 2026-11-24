@@ -59,7 +59,7 @@
   <text x="74" y="23" class="mono" font-size="12" fill="#59636e">noobucodonosor@genova:~ — terminal-hud</text>
   <rect x="724" y="9" width="140" height="20" rx="10" fill="#eaeef2" stroke="#d0d7de" />
   <circle cx="738" cy="19" r="4" fill="#1a7f37" class="pulse-dot" />
-  <text x="748" y="23" class="mono" font-size="11" font-weight="600" fill="#1f2328">HUB ONLINE 242ms</text>
+  <text x="748" y="23" class="mono" font-size="11" font-weight="600" fill="#1f2328">HUB ONLINE 255ms</text>
 
   <text x="28" y="76" class="sans" font-size="26" font-weight="800" letter-spacing="-0.5" fill="url(#hero-shine)">Noobucodonosor — Control Deck</text>
   <g class="line-reveal" style="animation-delay: 0ms">
@@ -72,10 +72,10 @@
       </g>
   <g class="line-reveal" style="animation-delay: 36ms">
         <text x="28" y="160" class="mono" font-size="13" font-weight="700" fill="#0969da">&gt;</text>
-        <text x="46" y="160" class="mono" font-size="13" fill="#59636e">vetrina: 8 prodotti verticali | 8 aggiornati oggi | 45 commit (7g)</text>
+        <text x="46" y="160" class="mono" font-size="13" fill="#59636e">vetrina: 8 prodotti verticali | 8 aggiornati oggi | 55 commit (7g)</text>
       </g>
   <g class="line-reveal" style="animation-delay: 54ms">
         <text x="28" y="183" class="mono" font-size="13" font-weight="700" fill="#0969da">&gt;</text>
-        <text x="46" y="183" class="mono" font-size="13" fill="#59636e">hub-cloud-run: ONLINE 242ms | kit-offline: bundles/noobucodonosor-portable.html | sync: 23 nov 2026, 22:05</text>
+        <text x="46" y="183" class="mono" font-size="13" fill="#59636e">hub-cloud-run: ONLINE 255ms | kit-offline: bundles/noobucodonosor-portable.html | sync: 24 nov 2026, 05:49</text>
       </g>
 </svg>

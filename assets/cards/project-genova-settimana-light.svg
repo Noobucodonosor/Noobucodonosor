@@ -45,10 +45,10 @@
   <rect x="0.5" y="0.5" width="5" height="135" rx="2" fill="#0f4c81" />
   <text x="22" y="28" class="mono" font-size="11" font-weight="700" fill="#0f4c81">AGENDA &amp; TERRITORIO</text>
   <circle cx="220" cy="24" r="4" fill="#1a7f37" class="pulse-dot" />
-  <text x="230" y="28" class="mono" font-size="11" fill="#59636e">23 nov 2026 · 8 agg. (7g)</text>
+  <text x="230" y="28" class="mono" font-size="11" fill="#59636e">23 nov 2026 · 9 agg. (7g)</text>
   <rect x="730" y="12" width="132" height="22" rx="11" fill="#eaeef2" stroke="#d0d7de" />
   <circle cx="744" cy="23" r="4" fill="#1a7f37" />
-  <text x="754" y="27" class="mono" font-size="10" font-weight="600" fill="#1f2328">ONLINE 199ms</text>
+  <text x="754" y="27" class="mono" font-size="10" font-weight="600" fill="#1f2328">ONLINE 206ms</text>
 
   <text x="22" y="62" class="sans" font-size="21" font-weight="800" fill="#1f2328">Cosa faccio questa settimana a Genova</text>
   <text x="22" y="88" class="sans" font-size="13" fill="#59636e">Cinema, mostre, musica, biblioteche, ~5.000 attività locali e storia delle vie su 67 comuni.</text>
