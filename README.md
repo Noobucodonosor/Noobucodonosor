@@ -28,7 +28,7 @@ Tutti gli 8 prodotti qui sotto sono esplorabili subito online; i 4 playground AI
 <summary><strong>Stato dei Progetti in Tempo Reale & Dettagli Architetturali (ADR-0001..0004)</strong></summary>
 
 <!-- PULSE:START -->
-> **8** progetti attivi in vetrina · **55** miglioramenti negli ultimi 7 giorni · **8** aggiornati oggi · *Ultimo controllo automatico: 24 nov 2026, 05:49*
+> **8** progetti attivi in vetrina · **55** miglioramenti negli ultimi 7 giorni · **8** aggiornati oggi · *Ultimo controllo automatico: 24 nov 2026, 16:55*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
