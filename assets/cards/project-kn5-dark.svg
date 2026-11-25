@@ -70,7 +70,7 @@
   <text x="16" y="106" class="sans" font-size="11.5" fill="#8b949e">YouTube · IG · Telegram</text>
 
   <line x1="16" y1="122" x2="416" y2="122" stroke="#21262d" />
-  <circle cx="21" cy="139" r="4" fill="#3fb950" class="pulse-dot" />
+  <circle cx="21" cy="139" r="4" fill="#d29922" class="pulse-dot" />
   <text x="31" y="143" class="mono" font-size="11" fill="#8b949e">23 nov 2026 · 5 agg. (7g)</text>
   <text x="404" y="143" class="mono arrow-nudge" font-size="13" font-weight="700" fill="#f59e0b">→</text>
 </svg>
