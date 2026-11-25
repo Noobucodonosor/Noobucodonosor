@@ -28,12 +28,12 @@ Tutti gli 8 prodotti qui sotto sono esplorabili subito online; i 4 playground AI
 <summary><strong>Stato dei Progetti in Tempo Reale & Dettagli Architetturali (ADR-0001..0004)</strong></summary>
 
 <!-- PULSE:START -->
-> **8** progetti attivi in vetrina · **56** miglioramenti negli ultimi 7 giorni · **1** aggiornati oggi · *Ultimo controllo automatico: 25 nov 2026, 10:53*
+> **8** progetti attivi in vetrina · **57** miglioramenti negli ultimi 7 giorni · **1** aggiornati oggi · *Ultimo controllo automatico: 25 nov 2026, 20:57*
 
 | Progetto | Ambito | Stato | Ultimo aggiornamento | Attività (7 giorni) |
 | :--- | :--- | :--- | :--- | :---: |
 | [**Cosa faccio questa settimana a Genova**](https://noobucodonosor.github.io/genova-settimana/) | Agenda & Territorio | 🟡 Aggiornato questa settimana | 23 nov 2026 | 9 aggiornamenti |
-| [**v.i.n.o. — Annate Smartphone NOS**](https://noobucodonosor.github.io/v.i.n.o./) | Market Tracker & Dati | 🟢 Aggiornato oggi | 24 nov 2026 | 11 aggiornamenti |
+| [**v.i.n.o. — Annate Smartphone NOS**](https://noobucodonosor.github.io/v.i.n.o./) | Market Tracker & Dati | 🟢 Aggiornato oggi | 25 nov 2026 | 12 aggiornamenti |
 | [**MedioMeteo Genova**](https://mediometeo-664856461640.europe-west1.run.app) | Meteo & Sensori | 🟡 Aggiornato questa settimana | 23 nov 2026 | 7 aggiornamenti |
 | [**kn5 — Knowledge Ingestor**](https://noobucodonosor.github.io/Noobucodonosor/?app=kn5) | AI & Knowledge | 🟡 Aggiornato questa settimana | 23 nov 2026 | 5 aggiornamenti |
 | [**Leslie — Agency OS**](https://noobucodonosor.github.io/Noobucodonosor/?app=leslie) | AI Commerciale B2B | 🟡 Aggiornato questa settimana | 23 nov 2026 | 5 aggiornamenti |

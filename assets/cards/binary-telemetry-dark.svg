@@ -47,40 +47,40 @@
   <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">17 commit<set attributeName="visibility" to="visible" begin="0.045s" dur="0.045s" fill="freeze" /></text>
   <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">24 commit<set attributeName="visibility" to="visible" begin="0.09s" dur="0.045s" fill="freeze" /></text>
   <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">30 commit<set attributeName="visibility" to="visible" begin="0.135s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">35 commit<set attributeName="visibility" to="visible" begin="0.18s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">39 commit<set attributeName="visibility" to="visible" begin="0.225s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">43 commit<set attributeName="visibility" to="visible" begin="0.27s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">46 commit<set attributeName="visibility" to="visible" begin="0.315s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">49 commit<set attributeName="visibility" to="visible" begin="0.36s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">51 commit<set attributeName="visibility" to="visible" begin="0.405s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">53 commit<set attributeName="visibility" to="visible" begin="0.45s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">54 commit<set attributeName="visibility" to="visible" begin="0.495s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">55 commit<set attributeName="visibility" to="visible" begin="0.54s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">55 commit<set attributeName="visibility" to="visible" begin="0.585s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">56 commit<set attributeName="visibility" to="visible" begin="0.63s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">56 commit<set attributeName="visibility" to="visible" begin="0.675s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">56 commit<set attributeName="visibility" to="visible" begin="0.72s" dur="0.045s" fill="freeze" /></text>
-  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">56 commit<set attributeName="visibility" to="visible" begin="0.765s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">36 commit<set attributeName="visibility" to="visible" begin="0.18s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">40 commit<set attributeName="visibility" to="visible" begin="0.225s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">44 commit<set attributeName="visibility" to="visible" begin="0.27s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">47 commit<set attributeName="visibility" to="visible" begin="0.315s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">50 commit<set attributeName="visibility" to="visible" begin="0.36s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">52 commit<set attributeName="visibility" to="visible" begin="0.405s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">54 commit<set attributeName="visibility" to="visible" begin="0.45s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">55 commit<set attributeName="visibility" to="visible" begin="0.495s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">56 commit<set attributeName="visibility" to="visible" begin="0.54s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">56 commit<set attributeName="visibility" to="visible" begin="0.585s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">57 commit<set attributeName="visibility" to="visible" begin="0.63s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">57 commit<set attributeName="visibility" to="visible" begin="0.675s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">57 commit<set attributeName="visibility" to="visible" begin="0.72s" dur="0.045s" fill="freeze" /></text>
+  <text x="16" y="62" class="mono" font-size="22" font-weight="700" fill="#f0f6fc" visibility="hidden">57 commit<set attributeName="visibility" to="visible" begin="0.765s" fill="freeze" /></text>
   <text x="16" y="80" class="sans" font-size="11" fill="#8b949e">su 8 progetti verticali attivi</text>
   <rect x="16" y="92" width="24" height="44" rx="4" fill="#21262d" />
-      <rect x="16" y="100" width="24" height="36" rx="4" fill="#0f4c81" class="bar-grow" style="animation-delay: 0ms" />
+      <rect x="16" y="103" width="24" height="33" rx="4" fill="#0f4c81" class="bar-grow" style="animation-delay: 0ms" />
       <text x="28" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">geno</text>
   <rect x="52" y="92" width="24" height="44" rx="4" fill="#21262d" />
       <rect x="52" y="92" width="24" height="44" rx="4" fill="#9f1239" class="bar-grow" style="animation-delay: 45ms" />
       <text x="64" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">vino</text>
   <rect x="88" y="92" width="24" height="44" rx="4" fill="#21262d" />
-      <rect x="88" y="108" width="24" height="28" rx="4" fill="#0ea5e9" class="bar-grow" style="animation-delay: 90ms" />
+      <rect x="88" y="110" width="24" height="26" rx="4" fill="#0ea5e9" class="bar-grow" style="animation-delay: 90ms" />
       <text x="100" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">medi</text>
   <rect x="124" y="92" width="24" height="44" rx="4" fill="#21262d" />
-      <rect x="124" y="116" width="24" height="20" rx="4" fill="#f59e0b" class="bar-grow" style="animation-delay: 135ms" />
+      <rect x="124" y="118" width="24" height="18" rx="4" fill="#f59e0b" class="bar-grow" style="animation-delay: 135ms" />
       <text x="136" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">kn5</text>
   <rect x="160" y="92" width="24" height="44" rx="4" fill="#21262d" />
-      <rect x="160" y="116" width="24" height="20" rx="4" fill="#ec4899" class="bar-grow" style="animation-delay: 180ms" />
+      <rect x="160" y="118" width="24" height="18" rx="4" fill="#ec4899" class="bar-grow" style="animation-delay: 180ms" />
       <text x="172" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">lesl</text>
   <rect x="196" y="92" width="24" height="44" rx="4" fill="#21262d" />
-      <rect x="196" y="108" width="24" height="28" rx="4" fill="#6366f1" class="bar-grow" style="animation-delay: 225ms" />
+      <rect x="196" y="110" width="24" height="26" rx="4" fill="#6366f1" class="bar-grow" style="animation-delay: 225ms" />
       <text x="208" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">resu</text>
   <rect x="232" y="92" width="24" height="44" rx="4" fill="#21262d" />
-      <rect x="232" y="116" width="24" height="20" rx="4" fill="#f97316" class="bar-grow" style="animation-delay: 270ms" />
+      <rect x="232" y="118" width="24" height="18" rx="4" fill="#f97316" class="bar-grow" style="animation-delay: 270ms" />
       <text x="244" y="150" text-anchor="middle" class="mono" font-size="9" fill="#8b949e">scoo</text>
 </svg>
